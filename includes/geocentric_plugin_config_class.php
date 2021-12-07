@@ -46,5 +46,13 @@ if (!class_exists('_geocentric_plugin_config')) {
             return plugin_dir_url(__FILE__) . '../config/logo.svg';
         }
 
+        /* 
+        @Description: Return the plugin_logo_small
+        @Return: string
+        */
+        public function get_plugin_logo_small() {
+            return plugin_dir_url(__FILE__) . '../config/logo-small.svg';
+        }
+
     }
 }

@@ -38,5 +38,13 @@ if (!class_exists('_geocentric_component_styles')) {
                 return false;
             }
         }
+
+        /* 
+        @Description: Gets the component styles data
+        @Returns: ArrayObject
+        */
+        public function get_component_styles() {
+            return $this->styles;
+        }
     }
 }

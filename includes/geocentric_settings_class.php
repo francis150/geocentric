@@ -48,5 +48,13 @@ if (!class_exists('_geocentric_settings')) {
                 return false;
             }
         }
+
+        /* 
+        @Description: Gets the settings data
+        @Returns: ArrayObject
+        */
+        public function get_settings_data() {
+            return $this->settings;
+        }
     }
 }
