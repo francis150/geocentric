@@ -7,7 +7,9 @@ if (!class_exists('_geocentric_plugin_config')) {
         private $config;
         
         function __construct() {
-            $this->plugin_config_dir = plugin_dir_url(__FILE__) . '../config/';
+            $this->plugin_config_dir = WP_CONTENT_DIR . '/plugins/geocentric/config/';;
+
+            $this->load_config_data();
         }
 
         /* 
@@ -33,7 +35,7 @@ if (!class_exists('_geocentric_plugin_config')) {
         @Return: string
         */
         public function get_admin_menu_icon() {
-            return $this->plugin_config_dir . 'admin-menu-icon.svg';
+            return plugin_dir_url(__FILE__) . '../config/admin-menu-icon.svg';
         }
 
     }
