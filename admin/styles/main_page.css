@@ -1,1 +1,218 @@
-/* No CSS *//*# sourceMappingURL=main_page.css.map */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap");
+._geocentric-main * {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+}
+
+._geocentric-main *::-webkit-scrollbar-track {
+  background-color: #F7F8FA;
+}
+
+._geocentric-main *::-webkit-scrollbar {
+  width: 5px;
+  background-color: #F7F8FA;
+}
+
+._geocentric-main *::-webkit-scrollbar-thumb {
+  background-color: #363636;
+}
+
+sl-divider {
+  --width: 2px;
+}
+
+.input-wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.input-wrapper label {
+  margin-bottom: 5px;
+}
+
+.input-wrapper label span {
+  color: #DD1818;
+}
+
+.input-wrapper select,
+.input-wrapper input,
+.input-wrapper textarea,
+.input-wrapper button {
+  height: 40px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: #F7F8FA;
+  outline: none;
+  padding: 0 10px;
+}
+
+.input-wrapper select:focus,
+.input-wrapper input:focus,
+.input-wrapper textarea:focus,
+.input-wrapper button:focus {
+  outline: none;
+}
+
+.input-wrapper textarea {
+  padding: 10px;
+}
+
+.input-wrapper small {
+  margin-top: 2px;
+  opacity: 0.6;
+}
+
+.input-wrapper:focus-within small {
+  opacity: 1;
+}
+
+.one-col-div {
+  margin-bottom: 20px;
+}
+
+.one-col-div div {
+  width: 100%;
+}
+
+.two-col-div {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-column-gap: 10px;
+          column-gap: 10px;
+  margin-bottom: 20px;
+}
+
+.two-col-div .input-wrapper {
+  width: 50%;
+}
+
+.three-col-div {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-column-gap: 10px;
+          column-gap: 10px;
+  margin-bottom: 20px;
+}
+
+.three-col-div div {
+  width: 33.3%;
+}
+
+.four-col-div {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-column-gap: 10px;
+          column-gap: 10px;
+  margin-bottom: 20px;
+}
+
+.four-col-div div {
+  width: 23.5%;
+}
+
+._geocentric-main .get-started-wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 800px;
+  border-radius: 5px;
+  margin: 10px;
+  padding: 60px 30px 60px 60px;
+  background: linear-gradient(73.3deg, #782F2F 0.65%, #DD1818 99.62%);
+  -webkit-box-shadow: 1px 1px 100px rgba(0, 0, 0, 0.15);
+          box-shadow: 1px 1px 100px rgba(0, 0, 0, 0.15);
+}
+
+._geocentric-main .get-started-wrapper .content-wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  margin: 0;
+  padding: 0;
+  width: 45%;
+  gap: 40px;
+}
+
+._geocentric-main .get-started-wrapper .content-wrapper img {
+  height: 70px;
+  margin-bottom: 20px;
+}
+
+._geocentric-main .get-started-wrapper .content-wrapper p {
+  color: white;
+  font-size: 13px;
+  margin-bottom: 20px;
+  font-weight: 400;
+}
+
+._geocentric-main .get-started-wrapper .content-wrapper form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+._geocentric-main .get-started-wrapper .content-wrapper form .input-wrapper {
+  margin-right: 10px;
+}
+
+._geocentric-main .get-started-wrapper .content-wrapper form .input-wrapper input {
+  background: rgba(255, 255, 255, 0.5);
+  -webkit-transition: .3s background ease-in-out;
+  transition: .3s background ease-in-out;
+}
+
+._geocentric-main .get-started-wrapper .content-wrapper form .input-wrapper input:focus {
+  background: white;
+}
+
+._geocentric-main .get-started-wrapper .content-wrapper form .input-wrapper small {
+  color: white;
+}
+
+._geocentric-main .get-started-wrapper .content-wrapper form .get-started-btn {
+  height: 40px;
+  background: white;
+  color: #DD1818;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 0 10px;
+  border-radius: 5px;
+  -webkit-filter: 1px 1px 100px rgba(0, 0, 0, 0.15);
+          filter: 1px 1px 100px rgba(0, 0, 0, 0.15);
+  -webkit-transition: .3s all ease-in-out;
+  transition: .3s all ease-in-out;
+}
+
+._geocentric-main .get-started-wrapper .content-wrapper form .get-started-btn:hover {
+  -webkit-transform: scale(1.01);
+          transform: scale(1.01);
+}
+
+._geocentric-main .get-started-wrapper .illustration {
+  width: 55%;
+}
+/*# sourceMappingURL=main_page.css.map */

@@ -38,5 +38,13 @@ if (!class_exists('_geocentric_plugin_config')) {
             return plugin_dir_url(__FILE__) . '../config/admin-menu-icon.svg';
         }
 
+        /* 
+        @Description: Return the plugin logo
+        @Return: string
+        */
+        public function get_plugin_logo() {
+            return plugin_dir_url(__FILE__) . '../config/logo.svg';
+        }
+
     }
 }
