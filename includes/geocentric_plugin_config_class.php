@@ -7,7 +7,7 @@ if (!class_exists('_geocentric_plugin_config')) {
         private $config;
         
         function __construct() {
-            $this->plugin_config_dir = WP_CONTENT_DIR . '/plugins/geocentric/config/';;
+            $this->plugin_config_dir = WP_CONTENT_DIR . '/plugins/geocentric/config/';
 
             $this->load_config_data();
         }
