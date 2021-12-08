@@ -1,5 +1,6 @@
 <?php
 
+// Get started button
 if (isset($_POST['_get-started'])) {
     $config_data = $pluginConfigController->get_plugin_config_data();
 
@@ -21,6 +22,7 @@ if (isset($_POST['_get-started'])) {
     }
 }
 
+// Location form submit
 if (isset($_POST['_location-form-submit'])) {
     $formdata = $_POST;
 
@@ -112,6 +114,7 @@ if (isset($_POST['_location-form-submit'])) {
     }
 }
 
+// Remove location
 if (!empty($_POST['remove_key'])) {
 
     $modified = array();
@@ -135,7 +138,7 @@ if (!empty($_POST['remove_key'])) {
     }
 }
 
-// Set main location
+// Set as Primary Location
 if (!empty($_POST['mainlocation_key'])) {
     
     $modified = array_map(function($data) {
@@ -166,4 +169,134 @@ if (!empty($_POST['mainlocation_key'])) {
         <?php
     }
 
+}
+
+// Update component styles
+if (isset($_POST['_style-form-update'])) {
+    $formdata = $_POST;
+
+    $styledata = array(
+        "weatherSection" => array(
+            "backgroundColor" => !empty($formdata['wsBackgroundColor']) ? $formdata['wsBackgroundColor'] : "#00000000",
+            "accentColor" => !empty($formdata['wsTextColor']) ? $formdata['wsTextColor'] : "#00000000"
+        ),
+        "aboutSection" => array(
+            "title" => array(
+                "fontSize" => !empty($formdata['asTitleFontSize']) ? (int)$formdata['asTitleFontSize'] : 36,
+                "fontWeight" => !empty($formdata['asTitleFontWeight']) ? (int)$formdata['asTitleFontWeight'] : 500,
+                "fontColor" => !empty($formdata['asTitleFontColor']) ? $formdata['asTitleFontColor'] : "#00000000",
+                "textAlignment" => !empty($formdata['asTitleTextAligment']) ? $formdata['asTitleTextAligment'] : "center"
+            ),
+            "content" => array(
+                "fontSize" => !empty($formdata['asContentFontSize']) ? (int)$formdata['asContentFontSize'] : 16,
+                "fontWeight" => !empty($formdata['asContentFontWeight']) ? (int)$formdata['asContentFontWeight'] : 400,
+                "fontColor" => !empty($formdata['asContentFontColor']) ? $formdata['asContentFontColor'] : "#00000000",
+                "textAlignment" => !empty($formdata['asContentTextAligment']) ? $formdata['asContentTextAligment'] : "left"
+            )
+        ),
+        "neighborhoods" => array(
+            "title" => array(
+                "fontSize" => !empty($formdata['nhTitleFontSize']) ? (int)$formdata['nhTitleFontSize'] : 36,
+                "fontWeight" => !empty($formdata['nhTitleFontWeight']) ? (int)$formdata['nhTitleFontWeight'] : 500,
+                "fontColor" => !empty($formdata['nhTitleFontColor']) ? $formdata['nhTitleFontColor'] : "#00000000",
+                "textAlignment" => !empty($formdata['nhTitleTextAligment']) ? $formdata['nhTitleTextAligment'] : "center"
+            ),
+            "neighborhoods" => array(
+                "fontSize" => !empty($formdata['nhLinksFontSize']) ? (int)$formdata['nhLinksFontSize'] : 16,
+                "fontWeight" => !empty($formdata['nhLinksFontWeight']) ? (int)$formdata['nhLinksFontWeight'] : 400,
+                "fontColor" => !empty($formdata['nhLinksFontColor']) ? $formdata['nhLinksFontColor'] : "#00000000",
+                "fontColorHovered" => !empty($formdata['nhLinksHoveredFontColor']) ? $formdata['nhLinksHoveredFontColor'] : "#00000000",
+                "textAlignment" => !empty($formdata['nhLinksTextAligment']) ? $formdata['nhLinksTextAligment'] : "center"
+            )
+        ),
+        "thingsToDo" => array(
+            "title" => array(
+                "fontSize" => !empty($formdata['ttdTitleFontSize']) ? (int)$formdata['ttdTitleFontSize'] : 36,
+                "fontWeight" => !empty($formdata['ttdTitleFontWeight']) ? (int)$formdata['ttdTitleFontWeight'] : 500,
+                "fontColor" => !empty($formdata['ttdTitleFontColor']) ? $formdata['ttdTitleFontColor'] : "#00000000",
+                "textAlignment" => !empty($formdata['ttdTitleTextAligment']) ? $formdata['ttdTitleTextAligment'] : "#00000000"
+            ),
+            "items" => array(
+                "gap" => !empty($formdata['ttdItemsGap']) ? (int)$formdata['ttdItemsGap'] : 20,
+                "backgroundColor" => !empty($formdata['ttdItemsBackgroundColor']) ? $formdata['ttdItemsBackgroundColor'] : "#00000000",
+                "hoverEffect" => !empty($formdata['ttdItemsHoverEffect']) ? $formdata['ttdItemsHoverEffect'] : "scaleUp",
+                "borderRadius" => !empty($formdata['ttdItemsBorderRadius']) ? (int)$formdata['ttdItemsBorderRadius'] : 5,
+                "borderWidth" => !empty($formdata['ttdItemsBorderWidth']) ? (int)$formdata['ttdItemsBorderWidth'] : 1,
+                "borderColor" => !empty($formdata['ttdItemsBorderColor']) ? $formdata['ttdItemsBorderColor'] : "#00000000",
+                "padding" => !empty($formdata['ttdItemsPadding']) ? (int)$formdata['ttdItemsPadding'] : 20
+            ),
+            "image" => array(
+                "borderRadius" => !empty($formdata['ttdImageBorderRadius']) ? (int)$formdata['ttdImageBorderRadius'] : 5,
+                "borderWidth" => !empty($formdata['ttdImageBorderWidth']) ? (int)$formdata['ttdImageBorderWidth'] : 0,
+                "borderColor" => !empty($formdata['ttdImageBorderColor']) ? $formdata['ttdImageBorderColor'] : "#00000000"
+            ),
+            "name" => array(
+                "fontSize" => !empty($formdata['ttdNameFontSize']) ? (int)$formdata['ttdNameFontSize'] : 16,
+                "fontWeight" => !empty($formdata['ttdNameFontWeight']) ? (int)$formdata['ttdNameFontWeight'] : 400,
+                "fontColor" => !empty($formdata['ttdNameFontColor']) ? $formdata['ttdNameFontColor'] : "#00000000",
+                "textAlignment" => !empty($formdata['ttdNameTextAligment']) ? $formdata['ttdNameTextAligment'] : "left",
+            )
+        ),
+        "mapEmbed" => array(
+            "title" => array(
+                "fontSize" => !empty($formdata['meTitleFontSize']) ? (int)$formdata['meTitleFontSize'] : 36,
+                "fontWeight" => !empty($formdata['meTitleFontWeight']) ? (int)$formdata['meTitleFontWeight'] : 500,
+                "fontColor" => !empty($formdata['meTitleFontColor']) ? $formdata['meTitleFontColor'] : "#00000000",
+                "textAlignment" => !empty($formdata['meTitleTextAligment']) ? $formdata['meTitleTextAligment'] : "center"
+            ),
+            "map" => array(
+                "height" => !empty($formdata['meMapHeight']) ? (int)$formdata['meMapHeight'] : 400,
+                "width" => !empty($formdata['meMapWidth']) ? (int)$formdata['meMapWidth'] : 100
+            )
+        ),
+        "drivingDirections" => array(
+            "title" => array(
+                "fontSize" => !empty($formdata['ddTitleFontSize']) ? (int)$formdata['ddTitleFontSize'] : 36,
+                "fontWeight" => !empty($formdata['ddTitleFontWeight']) ? (int)$formdata['ddTitleFontWeight'] : 500,
+                "fontColor" => !empty($formdata['ddTitleFontColor']) ? $formdata['ddTitleFontColor'] : "#00000000",
+                "textAlignment" => !empty($formdata['ddTitleTextAligment']) ? $formdata['ddTitleTextAligment'] : "center"
+            ),
+            "map" => array(
+                "height" => !empty($formdata['ddMapHeight']) ? (int)$formdata['ddMapHeight'] : 400,
+                "width" => !empty($formdata['ddMapWidth']) ? (int)$formdata['ddMapWidth'] : 100
+            )
+        )
+    );
+
+    if ($componentStylesController->set_component_styles($styledata)) {
+        ?>
+        <div class="notice notice-success is-dismissible">
+            <p><b><?php echo $config_data['plugin_name']; ?></b> - Component Styles Updated Successfully!</p>
+        </div>
+        <?php
+    } else {
+        ?>
+        <div class="notice notice-error is-dismissible">
+            <p><b><?php echo $config_data['plugin_name']; ?></b> - Failed to update Component Styles.</p>
+        </div>
+        <?php
+    }
+}
+
+// User Submits Settings Form
+if (isset($_POST['_settings-form-update'])) {
+    $formdata = $_POST;
+
+    $settings = array(
+        "google_api_key" => $_POST['settingsGoogleAPIKey']
+    );
+
+    if ($settingsController->set_settings_data($settings)) {
+        ?>
+        <div class="notice notice-success is-dismissible">
+            <p><b><?php echo $config_data['plugin_name']; ?></b> - Settings Updated Successfully!</p>
+        </div>
+        <?php
+    } else {
+        ?>
+        <div class="notice notice-error is-dismissible">
+            <p><b><?php echo $config_data['plugin_name']; ?></b> - Failed to update Settings.</p>
+        </div>
+        <?php
+    }
 }

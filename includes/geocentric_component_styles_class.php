@@ -46,5 +46,19 @@ if (!class_exists('_geocentric_component_styles')) {
         public function get_component_styles() {
             return $this->styles;
         }
+
+        /* 
+        @Description: Updates or sets the component styles data
+        @Returns: bool
+        @Parans: ArrayObject $data
+        */
+        public function set_component_styles($data) {
+            if (file_put_contents($this->config_dir . 'component_styles.json', json_encode($data, JSON_PRETTY_PRINT))) {
+                $this->load_styles_data();
+                return true;
+            } else {
+                return false;
+            }
+        }
     }
 }

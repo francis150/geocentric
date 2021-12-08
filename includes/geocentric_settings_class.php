@@ -56,5 +56,19 @@ if (!class_exists('_geocentric_settings')) {
         public function get_settings_data() {
             return $this->settings;
         }
+
+        /* 
+        @Description: Updates the settings.json and settings_data
+        @Returns: bool
+        @Params: $data
+        */
+        public function set_settings_data($data) {
+            if (file_put_contents($this->config_dir . 'settings.json', json_encode($data, JSON_PRETTY_PRINT))) {
+                $this->load_settings();
+                return true;
+            } else {
+                return false;
+            }
+        }
     }
 }

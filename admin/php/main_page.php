@@ -12,11 +12,12 @@ $componentStylesController = new _geocentric_component_styles();
 require_once plugin_dir_path(__FILE__) . '../../includes/geocentric_userinput_data_class.php';
 $userInputDataController = new _geocentric_userinput_data();
 
-$component_styles = $componentStylesController->get_component_styles();
-$settings = $settingsController->get_settings_data();
 $config_data = $pluginConfigController->get_plugin_config_data();
 
 require_once plugin_dir_path(__FILE__) . 'main_page_functions.php';
+
+$component_styles = $componentStylesController->get_component_styles();
+$settings = $settingsController->get_settings_data();
 
 if (!$settingsController->settings_isset()) {
     ?>
