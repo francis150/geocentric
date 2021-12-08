@@ -74,7 +74,6 @@ document.querySelector('._geocentric-main .newlocation-form select.city').addEve
 
 
 
-
 /* *****LOCATION LIST**** */
 // Edit location
 document.querySelectorAll('._geocentric-main .main-view-wrapper .main-tab-group .locations-list .location-item .moreoptions-dropdown .edit-location-button').forEach(editBtn => {
@@ -110,8 +109,19 @@ document.querySelectorAll('._geocentric-main .main-view-wrapper .main-tab-group 
     })
 })
 
+// Remove Location
+document.querySelectorAll('._geocentric-main .main-view-wrapper .main-tab-group .locations-list .location-item .moreoptions-dropdown .remove-location-button').forEach(removeBtn => {
+    removeBtn.addEventListener('click', async (e) => {
 
+        if(confirm('Are you sure you want to remove this location?')) {
+            const locationItem = await e.target.parentElement.parentElement.parentElement.dataset
 
+            document.querySelector('._geocentric-main .newlocation-form form .remove_key').value = locationItem.id
+            document.querySelector('._geocentric-main .newlocation-form form').submit()
+        }
+
+    })
+})
 
 
 

@@ -111,3 +111,26 @@ if (isset($_POST['_location-form-submit'])) {
         }
     }
 }
+
+if (!empty($_POST['remove_key'])) {
+
+    $modified = array();
+
+    foreach ($userInputDataController->get_userinput_data() as $data) {
+        if ($_POST['remove_key'] !== $data['id']) array_push($modified, $data);
+    }
+
+    if ($userInputDataController->set_userinput_data($modified)) {
+        ?>
+        <div class="notice notice-success is-dismissible">
+            <p><b><?php echo $config_data['plugin_name']; ?></b> - Location removed successfully!</p>
+        </div>
+        <?php
+    } else {
+        ?>
+        <div class="notice notice-error is-dismissible">
+            <p><b><?php echo $config_data['plugin_name']; ?></b> - Failed to remove location.</p>
+        </div>
+        <?php
+    }
+}
