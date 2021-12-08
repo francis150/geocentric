@@ -20,3 +20,53 @@ if (isset($_POST['_get-started'])) {
         <?php
     }
 }
+
+if (isset($_POST['_location-form-submit'])) {
+    $formdata = $_POST;
+
+    if (!empty($formdata['new_key'])) {
+        $existing_userinput_data = $userInputDataController->get_userinput_data();
+
+        $new_location = array(
+            "id" => $formdata['new_key'],
+            "city" => array(
+                "id" => $formdata['city_id'],
+                "name" => $formdata['city_name']
+            ),
+            "state" => array(
+                "code" => $formdata['state_code'],
+                "name" => $formdata['state_name']
+            ),
+            "country" => array(
+                "iso2" => $formdata['country_code'],
+                "name" => $formdata['country_name']
+            )
+        );
+
+        if (!empty($formdata['neighborhood'])) $new_location['neighbourhoods'] = array_map( function ($data) {
+            return trim($data);
+        }, explode(",", $formdata['neighborhood']));
+
+        if (!empty($formdata['google_maps_place_id'])) $new_location['google_place_id'] = $formdata['google_maps_place_id'];
+        if (!empty($formdata['driving_directions_limit'])) $new_location['drivingDirectionsLimit'] = $formdata['driving_directions_limit'];
+
+        array_push($existing_userinput_data, $new_location);
+
+        if ($userInputDataController->set_userinput_data($existing_userinput_data)) {
+            ?>
+            <div class="notice notice-success is-dismissible">
+                <p><b><?php echo $config_data['plugin_name']; ?></b> - New location added successfully!</p>
+            </div>
+            <?php
+        } else {
+            ?>
+            <div class="notice notice-error is-dismissible">
+                <p><b><?php echo $config_data['plugin_name']; ?></b> - Failed to update locations.</p>
+            </div>
+            <?php
+        }
+
+    } else if (!empty($formdata['edit_key'])) {
+        
+    }
+}

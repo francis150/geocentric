@@ -16,7 +16,7 @@ if (!class_exists('_geocentric_userinput_data')) {
         */
         private function load_userinput_data() {
             if (file_exists( $this->config_dir . 'userinput_data.json' )) {
-                $this->settings = json_decode(file_get_contents( $this->config_dir . 'userinput_data.json' ), true);
+                $this->userinput_data = json_decode(file_get_contents( $this->config_dir . 'userinput_data.json' ), true);
             }
         }
 
@@ -28,6 +28,20 @@ if (!class_exists('_geocentric_userinput_data')) {
         public function get_userinput_data() {
             if (!isset($this->userinput_data)) return array();
             return $this->userinput_data;
+        }
+
+        /* 
+        @Description: Set or update userinput_data
+        @Returns: boolean
+        @Params: ArrayObject $data
+        */
+        public function set_userinput_data($data) {
+            if (file_put_contents($this->config_dir . 'userinput_data.json', json_encode($data, JSON_PRETTY_PRINT))) {
+                $this->load_userinput_data();
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 }
