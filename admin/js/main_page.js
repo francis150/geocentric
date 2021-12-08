@@ -75,6 +75,43 @@ document.querySelector('._geocentric-main .newlocation-form select.city').addEve
 
 
 
+/* *****LOCATION LIST**** */
+// Edit location
+document.querySelectorAll('._geocentric-main .main-view-wrapper .main-tab-group .locations-list .location-item .moreoptions-dropdown .edit-location-button').forEach(editBtn => {
+    editBtn.addEventListener('click', (e) => {
+        const locationItem = e.target.parentElement.parentElement.parentElement.dataset
+
+        document.querySelector('._geocentric-main .newlocation-form form .edit_key').value = locationItem.id
+        document.querySelector('._geocentric-main .newlocation-form form .city_name').value = locationItem.city_name
+        document.querySelector('._geocentric-main .newlocation-form form .state_name').value = locationItem.state_name
+        document.querySelector('._geocentric-main .newlocation-form form .country_name').value = locationItem.country_name
+
+        document.querySelector('._geocentric-main .newlocation-form form select.country').innerHTML += `<option selected value="${locationItem.country_iso2}">${locationItem.country_name}</option>`;
+
+        fetchStates(locationItem.country_iso2, () => {
+            document.querySelector('._geocentric-main .newlocation-form form select.state').innerHTML += `<option selected value="${locationItem.state_code}">${locationItem.state_name}</option>`;
+
+            fetchCities(locationItem.country_iso2, locationItem.state_code, () => {
+                document.querySelector('._geocentric-main .newlocation-form form select.city').innerHTML += `<option selected value="${locationItem.city_id}">${locationItem.city_name}</option>`;
+            })
+        })
+
+        if (locationItem.neighbourhoods) document.querySelector('._geocentric-main .newlocation-form form .neighborhood').innerHTML = locationItem.neighbourhoods
+
+
+        if (locationItem.google_place_id || locationItem.driving_directions_limit) document.querySelector('._geocentric-main .newlocation-form form .newlocation-form-advance-options').click()
+
+        if (locationItem.google_place_id) document.querySelector('._geocentric-main .newlocation-form form .google_maps_place_id').value = locationItem.google_place_id
+        if (locationItem.driving_directions_limit) document.querySelector('._geocentric-main .newlocation-form form .driving_directions_limit').value = locationItem.driving_directions_limit
+
+        document.querySelector('._geocentric-main .newlocation-form form .head h2').innerHTML = 'Edit Location'
+        document.querySelector('._geocentric-main .newlocation-form').style.display = 'flex'
+        
+    })
+})
+
+
+
 
 
 
