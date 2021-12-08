@@ -123,6 +123,18 @@ document.querySelectorAll('._geocentric-main .main-view-wrapper .main-tab-group 
     })
 })
 
+// Set as main location
+document.querySelectorAll('._geocentric-main .main-view-wrapper .main-tab-group .locations-list .location-item .moreoptions-dropdown .main-location-button').forEach(mainLocationBtn => {
+    mainLocationBtn.addEventListener('click', async (e) => {
+        if (confirm('This Operation will remove all imported data and you will have to re-import them all again. Are you sure you want to set this location as your Primary Location? Would be better if you add a GMB Place ID under Advance Options.')) {
+            const locationItem = await e.target.parentElement.parentElement.parentElement.dataset
+
+            document.querySelector('._geocentric-main .newlocation-form form .mainlocation_key').value = locationItem.id
+            document.querySelector('._geocentric-main .newlocation-form form').submit()
+        }
+    })
+})
+
 
 
 

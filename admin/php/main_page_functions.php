@@ -134,3 +134,36 @@ if (!empty($_POST['remove_key'])) {
         <?php
     }
 }
+
+// Set main location
+if (!empty($_POST['mainlocation_key'])) {
+    
+    $modified = array_map(function($data) {
+
+        if ($data['id'] == $_POST['mainlocation_key']) {
+            $data['primaryLocation'] = true;
+        } else {
+            unset($data['primaryLocation']);
+        }
+
+        unset($data['dataIsAvailable']);
+
+        return $data;
+
+    }, $userInputDataController->get_userinput_data());
+
+    if ($userInputDataController->set_userinput_data($modified)) {
+        ?>
+        <div class="notice notice-success is-dismissible">
+            <p><b><?php echo $config_data['plugin_name']; ?></b> - Primary location updated!</p>
+        </div>
+        <?php
+    } else {
+        ?>
+        <div class="notice notice-error is-dismissible">
+            <p><b><?php echo $config_data['plugin_name']; ?></b> - Failed to set primary location!</p>
+        </div>
+        <?php
+    }
+
+}
