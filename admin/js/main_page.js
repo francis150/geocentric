@@ -85,6 +85,8 @@ document.querySelectorAll('._geocentric-main .main-view-wrapper .main-tab-group 
         document.querySelector('._geocentric-main .newlocation-form form .state_name').value = locationItem.state_name
         document.querySelector('._geocentric-main .newlocation-form form .country_name').value = locationItem.country_name
 
+        if (locationItem.primary_location) document.querySelector('._geocentric-main .newlocation-form form .is_primary').value = locationItem.primary_location
+
         document.querySelector('._geocentric-main .newlocation-form form select.country').innerHTML += `<option selected value="${locationItem.country_iso2}">${locationItem.country_name}</option>`;
 
         fetchStates(locationItem.country_iso2, () => {
@@ -166,6 +168,8 @@ document.querySelectorAll('._geocentric-main .main-view-wrapper .main-tab-group 
             google_api_key: e.target.dataset.google_api_key,
             mainLocation: primaryLocation
         }
+
+        console.log(JSON.stringify(payload))
 
         axios({
             method: 'POST',

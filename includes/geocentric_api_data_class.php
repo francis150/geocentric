@@ -80,5 +80,20 @@ if (!class_exists('_geocentric_api_data')) {
                 return false;
             }
         }
+
+        /* 
+        @Description: Remove all api_data
+        @Returns: boolean
+        */
+        public function remove_all_data() {
+            if (!isset($this->api_data)) return true;
+
+            if (unlink($this->config_dir . 'api_data.json')) {
+                unset($this->api_data);
+                return true;
+            } else {
+                return false;
+            }
+        }
     }
 }

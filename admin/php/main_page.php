@@ -61,6 +61,8 @@ if (!$settingsController->settings_isset()) {
                 <input type="text" style="display: none;" class="state_name" name="state_name" value="">
                 <input type="text" style="display: none;" class="country_name" name="country_name" value="">
 
+                <input type="text" style="display: none;" class="is_primary" name="is_primary">
+
                 <div class="head">
                     <h2>...</h2>
                     <sl-icon-button class="close-button" name="x-lg" label="Close"></sl-icon-button>

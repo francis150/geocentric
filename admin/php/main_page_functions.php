@@ -92,6 +92,8 @@ if (isset($_POST['_location-form-submit'])) {
         if (!empty($formdata['google_maps_place_id'])) $editedLocation['google_place_id'] = $formdata['google_maps_place_id'];
         if (!empty($formdata['driving_directions_limit'])) $editedLocation['drivingDirectionsLimit'] = $formdata['driving_directions_limit'];
 
+        if (!empty($formdata['is_primary'])) $editedLocation['primaryLocation'] = true;
+
         $newSet = array_map(function($data) use ($editedLocation) {
             unset($data['dataIsAvailable']);
             if($data['id'] == $editedLocation['id']) { return $editedLocation; }
@@ -155,12 +157,20 @@ if (!empty($_POST['mainlocation_key'])) {
 
     }, $userInputDataController->get_userinput_data());
 
-    if ($userInputDataController->set_userinput_data($modified)) {
-        ?>
-        <div class="notice notice-success is-dismissible">
-            <p><b><?php echo $config_data['plugin_name']; ?></b> - Primary location updated!</p>
-        </div>
-        <?php
+    if ($apiDataController->remove_all_data()) {
+        if ($userInputDataController->set_userinput_data($modified)) {
+            ?>
+            <div class="notice notice-success is-dismissible">
+                <p><b><?php echo $config_data['plugin_name']; ?></b> - Primary location updated!</p>
+            </div>
+            <?php
+        } else {
+            ?>
+            <div class="notice notice-error is-dismissible">
+                <p><b><?php echo $config_data['plugin_name']; ?></b> - Failed to set primary location!</p>
+            </div>
+            <?php
+        }
     } else {
         ?>
         <div class="notice notice-error is-dismissible">
@@ -168,6 +178,8 @@ if (!empty($_POST['mainlocation_key'])) {
         </div>
         <?php
     }
+
+    
 
 }
 
