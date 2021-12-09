@@ -239,7 +239,7 @@ sl-divider {
   background: rgba(255, 255, 255, 0.85);
 }
 
-._geocentric-main .overlay-form form {
+._geocentric-main .overlay-form form, ._geocentric-main .overlay-form .wrapper {
   width: 600px;
   background: white;
   padding: 40px 20px 20px 20px;
@@ -364,6 +364,49 @@ sl-divider {
 ._geocentric-main .newlocation-form .bottom ._location-form-submit:hover {
   -webkit-transform: scale(1.03) translateY(-25px);
           transform: scale(1.03) translateY(-25px);
+}
+
+._geocentric-main .loading-screen {
+  display: none;
+}
+
+._geocentric-main .loading-screen .wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 400px;
+  height: 200px;
+  gap: 40px;
+}
+
+._geocentric-main .loading-screen .wrapper div {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+._geocentric-main .loading-screen .wrapper div sl-spinner {
+  margin-right: 10px;
 }
 
 ._geocentric-main .main-view-wrapper {

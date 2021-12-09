@@ -208,7 +208,7 @@ sl-divider {
     z-index: 20;
     background: rgba(255, 255, 255, 0.85);
 
-    form {
+    form, .wrapper {
         width: 600px;
         background: white;
         padding: 40px 20px 20px 20px;
@@ -319,6 +319,32 @@ sl-divider {
 
             &:hover {
                 transform: scale(1.03) translateY(-25px);
+            }
+        }
+    }
+}
+
+._geocentric-main .loading-screen {
+    display: none;
+    // display: flex;
+
+    .wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 400px;
+        height: 200px;
+        gap: 40px;
+
+        div {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+
+            sl-spinner {
+                margin-right: 10px;
             }
         }
     }

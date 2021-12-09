@@ -127,7 +127,7 @@ document.querySelectorAll('._geocentric-main .main-view-wrapper .main-tab-group 
 document.querySelectorAll('._geocentric-main .main-view-wrapper .main-tab-group .locations-list .location-item .moreoptions-dropdown .main-location-button').forEach(mainLocationBtn => {
     mainLocationBtn.addEventListener('click', async (e) => {
         if (confirm('This Operation will remove all imported data and you will have to re-import them all again. Are you sure you want to set this location as your Primary Location? Would be better if you add a GMB Place ID under Advance Options.')) {
-            const locationItem = await e.target.parentElement.parentElement.parentElement.dataset
+            const locationItem = e.target.parentElement.parentElement.parentElement.dataset
 
             document.querySelector('._geocentric-main .newlocation-form form .mainlocation_key').value = locationItem.id
             document.querySelector('._geocentric-main .newlocation-form form').submit()
@@ -135,12 +135,80 @@ document.querySelectorAll('._geocentric-main .main-view-wrapper .main-tab-group 
     })
 })
 
+// Import single data
+document.querySelectorAll('._geocentric-main .main-view-wrapper .main-tab-group .locations-list .location-item .moreoptions-dropdown .import-data-button').forEach(importDataBtn => {
+    importDataBtn.addEventListener('click', (e) => {
+        const primaryLocation = get_primary_location()
+        if (!primaryLocation) return alert('Please choose your Primary Location before importing data.')
 
+        const locationItem = e.target.parentElement.parentElement.parentElement
+        const locationData = locationItem.dataset
+        const hiddenForm = document.querySelector('._geocentric-main .hidden-form form')
+
+        document.querySelector('._geocentric-main .loading-screen').style.display = 'flex'
+        document.querySelector('._geocentric-main .loading-screen p').innerHTML = 'Requesting 1 Location Data out of 1...'
+
+        const payload = {
+            requesting_domain : e.target.dataset.site_domain,
+            id: locationData.id,
+            city: {
+                id: locationData.city_id,
+                name: locationData.city_name
+            },
+            state: {
+                name: locationData.state_name,
+                code: locationData.state_code
+            },
+            country: {
+                name: locationData.country_name,
+                iso2: locationData.country_iso2
+            },
+            google_api_key: e.target.dataset.google_api_key,
+            mainLocation: primaryLocation
+        }
+
+        axios({
+            method: 'POST',
+            url: e.target.dataset.api_server_url + 'locations-generator/generate',
+            data: payload
+        })
+        .then(res => {
+            hiddenForm._single_api_data.value = JSON.stringify(res.data)
+            hiddenForm.submit()
+        })
+        .catch(err => {
+            hiddenForm._single_api_data.value = JSON.stringify(err.response.data)
+            hiddenForm.submit()
+        })
+    }) 
+})
+
+
+
+function get_primary_location() {
+    let res
+    document.querySelectorAll('._geocentric-main .main-view-wrapper .main-tab-group .locations-list .location-item').forEach(locationItem => {
+        if (locationItem.dataset.primary_location) {
+            res = {
+                country_iso2: locationItem.dataset.country_iso2,
+                state_code: locationItem.dataset.state_code,
+                city: {
+                    name: locationItem.dataset.city_name,
+                    id: locationItem.dataset.city_id
+                }
+            }
+
+            if (locationItem.dataset.google_place_id) res['placeID'] = locationItem.dataset.google_place_id
+        }
+    })
+
+    return res
+}
 
 
 /* ****GEODATABASE***** */
 
-const GEODATABASE_URL = 'https://geodatabase-api.herokuapp.com/api/'
+const GEODATABASE_URL = 'https://geo-database-api.herokuapp.com/api/'
 
 // Fetch States
 function fetchStates(country, callback = () => {}) {

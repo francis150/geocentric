@@ -300,3 +300,20 @@ if (isset($_POST['_settings-form-update'])) {
         <?php
     }
 }
+
+// Single API Data import
+if (isset($_POST['_single_api_data'])) {
+    if ($apiDataController->set_single_api_data($_POST['_single_api_data'])) {
+        ?>
+        <div class="notice notice-success is-dismissible">
+            <p><b><?php echo $config_data['plugin_name']; ?></b> - Data imported successfully from server!</p>
+        </div>
+        <?php
+    } else {
+        ?>
+        <div class="notice notice-error is-dismissible">
+            <p><b><?php echo $config_data['plugin_name']; ?></b> - Failed import data from server.</p>
+        </div>
+        <?php
+    }
+}

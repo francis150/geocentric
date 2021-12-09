@@ -12,6 +12,11 @@ $componentStylesController = new _geocentric_component_styles();
 require_once plugin_dir_path(__FILE__) . '../../includes/geocentric_userinput_data_class.php';
 $userInputDataController = new _geocentric_userinput_data();
 
+require_once plugin_dir_path(__FILE__) . '../../includes/geocentric_api_data_class.php';
+$apiDataController = new _geocentric_api_data();
+
+
+
 $config_data = $pluginConfigController->get_plugin_config_data();
 
 require_once plugin_dir_path(__FILE__) . 'main_page_functions.php';
@@ -370,6 +375,13 @@ if (!$settingsController->settings_isset()) {
                 </div>
             </form>
         </section>
+
+        <section class="overlay-form loading-screen">
+            <div class="wrapper">
+                <img src="<?php echo $pluginConfigController->get_plugin_logo_small(); ?>" class="logo">
+                <div><sl-spinner style="font-size: 1.2rem;"></sl-spinner> <p>...</p></div>
+            </div>
+        </section>
         
         <section class="main-view-wrapper">
             <img src="<?php echo $pluginConfigController->get_plugin_logo_small(); ?>" class="main-screen-logo">
@@ -420,16 +432,21 @@ if (!$settingsController->settings_isset()) {
                                         data-driving_directions_limit="<?php echo $serviceArea['drivingDirectionsLimit']; ?>"
                                         <?php
                                     }
+
+                                    if (isset($serviceArea['primaryLocation'])) {
+                                        ?>
+                                        data-primary_location="true" 
+                                        <?php
+                                    }
                                     ?>
 
                                     >
                                         <sl-icon name="<?php echo isset($serviceArea['primaryLocation']) ? 'geo-alt-fill' : ''; ?>"></sl-icon>
                                         <p><?php echo "{$serviceArea['city']['name']}, {$serviceArea['state']['code']} ({$serviceArea['country']['name']})"; ?></p>
-                                        <span class="unavailable">Not Available</span>
-                                        <?php /* echo $serviceArea['dataIsAvailable'] ? '<span class="available">Available</span>' : '<span class="unavailable">Not Available</span>'; */ ?>
-                                        <sl-dropdown class="shortcodes-dropdown">
+                                        <?php echo $apiDataController->api_data_is_available($serviceArea['id']) ? '<span class="available">Available</span>' : '<span class="unavailable">Not Available</span>'; ?>
+                                        <sl-dropdown class="shortcodes-dropdown" <?php echo !$apiDataController->api_data_is_available($serviceArea['id']) ? 'disabled' : '' ?>>
                                             <sl-tooltip slot="trigger" content="Shortcodes">
-                                                <sl-icon-button name="code-slash" label="Shortcodes"></sl-icon-button>
+                                                <sl-icon-button <?php echo !$apiDataController->api_data_is_available($serviceArea['id']) ? 'disabled' : '' ?> name="code-slash" label="Shortcodes"></sl-icon-button>
                                             </sl-tooltip>
                                             <sl-menu>
                                                 <sl-menu-label>Click to Copy</sl-menu-label>
@@ -449,7 +466,11 @@ if (!$settingsController->settings_isset()) {
                                                 <sl-menu-item class="edit-location-button">Edit<sl-icon slot="prefix" name="pencil-square"></sl-icon></sl-menu-item>
                                                 <sl-menu-item class="remove-location-button">Remove<sl-icon slot="prefix" name="trash"></sl-icon></sl-menu-item>
                                                 <sl-divider></sl-divider>
-                                                <sl-menu-item>Import Data<sl-icon slot="prefix" name="cloud-download"></sl-icon></sl-menu-item>
+                                                <sl-menu-item class="import-data-button" 
+                                                data-site_domain="<?php echo get_site_url(); ?>" 
+                                                data-google_api_key="<?php echo $settings['google_api_key']; ?>" 
+                                                data-api_server_url="<?php echo $config_data['server_url']; ?>" 
+                                                >Import Data<sl-icon slot="prefix" name="cloud-download"></sl-icon></sl-menu-item>
                                                 <sl-menu-item class="main-location-button">Set as Primary Location<sl-icon slot="prefix" name="geo-alt-fill"></sl-icon></sl-menu-item>
                                             </sl-menu>
                                         </sl-dropdown>
@@ -800,6 +821,13 @@ if (!$settingsController->settings_isset()) {
             <div class="footer">
                 <p>Powered by © <a href="#">Rank Fortress</a>, 2021 🤘.</p>
             </div>
+        </section>
+
+        <section class="hidden-form" style="display: none;">
+            <form action="#" method="POST">
+               <input type="text" name="_single_api_data" /> 
+               <input type="text" name="_api_request_failed" /> 
+            </form>
         </section>
     </div>
     <?php

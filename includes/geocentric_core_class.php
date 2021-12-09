@@ -49,6 +49,9 @@ if (!class_exists('_geocentric_core')) {
             
             // npm-uuid cdn import
             wp_enqueue_script('_geocentric_uuid_cdn_script', 'https://cdn.jsdelivr.net/npm/uuid@latest/dist/umd/uuidv4.min.js');
+
+            // axios
+            wp_enqueue_script('_geocentric_axios_cdn_script', 'https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js');
         }
 
         public function addto_admin_head() {
