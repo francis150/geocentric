@@ -399,7 +399,11 @@ if (!$settingsController->settings_isset()) {
                         <sl-tooltip content="Add Service Area">
                             <sl-icon-button class="add-location-button" name="plus-lg" label="Add Service Area"></sl-icon-button>
                         </sl-tooltip>
-                        <button><sl-icon name="cloud-download"></sl-icon>Import All Data</button>
+                        <button class="_geocentric_import_all_data" 
+                        data-site_domain="<?php echo get_site_url(); ?>" 
+                        data-google_api_key="<?php echo $settings['google_api_key']; ?>" 
+                        data-api_server_url="<?php echo $config_data['server_url']; ?>" 
+                        ><sl-icon name="cloud-download"></sl-icon>Import All Data</button>
                     </div>
                     <div class="locations-list">
 
@@ -407,14 +411,14 @@ if (!$settingsController->settings_isset()) {
                             if (!empty($userInputDataController->get_userinput_data())) {
                                 foreach ($userInputDataController->get_userinput_data() as $serviceArea) {
                                     ?>
-                                    <div class="location-item"
-                                    data-id="<?php echo $serviceArea['id']; ?>"
-                                    data-city_name="<?php echo $serviceArea['city']['name']; ?>"
-                                    data-city_id="<?php echo $serviceArea['city']['id']; ?>"
-                                    data-state_name="<?php echo $serviceArea['state']['name']; ?>"
-                                    data-state_code="<?php echo $serviceArea['state']['code']; ?>"
-                                    data-country_name="<?php echo $serviceArea['country']['name']; ?>"
-                                    data-country_iso2="<?php echo $serviceArea['country']['iso2']; ?>"
+                                    <div class="location-item" 
+                                    data-id="<?php echo $serviceArea['id']; ?>" 
+                                    data-city_name="<?php echo $serviceArea['city']['name']; ?>" 
+                                    data-city_id="<?php echo $serviceArea['city']['id']; ?>" 
+                                    data-state_name="<?php echo $serviceArea['state']['name']; ?>" 
+                                    data-state_code="<?php echo $serviceArea['state']['code']; ?>" 
+                                    data-country_name="<?php echo $serviceArea['country']['name']; ?>" 
+                                    data-country_iso2="<?php echo $serviceArea['country']['iso2']; ?>" 
                                     
                                     <?php
                                     if(isset($serviceArea['neighbourhoods'])) {
@@ -828,6 +832,7 @@ if (!$settingsController->settings_isset()) {
         <section class="hidden-form" style="display: none;">
             <form action="#" method="POST">
                <input type="text" name="_single_api_data" /> 
+               <input type="text" name="_bulk_api_data" /> 
                <input type="text" name="_api_request_failed" /> 
             </form>
         </section>

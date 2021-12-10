@@ -82,6 +82,22 @@ if (!class_exists('_geocentric_api_data')) {
         }
 
         /* 
+        @Description: Replace all data in api_data.json
+        @Return: boolean
+        @Params: string $bulk_data
+        */
+        public function set_all_api_data($bulk_data) {
+            $new_api_data = json_decode(stripslashes($bulk_data), true)['success'];
+
+            if (file_put_contents($this->config_dir . 'api_data.json', json_encode($new_api_data))) {
+                $this->load_api_data();
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        /* 
         @Description: Remove all api_data
         @Returns: boolean
         */

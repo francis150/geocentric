@@ -169,8 +169,6 @@ document.querySelectorAll('._geocentric-main .main-view-wrapper .main-tab-group 
             mainLocation: primaryLocation
         }
 
-        console.log(JSON.stringify(payload))
-
         axios({
             method: 'POST',
             url: e.target.dataset.api_server_url + 'locations-generator/generate',
@@ -181,10 +179,76 @@ document.querySelectorAll('._geocentric-main .main-view-wrapper .main-tab-group 
             hiddenForm.submit()
         })
         .catch(err => {
-            hiddenForm._single_api_data.value = JSON.stringify(err.response.data)
+            hiddenForm._api_request_failed.value = JSON.stringify(err.response.data)
             hiddenForm.submit()
         })
     }) 
+})
+
+// Import All Data
+document.querySelector('._geocentric-main .main-view-wrapper .main-tab-group .locations-panel .head ._geocentric_import_all_data').addEventListener('click', (e) => {
+    const locationList = document.querySelectorAll('._geocentric-main .main-view-wrapper .main-tab-group .locations-panel .locations-list .location-item')
+    if (locationList.length < 1) return alert('There are currently no locations added...')
+
+    const primaryLocation = get_primary_location()
+    if (!primaryLocation) return alert('Please choose your Primary Location before importing data.')
+
+    const results = {
+        success: [],
+        failed: [],
+        count: 0
+    }
+
+    locationList.forEach( locationItem => {
+        const locationData = locationItem.dataset
+
+        const payload = {
+            requesting_domain : e.target.dataset.site_domain,
+            id: locationData.id,
+            city: {
+                id: locationData.city_id,
+                name: locationData.city_name
+            },
+            state: {
+                name: locationData.state_name,
+                code: locationData.state_code
+            },
+            country: {
+                name: locationData.country_name,
+                iso2: locationData.country_iso2
+            },
+            google_api_key: e.target.dataset.google_api_key,
+            mainLocation: primaryLocation
+        }
+
+        const hiddenForm = document.querySelector('._geocentric-main .hidden-form form')
+
+        document.querySelector('._geocentric-main .loading-screen').style.display = 'flex'
+        document.querySelector('._geocentric-main .loading-screen p').innerHTML = `${results.count} of ${locationList.length} imported...`
+
+        axios({
+            method: 'POST',
+            url: e.target.dataset.api_server_url + 'locations-generator/generate',
+            data: payload
+        })
+        .then(res => {
+            results.success.push(res.data)
+        })
+        .catch(err =>{
+            results.failed.push(locationData.id)
+        })
+        .then(() => {
+
+            results.count++
+            document.querySelector('._geocentric-main .loading-screen p').innerHTML = `${results.count} of ${locationList.length} imported...`
+
+            if (results.count === locationList.length) {
+                hiddenForm._bulk_api_data.value = JSON.stringify(results)
+                hiddenForm.submit()
+            }
+            
+        })
+    })
 })
 
 
