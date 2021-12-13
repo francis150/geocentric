@@ -24,9 +24,22 @@ if (!class_exists('_geocentric_api_data')) {
         @Description: Gets all the available api data stored in api_data.json
         @Return: ArrayObject
         */
-        public function get_api_data() {
+        private function get_all_api_data() {
             if (!isset($this->api_data)) return array();
             return $this->api_data;
+        }
+
+        /* 
+        @Description: Gets a specific api dataset from the $id
+        @Return: ArrayObject
+        @Params: string $id
+        */
+        public function get_api_data($id) {
+            if (!isset($this->api_data)) return;
+
+            foreach ($this->get_all_api_data() as $data) {
+                if ($data['id'] == $id) return $data;
+            }
         }
 
         /* 
@@ -67,9 +80,9 @@ if (!class_exists('_geocentric_api_data')) {
                         return $data;
                     }
 
-                }, $this->get_api_data());
+                }, $this->get_all_api_data());
             } else {
-                $modified = $this->get_api_data();
+                $modified = $this->get_all_api_data();
                 array_push($modified, $recvd);
             }
 

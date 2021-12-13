@@ -3,19 +3,22 @@
 if (!class_exists('_geocentric_core')) {
 
     require_once plugin_dir_path( __FILE__ ) . 'geocentric_plugin_config_class.php';
+    require_once plugin_dir_path( __FILE__ ) . 'geocentric_components_class.php';
 
     class _geocentric_core {
         
         private $plugin_config_controller;
+        private $component_controller;
         
         function __construct() {
             $this->plugin_config_controller = new _geocentric_plugin_config();
+            $this->component_controller = new _geocentric_components();
 
             add_action( 'admin_menu', array($this, 'add_admin_menu_items'));
-
             add_action('admin_head', array($this, 'addto_admin_head'));
             add_action('admin_footer', array($this, 'addto_admin_footer'));
             add_action('wp_head', array($this, 'add_to_wp_head'));
+            add_action('init', array($this, 'init_component_shortcodes'));
         }
 
         public function add_admin_menu_items() {
@@ -30,6 +33,16 @@ if (!class_exists('_geocentric_core')) {
                 $this->plugin_config_controller->get_admin_menu_icon(),
                 120
             );
+        }
+
+        public function init_component_shortcodes() {
+            add_shortcode('geocentric-weather', array($this->component_controller, 'weather_component'));
+            add_shortcode('geocentric-about', array($this->component_controller, 'about_component'));
+            add_shortcode('geocentric-neighbourhoods', array($this->component_controller, 'neighbourhoods_component'));
+            add_shortcode('geocentric-thingstodo', array($this->component_controller, 'thingstodo_component'));
+            add_shortcode('geocentric-mapembed', array($this->component_controller, 'mapembed_component'));
+            add_shortcode('geocentric-drivingdirections', array($this->component_controller, 'drivingdirections_component'));
+            add_shortcode('geocentric-reviews', array($this->component_controller, 'reviews_component'));
         }
 
         public function navto_main_admin_page() {

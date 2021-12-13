@@ -15,8 +15,6 @@ $userInputDataController = new _geocentric_userinput_data();
 require_once plugin_dir_path(__FILE__) . '../../includes/geocentric_api_data_class.php';
 $apiDataController = new _geocentric_api_data();
 
-
-
 $config_data = $pluginConfigController->get_plugin_config_data();
 
 require_once plugin_dir_path(__FILE__) . 'main_page_functions.php';

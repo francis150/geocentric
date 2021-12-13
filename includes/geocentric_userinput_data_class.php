@@ -31,6 +31,19 @@ if (!class_exists('_geocentric_userinput_data')) {
         }
 
         /* 
+        @Description: Gets the userinput data according to $id
+        @Return: ArrayObject
+        @Params: string $id
+        */
+        public function get_userinput_by_id($id) {
+            if (!isset($this->userinput_data)) return;
+
+            foreach ($this->get_userinput_data() as $data) {
+                if ($data['id'] == $id) return $data;
+            }
+        }
+
+        /* 
         @Description: Set or update userinput_data
         @Returns: boolean
         @Params: ArrayObject $data

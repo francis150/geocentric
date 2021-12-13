@@ -60,5 +60,39 @@ if (!class_exists('_geocentric_component_styles')) {
                 return false;
             }
         }
+
+        /* 
+        @Description: Get styles for a specific component
+        @Returns: ArrayObject
+        @Params: string $key
+        */
+        public function get_component_style($key) {
+            if (!isset($this->styles)) return array();
+
+            return $this->styles[$key];
+        }
+
+
+        /* 
+        @Description: Get hover effect css value from the userinput
+        @Returns: string
+        @params: string userinput value
+        */
+        public function get_hover_effect($input) {
+            switch ($input) {
+                case 'scaleUp':
+                    return "scale(1.02)";
+                    break;
+                case 'scaleDown':
+                    return "scale(0.98)";
+                    break;
+                case 'rise':
+                    return "translateY(-10px)";
+                    break;
+                default:
+                    return "scale(1.02)";
+                    break;
+            }
+        }
     }
 }
