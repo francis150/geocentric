@@ -252,6 +252,19 @@ document.querySelector('._geocentric-main .main-view-wrapper .main-tab-group .lo
 })
 
 
+// Copy short code
+document.querySelectorAll('._geocentric-main .main-view-wrapper .main-tab-group .locations-list .location-item .shortcodes-dropdown sl-menu-item').forEach(copyBtn => {
+    copyBtn.addEventListener('click', (e)  => {
+        const container = document.getElementById('_copy_shortcode')
+
+        container.value = e.target.dataset.shortcode
+
+        container.select()
+        container.setSelectionRange(0, 99999)
+        navigator.clipboard.writeText(container.value);
+    })
+})
+
 
 function get_primary_location() {
     let res

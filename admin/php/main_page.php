@@ -454,14 +454,17 @@ if (!$settingsController->settings_isset()) {
                                             </sl-tooltip>
                                             <sl-menu>
                                                 <sl-menu-label>Click to Copy</sl-menu-label>
-                                                <sl-menu-item>[weather_component id="..."/]</sl-menu-item>
-                                                <sl-menu-item>[about_component id="..."/]</sl-menu-item>
-                                                <sl-menu-item>[neighbourhoods_component id="..."/]</sl-menu-item>
-                                                <sl-menu-item>[thingstodo_component id="..."/]</sl-menu-item>
-                                                <sl-menu-item>[mapembed_component id="..."/]</sl-menu-item>
-                                                <sl-menu-item>[drivingdirections_component id="..."/]</sl-menu-item>
+                                                <sl-menu-item data-shortcode="[weather_component id=&quot;<?php echo $serviceArea['id']; ?>&quot;]">[weather_component id="..."/]</sl-menu-item>
+                                                <sl-menu-item data-shortcode="[about_component id=&quot;<?php echo $serviceArea['id']; ?>&quot;]">[about_component id="..."/]</sl-menu-item>
+                                                <sl-menu-item data-shortcode="[neighbourhoods_component id=&quot;<?php echo $serviceArea['id']; ?>&quot;]">[neighbourhoods_component id="..."/]</sl-menu-item>
+                                                <sl-menu-item data-shortcode="[thingstodo_component id=&quot;<?php echo $serviceArea['id']; ?>&quot;]">[thingstodo_component id="..."/]</sl-menu-item>
+                                                <sl-menu-item data-shortcode="[mapembed_component id=&quot;<?php echo $serviceArea['id']; ?>&quot;]">[mapembed_component id="..."/]</sl-menu-item>
+                                                <sl-menu-item data-shortcode="[drivingdirections_component id=&quot;<?php echo $serviceArea['id']; ?>&quot;]">[drivingdirections_component id="..."/]</sl-menu-item>
+                                                <sl-menu-item data-shortcode="[reviews_component id=&quot;<?php echo $serviceArea['id']; ?>&quot;]">[reviews_component id="..."/]</sl-menu-item>
                                                 <sl-divider></sl-divider>
-                                                <sl-menu-item>Copy All Components</sl-menu-item>
+                                                <sl-menu-item data-shortcode="[weather_component id=&quot;<?php echo $serviceArea['id']; ?>&quot;][about_component id=&quot;<?php echo $serviceArea['id']; ?>&quot;][neighbourhoods_component id=&quot;<?php echo $serviceArea['id']; ?>&quot;][thingstodo_component id=&quot;<?php echo $serviceArea['id']; ?>&quot;][mapembed_component id=&quot;<?php echo $serviceArea['id']; ?>&quot;][drivingdirections_component id=&quot;<?php echo $serviceArea['id']; ?>&quot;][reviews_component id=&quot;<?php echo $serviceArea['id']; ?>&quot;]">
+                                                    Copy All Components
+                                                </sl-menu-item>
                                             </sl-menu>
                                         </sl-dropdown>
                                         <sl-dropdown class="moreoptions-dropdown">
@@ -832,6 +835,7 @@ if (!$settingsController->settings_isset()) {
                <input type="text" name="_single_api_data" /> 
                <input type="text" name="_bulk_api_data" /> 
                <input type="text" name="_api_request_failed" /> 
+               <input type="text" id="_copy_shortcode" name="_copy_shortcode" />
             </form>
         </section>
     </div>
