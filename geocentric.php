@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Geocentric
- * Description: TODO add description
+ * Description: Pull all relevant geocentric data to your service area page in one click!
  * Version: 1.0.0
  * Requires at least: 5.2
  * Tested up to: 5.8

@@ -282,6 +282,10 @@ if (!class_exists('_geocentric_components')) {
                     width: {$styles['map']['width']}%;
                     height: {$styles['map']['height']}px;
                 }
+
+                ._geocentric-mapembed .iframe_wrapper > div > iframe {
+                    min-width: 100%;
+                }
             </style>
             <div class=\"_geocentric-mapembed\"><h2>{$attribs['title']}</h2>
             <div class=\"iframe_wrapper\"><div><iframe height=\"{$styles['map']['height']}\" frameborder=\"0\" scrolling=\"no\" marginheight=\"0\" marginwidth=\"0\" id=\"gmap_canvas\" src=\"https://maps.google.com/maps?width=520&amp;height=400&amp;hl=en&amp;q={$userinput_data['city']['name']}, {$userinput_data['state']['code']}, {$userinput_data['country']['iso2']}&amp;t=&amp;z=12&amp;ie=UTF8&amp;iwloc=B&amp;output=embed\"></iframe></div></div></div>";
@@ -384,7 +388,10 @@ if (!class_exists('_geocentric_components')) {
 
             $attribs = shortcode_atts(array(
                 "title" => "Reviews",
-                "limit" => 1000
+                "limit" => 1000,
+                "items-on-desktop" => 3,
+                "items-on-tablet" => 2,
+                "items-on-mobile" => 1
             ), $atts);
 
             $reviewsString = [];
@@ -495,35 +502,31 @@ if (!class_exists('_geocentric_components')) {
 
                 <div class=\"glider\">".implode("", $reviewsString)."</div>
 
-                <div id=\"dots\" class=\"glider-dots\"></div>
-
-
             </div>
 
             <script src=\"https://cdn.jsdelivr.net/npm/glider-js@1/glider.min.js\"></script>
             <script>
                 new Glider(document.querySelector('.glider'), {
-                    slidesToShow: 3,
+                    slidesToShow: ". $attribs['items-on-desktop'] .",
                     draggable: true,
                     duration: .5,
-                    dots: '#dots',
                     responsive: [
                         {
                             breakpoint: 375,
                             settings: {
-                                slidesToShow: 1
+                                slidesToShow: ". $attribs['items-on-mobile'] ."
                             }
                         },
                         {
                             breakpoint: 1024,
                             settings: {
-                                slidesToShow: 2
+                                slidesToShow: ". $attribs['items-on-tablet'] ."
                             }
                         },
                         {
                             breakpoint: 1333,
                             settings: {
-                                slidesToShow: 3
+                                slidesToShow: ". $attribs['items-on-desktop'] ."
                             }
                         }
                     ]
