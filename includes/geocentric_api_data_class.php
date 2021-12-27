@@ -124,5 +124,27 @@ if (!class_exists('_geocentric_api_data')) {
                 return false;
             }
         }
+
+        /** 
+         * @Description: Remove an array object from datafile by ID
+         * @Returns: boolean
+         * @Params: string $id
+        */
+        public function remove_data_by_id($id) {
+            $modified = array();
+
+            foreach ($this->api_data as $data) {
+                if ($data['id'] !== $id) {
+                    array_push($modified, $data);
+                }
+            }
+
+            if (file_put_contents($this->config_dir . 'api_data.json', json_encode($modified, JSON_PRETTY_PRINT))) {
+                $this->load_api_data();
+                return true;
+            } else {
+                return false;
+            }
+        }
     }
 }

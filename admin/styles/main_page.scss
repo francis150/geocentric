@@ -258,45 +258,26 @@ sl-divider {
         margin: 20px 0 30px 0;
     }
 
+    .pinpoint-address {
+        margin-bottom: 40px;
+
+        sl-checkbox::part(label) {
+            font-size: 14px;
+            color: black;
+        }
+
+        .place_id {
+            margin-bottom: 10px;
+        }
+
+        .street_address_zipcode {
+            display: none;
+            margin-bottom: 48px;
+        }
+    }
+
     .bottom {
         display: flex;
-        flex-direction: column;
-        margin-top: 20px;
-
-        sl-switch {
-            &[checked] {
-                &::part(control) {
-                    background: #D31027;
-                    border-color: #D31027;
-                }
-
-                &::part(thumb) {
-                    border-color: #D31027;
-                }
-            }
-
-            &::part(label) {
-                font-size: 14px;
-                font-weight: 400;
-            }
-        }
-
-        .two-col-div {
-            margin-bottom: 2px;
-        }
-
-        .advance-options-panel {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            height: 0;
-            overflow: hidden;
-            transition: .3s height ease-in-out;
-
-            small.hint-text {
-                opacity: 0.6;
-            }
-        }
 
         ._location-form-submit {
             width: 120px;

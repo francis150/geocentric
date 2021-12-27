@@ -20,22 +20,21 @@ function closeNewLocationForm() {
     document.querySelector('._geocentric-main .newlocation-form textarea.neighborhood').placeholder = ''
     document.querySelector('._geocentric-main .newlocation-form textarea.neighborhood').innerHTML = ''
 
-    if (document.querySelector('._geocentric-main .newlocation-form .newlocation-form-advance-options').checked) 
-    document.querySelector('._geocentric-main .newlocation-form .newlocation-form-advance-options').click()
+    document.querySelector('._geocentric-main .newlocation-form .place_id_unavailable').checked = false;
+    document.querySelector('._geocentric-main .newlocation-form .pinpoint-address .place_id').style.display = 'flex'
+    document.querySelector('._geocentric-main .newlocation-form .pinpoint-address .street_address_zipcode').style.display = 'none'
 }
 document.querySelector('._geocentric-main .newlocation-form .head .close-button').addEventListener('click', () => {
     closeNewLocationForm();
 })
 
-// Advance options toggler
-document.querySelector('._geocentric-main .newlocation-form .newlocation-form-advance-options').addEventListener('sl-change', (e) => {
-    const panel = document.querySelector('._geocentric-main .newlocation-form .advance-options-panel')
+// Toggle place_id to street_addres + zip_code
+document.querySelector('._geocentric-main .newlocation-form .pinpoint-address .place_id_unavailable').addEventListener('click', (e) => {
+    document.querySelector('._geocentric-main .newlocation-form .pinpoint-address .place_id').style.display = e.target.checked ? 'none' : 'flex'
+    document.querySelector('._geocentric-main .newlocation-form .pinpoint-address .street_address_zipcode').style.display = e.target.checked ? 'flex' : 'none'
 
-    if (e.target.checked) {
-        panel.style.height = '180px';
-    } else {
-        panel.style.height = '0';
-    }
+    document.querySelector('._geocentric-main .newlocation-form .pinpoint-address .street_address').required = e.target.checked
+    document.querySelector('._geocentric-main .newlocation-form .pinpoint-address .zip_code').required = e.target.checked
 })
 
 // Load States when Country is selected
@@ -73,12 +72,11 @@ document.querySelector('._geocentric-main .newlocation-form select.city').addEve
 })
 
 
-
 /* *****LOCATION LIST**** */
 // Edit location
 document.querySelectorAll('._geocentric-main .main-view-wrapper .main-tab-group .locations-list .location-item .moreoptions-dropdown .edit-location-button').forEach(editBtn => {
-    editBtn.addEventListener('click', (e) => {
-        const locationItem = e.target.parentElement.parentElement.parentElement.dataset
+    editBtn.addEventListener('click', () => {
+        const locationItem = editBtn.parentElement.parentElement.parentElement.dataset
 
         document.querySelector('._geocentric-main .newlocation-form form .edit_key').value = locationItem.id
         document.querySelector('._geocentric-main .newlocation-form form .city_name').value = locationItem.city_name
@@ -86,6 +84,15 @@ document.querySelectorAll('._geocentric-main .main-view-wrapper .main-tab-group 
         document.querySelector('._geocentric-main .newlocation-form form .country_name').value = locationItem.country_name
 
         if (locationItem.primary_location) document.querySelector('._geocentric-main .newlocation-form form .is_primary').value = locationItem.primary_location
+        if (locationItem.google_place_id) document.querySelector('._geocentric-main .newlocation-form form .google_maps_place_id').value = locationItem.google_place_id
+
+        if (locationItem.street && locationItem.zip_code) {
+            document.querySelector('._geocentric-main .newlocation-form form .place_id_unavailable').click()
+            document.querySelector('._geocentric-main .newlocation-form form .street_address').value = locationItem.street
+            document.querySelector('._geocentric-main .newlocation-form form .zip_code').value = locationItem.zip_code
+        }
+
+        if (locationItem.neighbourhoods) document.querySelector('._geocentric-main .newlocation-form form .neighborhood').innerHTML = locationItem.neighbourhoods
 
         document.querySelector('._geocentric-main .newlocation-form form select.country').innerHTML += `<option selected value="${locationItem.country_iso2}">${locationItem.country_name}</option>`;
 
@@ -97,14 +104,6 @@ document.querySelectorAll('._geocentric-main .main-view-wrapper .main-tab-group 
             })
         })
 
-        if (locationItem.neighbourhoods) document.querySelector('._geocentric-main .newlocation-form form .neighborhood').innerHTML = locationItem.neighbourhoods
-
-
-        if (locationItem.google_place_id || locationItem.driving_directions_limit) document.querySelector('._geocentric-main .newlocation-form form .newlocation-form-advance-options').click()
-
-        if (locationItem.google_place_id) document.querySelector('._geocentric-main .newlocation-form form .google_maps_place_id').value = locationItem.google_place_id
-        if (locationItem.driving_directions_limit) document.querySelector('._geocentric-main .newlocation-form form .driving_directions_limit').value = locationItem.driving_directions_limit
-
         document.querySelector('._geocentric-main .newlocation-form form .head h2').innerHTML = 'Edit Location'
         document.querySelector('._geocentric-main .newlocation-form').style.display = 'flex'
         
@@ -113,10 +112,10 @@ document.querySelectorAll('._geocentric-main .main-view-wrapper .main-tab-group 
 
 // Remove Location
 document.querySelectorAll('._geocentric-main .main-view-wrapper .main-tab-group .locations-list .location-item .moreoptions-dropdown .remove-location-button').forEach(removeBtn => {
-    removeBtn.addEventListener('click', async (e) => {
+    removeBtn.addEventListener('click', () => {
 
         if(confirm('Are you sure you want to remove this location?')) {
-            const locationItem = await e.target.parentElement.parentElement.parentElement.dataset
+            const locationItem = removeBtn.parentElement.parentElement.parentElement.dataset
 
             document.querySelector('._geocentric-main .newlocation-form form .remove_key').value = locationItem.id
             document.querySelector('._geocentric-main .newlocation-form form').submit()
@@ -128,8 +127,8 @@ document.querySelectorAll('._geocentric-main .main-view-wrapper .main-tab-group 
 // Set as main location
 document.querySelectorAll('._geocentric-main .main-view-wrapper .main-tab-group .locations-list .location-item .moreoptions-dropdown .main-location-button').forEach(mainLocationBtn => {
     mainLocationBtn.addEventListener('click', async (e) => {
-        if (confirm('This Operation will remove all imported data and you will have to re-import them all again. Are you sure you want to set this location as your Primary Location? Would be better if you add a GMB Place ID under Advance Options.')) {
-            const locationItem = e.target.parentElement.parentElement.parentElement.dataset
+        if (confirm('This Operation will remove all imported data and you will have to re-import them all again. Are you sure you want to set this location as your Primary Location? Would be better if you add a GMB Place ID.')) {
+            const locationItem = mainLocationBtn.parentElement.parentElement.parentElement.dataset
 
             document.querySelector('._geocentric-main .newlocation-form form .mainlocation_key').value = locationItem.id
             document.querySelector('._geocentric-main .newlocation-form form').submit()
@@ -139,11 +138,11 @@ document.querySelectorAll('._geocentric-main .main-view-wrapper .main-tab-group 
 
 // Import single data
 document.querySelectorAll('._geocentric-main .main-view-wrapper .main-tab-group .locations-list .location-item .moreoptions-dropdown .import-data-button').forEach(importDataBtn => {
-    importDataBtn.addEventListener('click', (e) => {
+    importDataBtn.addEventListener('click', () => {
         const primaryLocation = get_primary_location()
         if (!primaryLocation) return alert('Please choose your Primary Location before importing data.')
 
-        const locationItem = e.target.parentElement.parentElement.parentElement
+        const locationItem = importDataBtn.parentElement.parentElement.parentElement
         const locationData = locationItem.dataset
         const hiddenForm = document.querySelector('._geocentric-main .hidden-form form')
 
@@ -151,7 +150,7 @@ document.querySelectorAll('._geocentric-main .main-view-wrapper .main-tab-group 
         document.querySelector('._geocentric-main .loading-screen p').innerHTML = 'Requesting 1 Location Data out of 1...'
 
         const payload = {
-            requesting_domain : e.target.dataset.site_domain,
+            requesting_domain : importDataBtn.dataset.site_domain,
             id: locationData.id,
             city: {
                 id: locationData.city_id,
@@ -165,13 +164,15 @@ document.querySelectorAll('._geocentric-main .main-view-wrapper .main-tab-group 
                 name: locationData.country_name,
                 iso2: locationData.country_iso2
             },
-            google_api_key: e.target.dataset.google_api_key,
+            google_api_key: importDataBtn.dataset.google_api_key,
             mainLocation: primaryLocation
         }
 
+        if (locationData.google_place_id) payload['place_id'] = locationData.google_place_id
+
         axios({
             method: 'POST',
-            url: e.target.dataset.api_server_url + 'locations-generator/generate',
+            url: importDataBtn.dataset.api_server_url + 'locations-generator/generate',
             data: payload
         })
         .then(res => {
@@ -220,6 +221,8 @@ document.querySelector('._geocentric-main .main-view-wrapper .main-tab-group .lo
             google_api_key: e.target.dataset.google_api_key,
             mainLocation: primaryLocation
         }
+
+        if (locationData.google_place_id) payload['place_id'] = locationData.google_place_id
 
         const hiddenForm = document.querySelector('._geocentric-main .hidden-form form')
 
@@ -279,7 +282,9 @@ function get_primary_location() {
                 }
             }
 
-            if (locationItem.dataset.google_place_id) res['placeID'] = locationItem.dataset.google_place_id
+            if (locationItem.dataset.google_place_id) res['place_id'] = locationItem.dataset.google_place_id
+            if (locationItem.dataset.street) res['street'] = locationItem.dataset.street
+            if (locationItem.dataset.zip_code) res['zip_code'] = locationItem.dataset.zip_code
         }
     })
 

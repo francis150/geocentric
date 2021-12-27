@@ -338,7 +338,7 @@ if (!class_exists('_geocentric_components')) {
                     /* Initialize Map ID and Options */
                     map = new google.maps.Map(document.querySelector('._geocentric-drivingdirections > .map'), {
                         zoom: 14, 
-                        center: directions.cityCenter
+                        center: directions.destination
                     });
 
                     /* Pin Point Routes Into Map And Set Markers  */
@@ -360,14 +360,12 @@ if (!class_exists('_geocentric_components')) {
                     }
 
                     directions.origins.forEach(origin =>{
-                        calculateRoute(origin, directions.cityCenter)
+                        calculateRoute(origin, directions.destination)
                     })
                 }
 
             </script>
             <script src=\"https://maps.googleapis.com/maps/api/js?key={$settings['google_api_key']}&callback=initMap&v=weekly\" async></script>";
-
-            return "<h1>Driving Directions</h1>";
         }
 
         /* 
@@ -382,11 +380,21 @@ if (!class_exists('_geocentric_components')) {
             $api_data = $this->api_data_controller->get_api_data($atts['id']);
 
             if (empty($api_data)) return "<pre>No data matched by id...</pre>";
+            if (empty($api_data['reviews'])) return "<pre>No data to show...</pre>";
 
             $attribs = shortcode_atts(array(
                 "title" => "Reviews",
                 "limit" => 1000
             ), $atts);
+
+            $reviewsString = [];
+
+            foreach ($api_data['reviews'] as $review) {
+                if($attribs['limit'] == count($reviewsString)) break;
+                array_push($reviewsString, "<div class=\"review\"><a class=\"head\" target=\"_blank\" href=\"{$review['authorUrl']}\"><img src=\"{$review['profilePhotoUrl']}\"><div class=\"head-content\"><p class=\"name\">{$review['authorName']}</p><sl-rating readonly value=\"{$review['rating']}\" style=\"--symbol-size: .9rem;\"></sl-rating></div></a><div class=\"message-wrapper\"><p class=\"message\">{$review['text']}</p></div></div>");
+            }
+
+            $gap_style = $styles['items']['gap'] / 2;
 
             return "
             <script type=\"module\" src=\"https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.62/dist/components/icon/icon.js\"></script>
@@ -407,10 +415,10 @@ if (!class_exists('_geocentric_components')) {
                 }
 
                 ._geocentric-reviewscomponent h2 {
-                    font-size: 36px;
-                    font-weight: 500;
-                    color: #000;
-                    text-align: center;
+                    font-size: {$styles['title']['fontSize']}px;
+                    font-weight: {$styles['title']['fontWeight']};
+                    color: {$styles['title']['fontColor']};
+                    text-align: {$styles['title']['textAlignment']};
 
                     margin-bottom: 40px;
                 }
@@ -420,17 +428,19 @@ if (!class_exists('_geocentric_components')) {
                 }
 
                 ._geocentric-reviewscomponent .review {
-                    background: #f5f5f5;
+                    background: {$styles['items']['backgroundColor']};
                     display: flex;
                     flex-direction: column;
-                    margin: 0 10px;
-                    padding: 15px;
-                    border-radius: 5px;
+                    margin: 0 {$gap_style}px;
+                    padding: {$styles['items']['padding']}px;
+                    border-width: {$styles['items']['borderWidth']}px;
+                    border-color: {$styles['items']['borderColor']}px;
+                    border-radius: {$styles['items']['borderRadius']}px;
                     transition: .3s transform ease-in-out;
                 }
 
                 ._geocentric-reviewscomponent .review:hover {
-                    transform: scale(1.03);
+                    transform: {$this->component_styles_controller->get_hover_effect($styles['items']['hoverEffect'])};
                 }
 
                 ._geocentric-reviewscomponent .head {
@@ -481,114 +491,9 @@ if (!class_exists('_geocentric_components')) {
             </style>
             <div class=\"glider-contain multiple _geocentric-reviewscomponent\">
 
-                <h2>Reviews</h2>
+                <h2>{$attribs['title']}</h2>
 
-                <div class=\"glider\">
-
-                    <div class=\"review\">
-                        <a class=\"head\" target=\"_blank\" href=\"https://www.google.com/maps/contrib/106456416651248395606/reviews\">
-                            <img src=\"https://lh3.googleusercontent.com/a/AATXAJyBGT-oKvdIPSQAOmF_xzQS1iQtoRIVTn9xAJmj=s128-c0x00000000-cc-rp-mo\">
-                            <div class=\"head-content\">
-                                <p class=\"name\">Stephanie Grisel</p>
-                                <sl-rating readonly value=\"4\" style=\"--symbol-size: .9rem;\"></sl-rating>
-                            </div>
-                        </a>
-                        <div class=\"message-wrapper\">
-                            <p class=\"message\">Our roof was over 30 years old and in horrible shape.  We put a claim into our homeowners insurance company and they would only pay $900 for repairs.  We enlisted Advosy and they got our roof replaced.  We paid no money to them.  They did all the work and our insurance company paid them fully.  It did take about 2 months, which Advosy warned us it would take.  But it was well worth the time.  They did great work and I would recommend them to everyone.</p>
-                        </div>
-                    </div>
-
-                    <div class=\"review\">
-                        <a class=\"head\" target=\"_blank\" href=\"https://www.google.com/maps/contrib/106456416651248395606/reviews\">
-                            <img src=\"https://lh3.googleusercontent.com/a/AATXAJyBGT-oKvdIPSQAOmF_xzQS1iQtoRIVTn9xAJmj=s128-c0x00000000-cc-rp-mo\">
-                            <div class=\"head-content\">
-                                <p class=\"name\">Stephanie Grisel</p>
-                                <sl-rating readonly value=\"4\" style=\"--symbol-size: .9rem;\"></sl-rating>
-                            </div>
-                        </a>
-                        <div class=\"message-wrapper\">
-                            <p class=\"message\">Our roof was over 30 years old and in horrible shape.  We put a claim into our homeowners insurance company and they would only pay $900 for repairs.  We enlisted Advosy and they got our roof replaced.  We paid no money to them.  They did all the work and our insurance company paid them fully.  It did take about 2 months, which Advosy warned us it would take.  But it was well worth the time.  They did great work and I would recommend them to everyone.</p>
-                        </div>
-                    </div>
-
-                    <div class=\"review\">
-                        <a class=\"head\" target=\"_blank\" href=\"https://www.google.com/maps/contrib/106456416651248395606/reviews\">
-                            <img src=\"https://lh3.googleusercontent.com/a/AATXAJyBGT-oKvdIPSQAOmF_xzQS1iQtoRIVTn9xAJmj=s128-c0x00000000-cc-rp-mo\">
-                            <div class=\"head-content\">
-                                <p class=\"name\">Stephanie Grisel</p>
-                                <sl-rating readonly value=\"4\" style=\"--symbol-size: .9rem;\"></sl-rating>
-                            </div>
-                        </a>
-                        <div class=\"message-wrapper\">
-                            <p class=\"message\">Our roof was over 30 years old and in horrible shape.  We put a claim into our homeowners insurance company and they would only pay $900 for repairs.  We enlisted Advosy and they got our roof replaced.  We paid no money to them.  They did all the work and our insurance company paid them fully.  It did take about 2 months, which Advosy warned us it would take.  But it was well worth the time.  They did great work and I would recommend them to everyone.</p>
-                        </div>
-                    </div>
-
-                    <div class=\"review\">
-                        <a class=\"head\" target=\"_blank\" href=\"https://www.google.com/maps/contrib/106456416651248395606/reviews\">
-                            <img src=\"https://lh3.googleusercontent.com/a/AATXAJyBGT-oKvdIPSQAOmF_xzQS1iQtoRIVTn9xAJmj=s128-c0x00000000-cc-rp-mo\">
-                            <div class=\"head-content\">
-                                <p class=\"name\">Stephanie Grisel</p>
-                                <sl-rating readonly value=\"4\" style=\"--symbol-size: .9rem;\"></sl-rating>
-                            </div>
-                        </a>
-                        <div class=\"message-wrapper\">
-                            <p class=\"message\">Our roof was over 30 years old and in horrible shape.  We put a claim into our homeowners insurance company and they would only pay $900 for repairs.  We enlisted Advosy and they got our roof replaced.  We paid no money to them.  They did all the work and our insurance company paid them fully.  It did take about 2 months, which Advosy warned us it would take.  But it was well worth the time.  They did great work and I would recommend them to everyone.</p>
-                        </div>
-                    </div>
-                    <div class=\"review\">
-                        <a class=\"head\" target=\"_blank\" href=\"https://www.google.com/maps/contrib/106456416651248395606/reviews\">
-                            <img src=\"https://lh3.googleusercontent.com/a/AATXAJyBGT-oKvdIPSQAOmF_xzQS1iQtoRIVTn9xAJmj=s128-c0x00000000-cc-rp-mo\">
-                            <div class=\"head-content\">
-                                <p class=\"name\">Stephanie Grisel</p>
-                                <sl-rating readonly value=\"4\" style=\"--symbol-size: .9rem;\"></sl-rating>
-                            </div>
-                        </a>
-                        <div class=\"message-wrapper\">
-                            <p class=\"message\">Our roof was over 30 years old and in horrible shape.  We put a claim into our homeowners insurance company and they would only pay $900 for repairs.  We enlisted Advosy and they got our roof replaced.  We paid no money to them.  They did all the work and our insurance company paid them fully.  It did take about 2 months, which Advosy warned us it would take.  But it was well worth the time.  They did great work and I would recommend them to everyone.</p>
-                        </div>
-                    </div>
-
-                    <div class=\"review\">
-                        <a class=\"head\" target=\"_blank\" href=\"https://www.google.com/maps/contrib/106456416651248395606/reviews\">
-                            <img src=\"https://lh3.googleusercontent.com/a/AATXAJyBGT-oKvdIPSQAOmF_xzQS1iQtoRIVTn9xAJmj=s128-c0x00000000-cc-rp-mo\">
-                            <div class=\"head-content\">
-                                <p class=\"name\">Stephanie Grisel</p>
-                                <sl-rating readonly value=\"4\" style=\"--symbol-size: .9rem;\"></sl-rating>
-                            </div>
-                        </a>
-                        <div class=\"message-wrapper\">
-                            <p class=\"message\">Our roof was over 30 years old and in horrible shape.  We put a claim into our homeowners insurance company and they would only pay $900 for repairs.  We enlisted Advosy and they got our roof replaced.  We paid no money to them.  They did all the work and our insurance company paid them fully.  It did take about 2 months, which Advosy warned us it would take.  But it was well worth the time.  They did great work and I would recommend them to everyone.</p>
-                        </div>
-                    </div>
-
-                    <div class=\"review\">
-                        <a class=\"head\" target=\"_blank\" href=\"https://www.google.com/maps/contrib/106456416651248395606/reviews\">
-                            <img src=\"https://lh3.googleusercontent.com/a/AATXAJyBGT-oKvdIPSQAOmF_xzQS1iQtoRIVTn9xAJmj=s128-c0x00000000-cc-rp-mo\">
-                            <div class=\"head-content\">
-                                <p class=\"name\">Stephanie Grisel</p>
-                                <sl-rating readonly value=\"4\" style=\"--symbol-size: .9rem;\"></sl-rating>
-                            </div>
-                        </a>
-                        <div class=\"message-wrapper\">
-                            <p class=\"message\">Our roof was over 30 years old and in horrible shape.  We put a claim into our homeowners insurance company and they would only pay $900 for repairs.  We enlisted Advosy and they got our roof replaced.  We paid no money to them.  They did all the work and our insurance company paid them fully.  It did take about 2 months, which Advosy warned us it would take.  But it was well worth the time.  They did great work and I would recommend them to everyone.</p>
-                        </div>
-                    </div>
-
-                    <div class=\"review\">
-                        <a class=\"head\" target=\"_blank\" href=\"https://www.google.com/maps/contrib/106456416651248395606/reviews\">
-                            <img src=\"https://lh3.googleusercontent.com/a/AATXAJyBGT-oKvdIPSQAOmF_xzQS1iQtoRIVTn9xAJmj=s128-c0x00000000-cc-rp-mo\">
-                            <div class=\"head-content\">
-                                <p class=\"name\">Stephanie Grisel</p>
-                                <sl-rating readonly value=\"4\" style=\"--symbol-size: .9rem;\"></sl-rating>
-                            </div>
-                        </a>
-                        <div class=\"message-wrapper\">
-                            <p class=\"message\">Our roof was over 30 years old and in horrible shape.  We put a claim into our homeowners insurance company and they would only pay $900 for repairs.  We enlisted Advosy and they got our roof replaced.  We paid no money to them.  They did all the work and our insurance company paid them fully.  It did take about 2 months, which Advosy warned us it would take.  But it was well worth the time.  They did great work and I would recommend them to everyone.</p>
-                        </div>
-                    </div>
-
-                </div>
+                <div class=\"glider\">".implode("", $reviewsString)."</div>
 
                 <div id=\"dots\" class=\"glider-dots\"></div>
 

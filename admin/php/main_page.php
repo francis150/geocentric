@@ -50,9 +50,9 @@ if (!$settingsController->settings_isset()) {
             <form action="#" method="POST">
 
                 <!-- Hidden feilds -->
-                <input type="text" style="display: none;" class="new_key" name="new_key" value="">
-                <input type="text" style="display: none;" class="edit_key" name="edit_key" value="">
-                <input type="text" style="display: none;" class="remove_key" name="remove_key" value="">
+                <input type="text" style="display: none;" class="new_key" name="new_key">
+                <input type="text" style="display: none;" class="edit_key" name="edit_key">
+                <input type="text" style="display: none;" class="remove_key" name="remove_key">
                 <input type="text" style="display: none;" class="mainlocation_key" name="mainlocation_key" value="">
                 
                 <input type="text" style="display: none;" class="city_name" name="city_name" value="">
@@ -71,7 +71,7 @@ if (!$settingsController->settings_isset()) {
                 <div class="three-col-div">
 
                     <div class="input-wrapper">
-                        <label>Country</label>
+                        <label>Country <span>*</span></label>
                         <select class="country" autocomplete="on" name="country_code" required>
                             <option value="" selected disabled>Choose a country...</option>
                             <option value="US">United States</option>
@@ -328,14 +328,14 @@ if (!$settingsController->settings_isset()) {
                     </div>
 
                     <div class="input-wrapper">
-                        <label>State</label>
+                        <label>State <span>*</span></label>
                         <select class="state" autocomplete="on" name="state_code" required>
                             <option value="" selected disabled>---</option>
                         </select>
                     </div>
 
                     <div class="input-wrapper">
-                        <label>City/Town</label>
+                        <label>City/Town <span>*</span></label>
                         <select class="city" autocomplete="on" name="city_id" required>
                             <option value="" selected disabled>---</option>
                         </select>
@@ -351,28 +351,34 @@ if (!$settingsController->settings_isset()) {
                     </div>
                 </div>
 
-                <div class="bottom">
-                    <sl-switch class="newlocation-form-advance-options">Advance Options</sl-switch>
-
-                    <div class="advance-options-panel">
-                        
-                        <div class="two-col-div">
-                            <div class="input-wrapper">
-                                <label>Google Maps Place ID</label>
-                                <input class="google_maps_place_id" name="google_maps_place_id" type="text">
-                            </div>
-
-                            <div class="input-wrapper">
-                                <label>Driving Directions Limit</label>
-                                <input name="driving_directions_limit" type="number" class="driving_directions_limit">
-                            </div>
+                <div class="pinpoint-address">
+                    <div class="one-col-div place_id">
+                        <div class="input-wrapper">
+                            <label>Google Maps Place ID</label>
+                            <input class="google_maps_place_id" name="google_maps_place_id" type="text">
+                            <small>If you have physical branch in this area, you can manually enter either the Google Maps Place ID or tick the checkbox below to use street address and zip code.</small>
                         </div>
-                        <small class="hint-text">If you have physical branch in this area, you can manually enter either the Google Maps Place ID or the Street Address above.</small>
-
                     </div>
 
+                    <div class="two-col-div street_address_zipcode">
+                        <div class="input-wrapper">
+                            <label>Street Address <span>*</span></label>
+                            <input class="street_address" name="street_address" type="text">
+                        </div>
+
+                        <div class="input-wrapper">
+                            <label>ZIP Code <span>*</span></label>
+                            <input class="zip_code" name="zip_code" type="text">
+                        </div>
+                    </div>
+
+                    <input type="checkbox" class="place_id_unavailable" name="place_id_unavailable" /><span>Use <b>street address</b> and <b>zip code</b>.</span>
+                </div>
+
+                <div class="bottom">
                     <input class="_location-form-submit" name="_location-form-submit" type="submit" />
                 </div>
+
             </form>
         </section>
 
@@ -431,9 +437,15 @@ if (!$settingsController->settings_isset()) {
                                         <?php
                                     }
 
-                                    if(isset($serviceArea['drivingDirectionsLimit'])) {
+                                    if(isset($serviceArea['street'])) {
                                         ?>
-                                        data-driving_directions_limit="<?php echo $serviceArea['drivingDirectionsLimit']; ?>"
+                                        data-street="<?php echo $serviceArea['street']; ?>"
+                                        <?php
+                                    }
+
+                                    if(isset($serviceArea['zip_code'])) {
+                                        ?>
+                                        data-zip_code="<?php echo $serviceArea['zip_code']; ?>"
                                         <?php
                                     }
 
@@ -454,15 +466,15 @@ if (!$settingsController->settings_isset()) {
                                             </sl-tooltip>
                                             <sl-menu>
                                                 <sl-menu-label>Click to Copy</sl-menu-label>
-                                                <sl-menu-item data-shortcode="[weather_component id=&quot;<?php echo $serviceArea['id']; ?>&quot;]">[weather_component id="..."/]</sl-menu-item>
-                                                <sl-menu-item data-shortcode="[about_component id=&quot;<?php echo $serviceArea['id']; ?>&quot;]">[about_component id="..."/]</sl-menu-item>
-                                                <sl-menu-item data-shortcode="[neighbourhoods_component id=&quot;<?php echo $serviceArea['id']; ?>&quot;]">[neighbourhoods_component id="..."/]</sl-menu-item>
-                                                <sl-menu-item data-shortcode="[thingstodo_component id=&quot;<?php echo $serviceArea['id']; ?>&quot;]">[thingstodo_component id="..."/]</sl-menu-item>
-                                                <sl-menu-item data-shortcode="[mapembed_component id=&quot;<?php echo $serviceArea['id']; ?>&quot;]">[mapembed_component id="..."/]</sl-menu-item>
-                                                <sl-menu-item data-shortcode="[drivingdirections_component id=&quot;<?php echo $serviceArea['id']; ?>&quot;]">[drivingdirections_component id="..."/]</sl-menu-item>
-                                                <sl-menu-item data-shortcode="[reviews_component id=&quot;<?php echo $serviceArea['id']; ?>&quot;]">[reviews_component id="..."/]</sl-menu-item>
+                                                <sl-menu-item data-shortcode="[geocentric-weather id=&quot;<?php echo $serviceArea['id']; ?>&quot;]">[geocentric-weather id="..."/]</sl-menu-item>
+                                                <sl-menu-item data-shortcode="[geocentric-about id=&quot;<?php echo $serviceArea['id']; ?>&quot;]">[geocentric-about id="..."/]</sl-menu-item>
+                                                <sl-menu-item data-shortcode="[geocentric-neighbourhoods id=&quot;<?php echo $serviceArea['id']; ?>&quot;]">[geocentric-neighbourhoods id="..."/]</sl-menu-item>
+                                                <sl-menu-item data-shortcode="[geocentric-thingstodo id=&quot;<?php echo $serviceArea['id']; ?>&quot;]">[geocentric-thingstodo id="..."/]</sl-menu-item>
+                                                <sl-menu-item data-shortcode="[geocentric-mapembed id=&quot;<?php echo $serviceArea['id']; ?>&quot;]">[geocentric-mapembed id="..."/]</sl-menu-item>
+                                                <sl-menu-item data-shortcode="[geocentric-drivingdirections id=&quot;<?php echo $serviceArea['id']; ?>&quot;]">[geocentric-drivingdirections id="..."/]</sl-menu-item>
+                                                <sl-menu-item data-shortcode="[geocentric-reviews id=&quot;<?php echo $serviceArea['id']; ?>&quot;]">[geocentric-reviews id="..."/]</sl-menu-item>
                                                 <sl-divider></sl-divider>
-                                                <sl-menu-item data-shortcode="[weather_component id=&quot;<?php echo $serviceArea['id']; ?>&quot;][about_component id=&quot;<?php echo $serviceArea['id']; ?>&quot;][neighbourhoods_component id=&quot;<?php echo $serviceArea['id']; ?>&quot;][thingstodo_component id=&quot;<?php echo $serviceArea['id']; ?>&quot;][mapembed_component id=&quot;<?php echo $serviceArea['id']; ?>&quot;][drivingdirections_component id=&quot;<?php echo $serviceArea['id']; ?>&quot;][reviews_component id=&quot;<?php echo $serviceArea['id']; ?>&quot;]">
+                                                <sl-menu-item data-shortcode="[geocentric-weather id=&quot;<?php echo $serviceArea['id']; ?>&quot;][geocentric-about id=&quot;<?php echo $serviceArea['id']; ?>&quot;][geocentric-neighbourhoods id=&quot;<?php echo $serviceArea['id']; ?>&quot;][geocentric-thingstodo id=&quot;<?php echo $serviceArea['id']; ?>&quot;][geocentric-mapembed id=&quot;<?php echo $serviceArea['id']; ?>&quot;][geocentric-drivingdirections id=&quot;<?php echo $serviceArea['id']; ?>&quot;][geocentric-reviews id=&quot;<?php echo $serviceArea['id']; ?>&quot;]">
                                                     Copy All Components
                                                 </sl-menu-item>
                                             </sl-menu>
@@ -529,9 +541,9 @@ if (!$settingsController->settings_isset()) {
                                 <div class="input-wrapper">
                                     <label>Text Alignment</label>
                                     <select name="asTitleTextAligment" value="<?php echo $component_styles['aboutSection']['title']['textAlignment']; ?>">
-                                        <option value="center">Center</option>
-                                        <option value="right">Right</option>
-                                        <option value="left">Left</option>
+                                        <option value="center" <?php if($component_styles['aboutSection']['title']['textAlignment'] == "center") echo "selected"; ?>>Center</option>
+                                        <option value="right" <?php if($component_styles['aboutSection']['title']['textAlignment'] == "right") echo "selected"; ?>>Right</option>
+                                        <option value="left" <?php if($component_styles['aboutSection']['title']['textAlignment'] == "left") echo "selected"; ?>>Left</option>
                                     </select>
                                 </div>
                             </div>
@@ -553,10 +565,10 @@ if (!$settingsController->settings_isset()) {
                                 <div class="input-wrapper">
                                     <label>Text Alignment</label>
                                     <select name="asContentTextAligment" value="<?php echo $component_styles['aboutSection']['content']['textAlignment']; ?>">
-                                        <option value="center">Center</option>
-                                        <option value="right">Right</option>
-                                        <option value="left">Left</option>
-                                        <option value="justify">Justify</option>
+                                        <option value="center" <?php if($component_styles['aboutSection']['content']['textAlignment'] == "center") echo "selected"; ?>>Center</option>
+                                        <option value="right" <?php if($component_styles['aboutSection']['content']['textAlignment'] == "right") echo "selected"; ?>>Right</option>
+                                        <option value="left" <?php if($component_styles['aboutSection']['content']['textAlignment'] == "left") echo "selected"; ?>>Left</option>
+                                        <option value="justify" <?php if($component_styles['aboutSection']['content']['textAlignment'] == "justify") echo "selected"; ?>>Justify</option>
                                     </select>
                                 </div>
                             </div>
@@ -580,9 +592,9 @@ if (!$settingsController->settings_isset()) {
                                 <div class="input-wrapper">
                                     <label>Text Alignment</label>
                                     <select name="nhTitleTextAligment" value="<?php echo $component_styles['neighborhoods']['title']['textAlignment']; ?>">
-                                        <option value="center">Center</option>
-                                        <option value="right">Right</option>
-                                        <option value="left">Left</option>
+                                        <option value="center" <?php if($component_styles['neighborhoods']['title']['textAlignment'] == "center") echo "selected"; ?>>Center</option>
+                                        <option value="right" <?php if($component_styles['neighborhoods']['title']['textAlignment'] == "right") echo "selected"; ?>>Right</option>
+                                        <option value="left" <?php if($component_styles['neighborhoods']['title']['textAlignment'] == "left") echo "selected"; ?>>Left</option>
                                     </select>
                                 </div>
                             </div>
@@ -610,9 +622,9 @@ if (!$settingsController->settings_isset()) {
                                 <div class="input-wrapper">
                                     <label>Text Alignment</label>
                                     <select name="nhLinksTextAligment" value="<?php echo $component_styles['neighborhoods']['neighborhoods']['textAlignment']; ?>">
-                                        <option value="center">Center</option>
-                                        <option value="right">Right</option>
-                                        <option value="left">Left</option>
+                                        <option value="center" <?php if($component_styles['neighborhoods']['neighborhoods']['textAlignment'] == "center") echo "selected"; ?>>Center</option>
+                                        <option value="right" <?php if($component_styles['neighborhoods']['neighborhoods']['textAlignment'] == "right") echo "selected"; ?>>Right</option>
+                                        <option value="left" <?php if($component_styles['neighborhoods']['neighborhoods']['textAlignment'] == "left") echo "selected"; ?>>Left</option>
                                     </select>
                                 </div>
                             </div>
@@ -637,9 +649,9 @@ if (!$settingsController->settings_isset()) {
                                 <div class="input-wrapper">
                                     <label>Text Alignment</label>
                                     <select name="ttdTitleTextAligment" value="<?php echo $component_styles['thingsToDo']['title']['textAlignment']; ?>">
-                                        <option value="center">Center</option>
-                                        <option value="right">Right</option>
-                                        <option value="left">Left</option>
+                                        <option value="center" <?php if($component_styles['thingsToDo']['title']['textAlignment'] == "center") echo "selected"; ?>>Center</option>
+                                        <option value="right" <?php if($component_styles['thingsToDo']['title']['textAlignment'] == "right") echo "selected"; ?>>Right</option>
+                                        <option value="left" <?php if($component_styles['thingsToDo']['title']['textAlignment'] == "left") echo "selected"; ?>>Left</option>
                                     </select>
                                 </div>
                             </div>
@@ -661,9 +673,9 @@ if (!$settingsController->settings_isset()) {
                                 <div class="input-wrapper">
                                     <label>Hover Effect</label>
                                     <select name="ttdItemsHoverEffect" value="<?php echo $component_styles['thingsToDo']['items']['hoverEffect']; ?>">
-                                        <option value="scaleUp">Scale Up</option>
-                                        <option value="scaleDown">Scale Down</option>
-                                        <option value="rise">Rise</option>
+                                        <option value="scaleUp" <?php if($component_styles['thingsToDo']['items']['hoverEffect'] == "scaleUp") echo "selected"; ?>>Scale Up</option>
+                                        <option value="scaleDown" <?php if($component_styles['thingsToDo']['items']['hoverEffect'] == "scaleDown") echo "selected"; ?>>Scale Down</option>
+                                        <option value="rise" <?php if($component_styles['thingsToDo']['items']['hoverEffect'] == "rise") echo "selected"; ?>>Rise</option>
                                     </select>
                                 </div>
                             </div>
@@ -715,9 +727,9 @@ if (!$settingsController->settings_isset()) {
                                 <div class="input-wrapper">
                                     <label>Text Alignment</label>
                                     <select name="ttdNameTextAligment" value="<?php echo $component_styles['thingsToDo']['name']['textAlignment']; ?>">
-                                        <option value="center">Center</option>
-                                        <option value="right">Right</option>
-                                        <option value="left">Left</option>
+                                        <option value="center" <?php if($component_styles['thingsToDo']['name']['textAlignment'] == "center") echo "selected"; ?>>Center</option>
+                                        <option value="right" <?php if($component_styles['thingsToDo']['name']['textAlignment'] == "right") echo "selected"; ?>>Right</option>
+                                        <option value="left" <?php if($component_styles['thingsToDo']['name']['textAlignment'] == "left") echo "selected"; ?>>Left</option>
                                     </select>
                                 </div>
                             </div>
@@ -743,9 +755,9 @@ if (!$settingsController->settings_isset()) {
                                 <div class="input-wrapper">
                                     <label>Text Alignment</label>
                                     <select name="meTitleTextAligment" value="<?php echo $component_styles['mapEmbed']['title']['textAlignment']; ?>">
-                                        <option value="center">Center</option>
-                                        <option value="right">Right</option>
-                                        <option value="left">Left</option>
+                                        <option value="center" <?php if($component_styles['mapEmbed']['title']['textAlignment'] == "center") echo "selected"; ?>>Center</option>
+                                        <option value="right" <?php if($component_styles['mapEmbed']['title']['textAlignment'] == "right") echo "selected"; ?>>Right</option>
+                                        <option value="left" <?php if($component_styles['mapEmbed']['title']['textAlignment'] == "left") echo "selected"; ?>>Left</option>
                                     </select>
                                 </div>
                             </div>
@@ -781,9 +793,9 @@ if (!$settingsController->settings_isset()) {
                                 <div class="input-wrapper">
                                     <label>Text Alignment</label>
                                     <select name="ddTitleTextAligment" value="<?php echo $component_styles['drivingDirections']['title']['textAlignment']; ?>">
-                                        <option value="center">Center</option>
-                                        <option value="right">Right</option>
-                                        <option value="left">Left</option>
+                                        <option value="center" <?php if($component_styles['drivingDirections']['title']['textAlignment'] == "center") echo "selected"; ?>>Center</option>
+                                        <option value="right" <?php if($component_styles['drivingDirections']['title']['textAlignment'] == "right") echo "selected"; ?>>Right</option>
+                                        <option value="left" <?php if($component_styles['drivingDirections']['title']['textAlignment'] == "left") echo "selected"; ?>>Left</option>
                                     </select>
                                 </div>
                             </div>
@@ -797,6 +809,70 @@ if (!$settingsController->settings_isset()) {
                                 <div class="input-wrapper">
                                     <label>Width (%)</label>
                                     <input min="10" max="100" type="number" name="ddMapWidth" placeholder="100" value="<?php echo $component_styles['drivingDirections']['map']['width']; ?>">
+                                </div>
+                            </div>
+                        </sl-details>
+
+                        <sl-details summary="Reviews">
+                            <h3>Title</h3>
+                            <div class="four-col-div">
+                                <div class="input-wrapper">
+                                    <label>Font Size</label>
+                                    <input type="number" name="rvTitleFontSize" placeholder="36" value="<?php echo $component_styles['reviews']['title']['fontSize']; ?>">
+                                </div>
+                                <div class="input-wrapper">
+                                    <label>Font Weight</label>
+                                    <input type="number" name="rvTitleFontWeight" placeholder="500" value="<?php echo $component_styles['reviews']['title']['fontWeight']; ?>">
+                                </div>
+                                <div class="input-wrapper">
+                                    <label>Font Color</label>
+                                    <input type="text" name="rvTitleFontColor" placeholder="#00000000" value="<?php echo $component_styles['reviews']['title']['fontColor']; ?>">
+                                </div>
+                                <div class="input-wrapper">
+                                    <label>Text Alignment</label>
+                                    <select name="rvTitleTextAligment" value="<?php echo $component_styles['reviews']['title']['textAlignment']; ?>">
+                                        <option value="center" <?php if($component_styles['reviews']['title']['textAlignment'] == "center") echo "selected"; ?>>Center</option>
+                                        <option value="right" <?php if($component_styles['reviews']['title']['textAlignment'] == "right") echo "selected"; ?>>Right</option>
+                                        <option value="left" <?php if($component_styles['reviews']['title']['textAlignment'] == "left") echo "selected"; ?>>Left</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <h3>Items</h3>
+                            <div class="four-col-div">
+                                <div class="input-wrapper">
+                                    <label>Padding</label>
+                                    <input type="number" name="rvItemsPadding" placeholder="20" value="<?php echo $component_styles['reviews']['items']['padding']; ?>">
+                                </div>
+                                <div class="input-wrapper">
+                                    <label>Gap</label>
+                                    <input type="number" name="rvItemsGap" placeholder="20" value="<?php echo $component_styles['reviews']['items']['gap']; ?>">
+                                </div>
+                                <div class="input-wrapper">
+                                    <label>Background Color</label>
+                                    <input type="text" name="rvItemsBackgroundColor" placeholder="#00000000" value="<?php echo $component_styles['reviews']['items']['backgroundColor']; ?>">
+                                </div>
+                                <div class="input-wrapper">
+                                    <label>Hover Effect</label>
+                                    <select name="rvItemsHoverEffect" value="<?php echo $component_styles['reviews']['items']['hoverEffect']; ?>">
+                                        <option value="scaleUp" <?php if($component_styles['reviews']['items']['hoverEffect'] == "scaleUp") echo "selected"; ?>>Scale Up</option>
+                                        <option value="scaleDown" <?php if($component_styles['reviews']['items']['hoverEffect'] == "scaleDown") echo "selected"; ?>>Scale Down</option>
+                                        <option value="rise" <?php if($component_styles['reviews']['items']['hoverEffect'] == "rise") echo "selected"; ?>>Rise</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="four-col-div">
+                                <div class="input-wrapper">
+                                    <label>Border Radius</label>
+                                    <input type="number" name="rvItemsBorderRadius" placeholder="5" value="<?php echo $component_styles['thingsToDo']['items']['borderRadius']; ?>">
+                                </div>
+                                <div class="input-wrapper">
+                                    <label>Border Width</label>
+                                    <input type="number" name="rvItemsBorderWidth" placeholder="1" value="<?php echo $component_styles['thingsToDo']['items']['borderWidth']; ?>">
+                                </div>
+                                <div class="input-wrapper">
+                                    <label>Border Color</label>
+                                    <input type="text" name="rvItemsBorderColor" placeholder="#00000000" value="<?php echo $component_styles['thingsToDo']['items']['borderColor']; ?>">
                                 </div>
                             </div>
                         </sl-details>

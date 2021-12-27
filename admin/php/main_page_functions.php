@@ -49,8 +49,9 @@ if (isset($_POST['_location-form-submit'])) {
             return trim($data);
         }, explode(",", $formdata['neighborhood']));
 
-        if (!empty($formdata['google_maps_place_id'])) $new_location['google_place_id'] = $formdata['google_maps_place_id'];
-        if (!empty($formdata['driving_directions_limit'])) $new_location['drivingDirectionsLimit'] = $formdata['driving_directions_limit'];
+        if (!isset($formdata['place_id_unavailable']) && !empty($formdata['google_maps_place_id'])) $new_location['google_place_id'] = $formdata['google_maps_place_id'];
+        if (isset($formdata['place_id_unavailable']) && !empty($formdata['street_address'])) $new_location['street'] = $formdata['street_address'];
+        if (isset($formdata['place_id_unavailable']) && !empty($formdata['zip_code'])) $new_location['zip_code'] = $formdata['zip_code'];
 
         array_push($existing_userinput_data, $new_location);
 
@@ -89,8 +90,23 @@ if (isset($_POST['_location-form-submit'])) {
             return trim($data);
         }, explode(",", $formdata['neighborhood']));
 
-        if (!empty($formdata['google_maps_place_id'])) $editedLocation['google_place_id'] = $formdata['google_maps_place_id'];
-        if (!empty($formdata['driving_directions_limit'])) $editedLocation['drivingDirectionsLimit'] = $formdata['driving_directions_limit'];
+        if (!isset($formdata['place_id_unavailable']) && !empty($formdata['google_maps_place_id'])) {
+            $editedLocation['google_place_id'] = $formdata['google_maps_place_id'];
+        } else {
+            unset($editedLocation['google_place_id']);
+        }
+        
+        if (isset($formdata['place_id_unavailable']) && !empty($formdata['street_address'])) {
+            $editedLocation['street'] = $formdata['street_address'];
+        } else {
+            unset($editedLocation['street']);
+        }
+        
+        if (isset($formdata['place_id_unavailable']) && !empty($formdata['zip_code'])) {
+            $editedLocation['zip_code'] = $formdata['zip_code'];
+        } else {
+            unset($editedLocation['zip_code']);
+        }
 
         if (!empty($formdata['is_primary'])) $editedLocation['primaryLocation'] = true;
 
@@ -100,18 +116,37 @@ if (isset($_POST['_location-form-submit'])) {
             else { return $data; }
         }, $userInputDataController->get_userinput_data());
 
-        if ($userInputDataController->set_userinput_data($newSet)) {
-            ?>
-            <div class="notice notice-success is-dismissible">
-                <p><b><?php echo $config_data['plugin_name']; ?></b> - Location updated successfully!</p>
-            </div>
-            <?php
-        } else {
-            ?>
-            <div class="notice notice-error is-dismissible">
-                <p><b><?php echo $config_data['plugin_name']; ?></b> - Failed to update locations.</p>
-            </div>
-            <?php
+        // Delete from user_api
+        if (!empty($formdata['is_primary']) && $apiDataController->remove_all_data()) {
+            // - If primary location - delete all
+            if ($userInputDataController->set_userinput_data($newSet)) {
+                ?>
+                <div class="notice notice-success is-dismissible">
+                    <p><b><?php echo $config_data['plugin_name']; ?></b> - Location updated successfully!</p>
+                </div>
+                <?php
+            } else {
+                ?>
+                <div class="notice notice-error is-dismissible">
+                    <p><b><?php echo $config_data['plugin_name']; ?></b> - Failed to update locations.</p>
+                </div>
+                <?php
+            }
+        } else if (empty($formdata['is_primary']) && $apiDataController->remove_data_by_id($formdata['edit_key'])) {
+            // - If not primary location delete that object only
+            if ($userInputDataController->set_userinput_data($newSet)) {
+                ?>
+                <div class="notice notice-success is-dismissible">
+                    <p><b><?php echo $config_data['plugin_name']; ?></b> - Location updated successfully!</p>
+                </div>
+                <?php
+            } else {
+                ?>
+                <div class="notice notice-error is-dismissible">
+                    <p><b><?php echo $config_data['plugin_name']; ?></b> - Failed to update locations.</p>
+                </div>
+                <?php
+            }
         }
     }
 }
@@ -271,6 +306,23 @@ if (isset($_POST['_style-form-update'])) {
             "map" => array(
                 "height" => !empty($formdata['ddMapHeight']) ? (int)$formdata['ddMapHeight'] : 400,
                 "width" => !empty($formdata['ddMapWidth']) ? (int)$formdata['ddMapWidth'] : 100
+            )
+        ),
+        "reviews" => array(
+            "title" => array(
+                "fontSize" => !empty($formdata['rvTitleFontSize']) ? (int)$formdata['rvTitleFontSize'] : 36,
+                "fontWeight" => !empty($formdata['rvTitleFontWeight']) ? (int)$formdata['rvTitleFontWeight'] : 500,
+                "fontColor" => !empty($formdata['rvTitleFontColor']) ? $formdata['rvTitleFontColor'] : "#00000000",
+                "textAlignment" => !empty($formdata['rvTitleTextAligment']) ? $formdata['rvTitleTextAligment'] : "center"
+            ),
+            "items" => array(
+                "gap" => !empty($formdata['rvItemsGap']) ? (int)$formdata['rvItemsGap'] : 20,
+                "backgroundColor" => !empty($formdata['rvItemsBackgroundColor']) ? $formdata['rvItemsBackgroundColor'] : "#00000000",
+                "hoverEffect" => !empty($formdata['rvItemsHoverEffect']) ? $formdata['rvItemsHoverEffect'] : "scaleUp",
+                "borderRadius" => !empty($formdata['rvItemsBorderRadius']) ? (int)$formdata['rvItemsBorderRadius'] : 5,
+                "borderWidth" => !empty($formdata['rvItemsBorderWidth']) ? (int)$formdata['rvItemsBorderWidth'] : 1,
+                "borderColor" => !empty($formdata['rvItemsBorderColor']) ? $formdata['rvItemsBorderColor'] : "#00000000",
+                "padding" => !empty($formdata['rvItemsPadding']) ? (int)$formdata['rvItemsPadding'] : 20
             )
         )
     );
