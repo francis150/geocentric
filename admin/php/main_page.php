@@ -407,6 +407,8 @@ if (!$settingsController->settings_isset()) {
                         data-site_domain="<?php echo get_site_url(); ?>" 
                         data-google_api_key="<?php echo $settings['google_api_key']; ?>" 
                         data-api_server_url="<?php echo $config_data['server_url']; ?>" 
+                        data-appsero_api_key="<?php echo $config_data['appsero_api_key']; ?>" 
+                        data-appsero_plugin_name="<?php echo $config_data['appsero_plugin_name']; ?>" 
                         ><sl-icon name="cloud-download"></sl-icon>Import All Data</button>
                     </div>
                     <div class="locations-list">
@@ -489,6 +491,8 @@ if (!$settingsController->settings_isset()) {
                                                 data-site_domain="<?php echo get_site_url(); ?>" 
                                                 data-google_api_key="<?php echo $settings['google_api_key']; ?>" 
                                                 data-api_server_url="<?php echo $config_data['server_url']; ?>" 
+                                                data-appsero_api_key="<?php echo $config_data['appsero_api_key']; ?>" 
+                                                data-appsero_plugin_name="<?php echo $config_data['appsero_plugin_name']; ?>"
                                                 >Import Data<sl-icon slot="prefix" name="cloud-download"></sl-icon></sl-menu-item>
                                                 <sl-menu-item class="main-location-button">Set as Primary Location<sl-icon slot="prefix" name="geo-alt-fill"></sl-icon></sl-menu-item>
                                             </sl-menu>

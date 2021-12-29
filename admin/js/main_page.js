@@ -164,6 +164,10 @@ document.querySelectorAll('._geocentric-main .main-view-wrapper .main-tab-group 
                 name: locationData.country_name,
                 iso2: locationData.country_iso2
             },
+            appsero_info: {
+                appsero_api_key: importDataBtn.dataset.appsero_api_key,
+                appsero_plugin_name: importDataBtn.dataset.appsero_plugin_name,
+            },
             google_api_key: importDataBtn.dataset.google_api_key,
             mainLocation: primaryLocation
         }
@@ -217,6 +221,10 @@ document.querySelector('._geocentric-main .main-view-wrapper .main-tab-group .lo
             country: {
                 name: locationData.country_name,
                 iso2: locationData.country_iso2
+            },
+            appsero_info: {
+                appsero_api_key: e.target.dataset.appsero_api_key,
+                appsero_plugin_name: e.target.dataset.appsero_plugin_name,
             },
             google_api_key: e.target.dataset.google_api_key,
             mainLocation: primaryLocation
