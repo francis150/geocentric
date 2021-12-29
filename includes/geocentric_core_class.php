@@ -4,15 +4,19 @@ if (!class_exists('_geocentric_core')) {
 
     require_once plugin_dir_path( __FILE__ ) . 'geocentric_plugin_config_class.php';
     require_once plugin_dir_path( __FILE__ ) . 'geocentric_components_class.php';
+    require_once plugin_dir_path( __FILE__ ) . 'geocentric_components_class.php';
+    require_once plugin_dir_path( __FILE__ ) . 'geocentric_appsero_class.php';
 
     class _geocentric_core {
         
         private $plugin_config_controller;
         private $component_controller;
+        private $appsero_controller;
         
         function __construct() {
             $this->plugin_config_controller = new _geocentric_plugin_config();
             $this->component_controller = new _geocentric_components();
+            $this->appsero_controller = new _geocentric_appsero();
 
             add_action( 'admin_menu', array($this, 'add_admin_menu_items'));
             add_action('admin_head', array($this, 'addto_admin_head'));
@@ -46,10 +50,12 @@ if (!class_exists('_geocentric_core')) {
         }
 
         public function navto_main_admin_page() {
-            require_once plugin_dir_path(__FILE__) . '../admin/php/main_page.php';
+            if ($this->appsero_controller->appsero_check_license()) {
+                require_once plugin_dir_path(__FILE__) . '../admin/php/main_page.php';
+            } else {
+                $this->appsero_controller->appsero_invalid_license_page();
+            }
         }
-
-
 
         public function add_to_wp_head() {
             // Shoelace
