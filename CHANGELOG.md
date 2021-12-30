@@ -1,6 +1,6 @@
 # 🚩 Geocentric Changelog
 
-[Back to README](https://github.com/francis150/geocentric)
+[Back to README](https://github.com/francis150/geocentric#-geocentric-wp-plugin)
 
 <p>&nbsp;</p>
 
@@ -24,7 +24,7 @@
 
 <p>&nbsp;</p>
 
-[Back To The Top]()
+[Back To The Top](#-geocentric-changelog)
 
 ---
 
