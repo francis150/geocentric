@@ -95,7 +95,7 @@ A WordPress plugin that pulls all relevant geocentric data and allows you to add
 
 1. After activating your plugin license, you will be prompted into a Welcome Screen, and all you have to do from there is enter your `Google API key` press the `Get Started` button. <p>![Google API Key Input](https://i.ibb.co/HDNNTkZ/image-27.png)</p>
 
-2. After Entering your Google API Key, you will be prompted to the dashboard. Next thing to do is Add your service areas to the list. You can do that by hitting the `Add Service Area` button and a form will pop up. <p>![Add service area button](https://i.ibb.co/fxVmJJw/Group-79-1.png)</p>
+2. After Entering your Google API Key, you will be prompted to the dashboard. Next thing to do is Add your service areas to the list. You can do that by hitting the `Add Service Area` button and a form will pop up. <p>![Add service area button](https://i.ibb.co/hZt0y12/addservice-area.png)</p>
 
 3. On the form, set your location by choosing from the three dropdowns(country, state, city). <p>![](https://i.ibb.co/RBLsNNY/Group-78-1.png)</p>
 
