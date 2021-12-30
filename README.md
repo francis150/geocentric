@@ -84,64 +84,51 @@ A WordPress plugin that pulls all relevant geocentric data and allows you to add
 <p>&nbsp;</p>
 
 
-### <strong>Getting Started 🚀</strong>
-<p>&nbsp;</p>
+### **Getting Started**
  
 1. Navigate to the [Google Maps Platform](https://developers.google.com/maps) and click on the Get Started button in the top right corner of the site. <p>![Get Started](https://i.imgur.com/IGIeZaA.png)</p>
-<p>&nbsp;</p>
 
 2. Set up your billing
 Select your country and accept Terms of Service. Click Continue.<p>![Get Started](https://i.imgur.com/9LrEuq9.png)</p>
-<p>&nbsp;</p>
-
-
 
 3. Enter your mobile number. <p>![Mobile Number](https://i.imgur.com/hupVT67.png)</p>
-<p>&nbsp;</p>
-
 
 4. Enter your customer info (details) and card information. <p>![Card Info](https://i.imgur.com/BkEZMKp.png)</p>
-<p>&nbsp;</p>
-
 
 5. Select START MY FREE TRIAL. <br><br> Please note that you have a 12-month or $300 credit free trial. When this free trial ends, you will get up to 28 000 map requests per month and 40 000 direction calls per month, free of charge. You will only be billed when your usage exceeds your monthly $200 credit limit.
 For more information about the free trial, please refer to [Google’s documentation](https://cloud.google.com/free/docs/gcp-free-tier).
 Once your billing has been set up, you can move on to creating your API Key.
 
-
-
 <p>&nbsp;</p>
 
-
-## Creating Your Cloud Console Project
+### **Creating Your Cloud Console Project**
 
 Go to your [Google Cloud Console Dashboard](https://console.cloud.google.com/home/dashboard)
 
-1. Select the current project as shown below ![Start Project](https://i.imgur.com/GF821HD.png)
+1. Select the current project as shown below. <p>![Start Project](https://i.imgur.com/GF821HD.png)</p> 
 
-2. Create a New Project ![Create Project](https://i.imgur.com/292WrW3.png)
+2. Create a New Project <p>![Create Project](https://i.imgur.com/292WrW3.png)</p>
 
-3. Name Your Project ![Create Project](https://i.imgur.com/b2lBUJo.png)
+3. Name Your Project <p>![Create Project](https://i.imgur.com/b2lBUJo.png)</p>
 
-4. After creating your project go back to your dashboard and click `Go to APIs overview` ![Go To APIs Overview](https://i.imgur.com/iF47yYw.png)
+4. After creating your project go back to your dashboard and click `Go to APIs overview` <p>![Go To APIs Overview](https://i.imgur.com/iF47yYw.png)</p>
 
-5. Click `Enable APIS AND SERVICES` ![Enable APIS](https://i.imgur.com/43WXp15.png)
+5. Click `Enable APIS AND SERVICES` <p>![Enable APIS](https://i.imgur.com/43WXp15.png)</p>
 
-6. In The API Library Search For The API you will be enabling for the project ![search apis](https://i.imgur.com/Chr70t2.png) <br> Here are a list of API's you will need for the Locations Plugin <br> <ul>
-    <li>Places API</li>
-    <li>Maps JavaScript API</li>
-    <li>Knowledge Graph Search API</li>
-    <li>Geo Coding API</li>
-    <li>Directions API</li>   
-</ul>
+6. In The API Library Search For The API you will be enabling for the project <p>![search apis](https://i.imgur.com/Chr70t2.png) Here are a list of API's you will need for the Locations Plugin 
+    - Places API
+    - Maps JavaScript API
+    - Knowledge Graph Search API
+    - Geo Coding API
+    - Directions API </p>
 
-7. Click the API you are searching for ![Click API](https://i.imgur.com/NZYWE71.png)
+7. Click the API you are searching for. <p>![Click API](https://i.imgur.com/NZYWE71.png)</p>
 
-8. Click Enable To Use That API ![Enable API](https://i.imgur.com/6xkNDos.png) <br> <i>Please Make sure you have enable requiredrequired API's enabled For The Plugin To Work!</i>
-
+8. Click Enable To Use That API <p>![Enable API](https://i.imgur.com/6xkNDos.png) *Please Make sure you have enable requiredrequired API's enabled For The Plugin To Work!*</p>
 
 
-## Generate Your API Key
+
+### **Generate Your API Key**
 You will now receive your API Key
 
 1. Go Back to your API Overview Dashboard Page ![Overview Page](https://i.imgur.com/xr97fVR.png)
@@ -149,12 +136,15 @@ You will now receive your API Key
 2. Click Create Create Credentials and Select API Key ![Api KEY](https://i.imgur.com/3nCFHZR.png)
 
 
-## Securing Your API Key
+### **Securing Your API Key**
 
-1. Restrict Your API Key ![Restrict Key](https://i.imgur.com/RnsAaZ4.png)
-2. Select HTTP referrers options and click `add an item` below ![Add Item](https://i.imgur.com/UOEF6Rf.png)
-3. Use this format `*yourdomain.com/*` ![format](https://i.imgur.com/1UfrNOG.png) <br> <i>It is important that you use this format for this to work. Replace yourdomain with your domain name. i.e `*rankfortress.com/*`</i>
-4. Click Done. <strong> Note: </strong>  Make sure that before you have a new site to add the plugin to. That you restrict your api key beforehand. This is so that your API Key will not be usable for api thiefs.
+1. Restrict Your API Key <p>![Restrict Key](https://i.imgur.com/RnsAaZ4.png)</p>
+
+2. Select HTTP referrers options and click `add an item` below <p>![Add Item](https://i.imgur.com/UOEF6Rf.png)</p>
+
+3. Use this format `*yourdomain.com/*` <p>![format](https://i.imgur.com/1UfrNOG.png) It is important that you use this format for this to work. Replace yourdomain with your domain name. i.e `*rankfortress.com/*`</p>
+
+4. Click Done. <p> **Note:** Make sure that before you have a new site to add the plugin to. That you restrict your api key beforehand. This is so that your API Key will not be usable for api thiefs. </p>
 
 <p>&nbsp;</p>
 
