@@ -131,9 +131,9 @@ Go to your [Google Cloud Console Dashboard](https://console.cloud.google.com/hom
 ### **Generate Your API Key**
 You will now receive your API Key
 
-1. Go Back to your API Overview Dashboard Page ![Overview Page](https://i.imgur.com/xr97fVR.png)
+1. Go Back to your API Overview Dashboard Page <p>![Overview Page](https://i.imgur.com/xr97fVR.png)</p>
 
-2. Click Create Create Credentials and Select API Key ![Api KEY](https://i.imgur.com/3nCFHZR.png)
+2. Click Create Create Credentials and Select API Key <p>![Api KEY](https://i.imgur.com/3nCFHZR.png)</p>
 
 
 ### **Securing Your API Key**
