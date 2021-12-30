@@ -15,19 +15,19 @@ A WordPress plugin that pulls all relevant geocentric data and allows you to add
 ### Contents
 
 - 🚀 [Installation](#-installation)
-- 📃 License & Activation
-- 🌎 Google API Key Setup
-- 🤔 Usage
-- 👨‍💻 Component Shortcodes
-    - Weather Component
-    - About Component
-    - Neighbourhoods Component
-    - Things to Do Component
-    - Map Embed Component
-    - Driving Directions Component
-    - Reviews Component
-- 🚩 Changelog
-- 🙋‍♂️ Developers
+- 📃 [License & Activation](#-license--activation)
+- 🌎 [Google API Key Setup](#-google-api-key-setup)
+- 🤔 [Usage](#-usage)
+- 👨‍💻 [Component Shortcodes](#-component-shortcodes)
+    - [Weather Component](#weather-component---geocentric-weather)
+    - [About Component](#about-component---geocentric-about)
+    - [Neighbourhoods Component](#neighbourhoods-component---geocentric-neighbourhoods)
+    - [Things to Do Component](#things-to-do-component---geocentric-thingstodo)
+    - [Map Embed Component](#map-embed-component---geocentric-mapembed)
+    - [Driving Directions Component](#driving-directions---geocentric-drivingdirections)
+    - [Reviews Component](#reviews---geocentric-reviews)
+- 🚩 [Changelog](CHANGELOG.md)
+- 🙋‍♂️ [Developers](#%EF%B8%8F-developers)
 
 <p>&nbsp;</p>
 
