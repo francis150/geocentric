@@ -6,6 +6,12 @@
 
 ## 🎯 v1.0.0 Initial Release
 
+### 😎 **Updates**
+
+- Extremely Cheap Google API Pulls
+- No Component Load Time
+- Improved UI and User Experience
+
 ### 🕷 **Bug Fixes**
 
 - Fixed Neighbourhoods Data Accuracy
@@ -15,12 +21,6 @@
 - Reworked Weather Widget (No Longer Requires Weather API)
 - Reworked About Component
 - Reworked Directions Component
-
-### 😎 **Updates**
-
-- Extremely Cheap Google API Pulls
-- No Component Load Time
-- Improved UI and User Experience
 
 <p>&nbsp;</p>
 
