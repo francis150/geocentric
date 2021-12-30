@@ -134,18 +134,6 @@ You will now receive your API Key
 1. Go Back to your API Overview Dashboard Page <p>![Overview Page](https://i.imgur.com/xr97fVR.png)</p>
 
 2. Click Create Create Credentials and Select API Key <p>![Api KEY](https://i.imgur.com/3nCFHZR.png)</p>
-
-
-### **Securing Your API Key**
-
-1. Restrict Your API Key <p>![Restrict Key](https://i.imgur.com/RnsAaZ4.png)</p>
-
-2. Select HTTP referrers options and click `add an item` below <p>![Add Item](https://i.imgur.com/UOEF6Rf.png)</p>
-
-3. Use this format `*yourdomain.com/*` <p>![format](https://i.imgur.com/1UfrNOG.png) It is important that you use this format for this to work. Replace yourdomain with your domain name. i.e `*rankfortress.com/*`</p>
-
-4. Click Done. <p> **Note:** Make sure that before you have a new site to add the plugin to. That you restrict your api key beforehand. This is so that your API Key will not be usable for api thiefs. </p>
-
 <p>&nbsp;</p>
 
 [Back To The Top](#-geocentric-wp-plugin)
