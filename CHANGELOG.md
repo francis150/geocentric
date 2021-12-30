@@ -21,3 +21,11 @@
 - Extremely Cheap Google API Pulls
 - No Component Load Time
 - Improved UI and User Experience
+
+<p>&nbsp;</p>
+
+[Back To The Top]()
+
+---
+
+© Powered by [RankFortress](https://rankfortress.com/) 2021 🤟.
