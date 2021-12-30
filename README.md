@@ -19,7 +19,15 @@ A WordPress plugin that pulls all relevant geocentric data and allows you to add
 - 🌎 Google API Key Setup
 - 🤔 Usage
 - 👨‍💻 Component Shortcodes
-- 🎨 Design
+    - Weather Component
+    - About Component
+    - Neighbourhoods Component
+    - Things to Do Component
+    - Map Embed Component
+    - Driving Directions Component
+    - Reviews Component
+- 🚩 Changelog
+- 🙋‍♂️ Developers
 
 <p>&nbsp;</p>
 
@@ -104,4 +112,121 @@ A WordPress plugin that pulls all relevant geocentric data and allows you to add
 
 9. Now, all that is left to do is use it on your actual location page. To do that just simply copy the component shortcode that you want (in my case, I clicked `Copy All Components` to copy all components) and paste the shortcodes to wherever part of the page you want it to be placed. <p>![](https://i.ibb.co/QPXBzxN/image-35.png)</p>
 
-10. After pasting the shortcodes, and then save it. Then you can now go to your new location page. With
+10. Hit Save and you're All Good! 👍
+
+<p>&nbsp;</p>
+
+[Back To The Top](#-geocentric-wp-plugin)
+
+<p>&nbsp;</p>
+
+---
+
+<p>&nbsp;</p>
+
+## 👨‍💻 Component Shortcodes
+
+*All shortcodes has a required attribute `id` which is used to reference your shortcodes from your multiple locations.*
+
+<p>&nbsp;</p>
+
+### **Weather Component** - `[geocentric-weather]`
+
+Shows the temperature, and weather in that area for the day and 7 days ahead. <p>![](https://i.ibb.co/FY4SbqS/image-36.png)</p>
+
+<p>&nbsp;</p>
+
+### **About Component** - `[geocentric-about]`
+
+Shows a paragraph of all the information about the location. <p>![](https://i.ibb.co/5jQ0qLz/image-37.png)</p>
+
+#### **Attributes**
+
+- `title` - *(optional)* changes the title of the section.
+
+<p>&nbsp;</p>
+
+### **Neighbourhoods Component** - `[geocentric-neighbourhoods]`
+
+Shows a list of all the neighbourhoods in that location and is linked to google maps whenever it is clicked. <p>![](https://i.ibb.co/5KqcmXm/image-38.png)</p>
+
+#### **Attributes**
+
+- `title` - *(optional)* changes the title of the section.
+
+<p>&nbsp;</p>
+
+### **Things to Do Component** - `[geocentric-thingstodo]`
+
+Shows all the top sights in that location together with their ratings. <p>![](https://i.ibb.co/2j16y0R/image-39.png)</p>
+
+#### **Attributes**
+
+- `title` - *(optional)* changes the title of the section.
+- `hide_ratings` - *(optional)* Wether or not to display the rating
+- `limit` - *(optional)* Limit the number of items to display
+- `alt` - *(optinal)* image alt texts
+
+<p>&nbsp;</p>
+
+### **Map Embed Component** - `[geocentric-mapembed]`
+
+Embeds Google Map of that location. <p>![](https://i.ibb.co/56F82V7/image-40.png)</p>
+
+#### **Attributes**
+
+- `title` - *(optional)* changes the title of the section.
+
+<p>&nbsp;</p>
+
+### **Driving Directions** - `[geocentric-drivingdirections]`
+
+Embeds a map with the driving directions from multiple points of that location to your primary location. <p>![](https://i.ibb.co/9y27kqj/image-41.png)</p>
+
+#### **Attributes**
+
+- `title` - *(optional)* changes the title of the section.
+
+<p>&nbsp;</p>
+
+### **Reviews** - `[geocentric-reviews]`
+
+Shows the reviews of your GMB Listing in that area if available, if not, it shows the reviews of your GMB Listing on your Primary Location. <p>![](https://i.ibb.co/s1xs4X7/image-42.png)</p>
+
+#### **Attributes**
+
+- `title` - *(optional)* changes the title of the section.
+- `limit` - *(optional)* Limit the number of reviews to display
+- `items-on-desktop` - *(optional)* items to show per page on desktop
+- `items-on-tablet` - *(optional)* items to show per page on tablet
+- `items-on-mobile` - *(optional)* items to show per page on mobile
+
+<p>&nbsp;</p>
+
+[Back To The Top](#-geocentric-wp-plugin)
+
+<p>&nbsp;</p>
+
+---
+
+<p>&nbsp;</p>
+
+## 🙋‍♂️ Developers
+
+### Francis Dela Victoria
+- [Facebook](https://www.facebook.com/iscothevictory/)
+- [Email](mailto:francisdelavictoria150@gmail.com)
+
+### Paul Bryan Reyes
+- [Facebook](https://www.facebook.com/seyluap)
+- [Email](mailto:pbreyes63937@gmail.com)
+
+<p>&nbsp;</p>
+
+[Back To The Top](#-geocentric-wp-plugin)
+
+<p>&nbsp;</p>
+
+---
+
+© Powered by [RankFortress](https://rankfortress.com/) 2021 🤟.

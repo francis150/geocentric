@@ -377,6 +377,9 @@ if (!class_exists('_geocentric_components')) {
         @Atts: {
             * title - (optional) Section title
             * limit - (optional) Limit the number of places to display
+            * items-on-desktop - (optional) items to show per page on desktop
+            * items-on-tablet - (optional) items to show per page on tablet
+            * items-on-mobile - (optional) items to show per page on mobile
         }
         */
         public function reviews_component($atts) {
