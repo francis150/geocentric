@@ -40,7 +40,7 @@ A WordPress plugin that pulls all relevant geocentric data and allows you to add
 
 ## 🚀 Installation
 
-1. After completing your order from [RankFortress](https://rankfortress.com/product-category/gmb-tools/), you will receive an email with the download link and your license key. You can also download here for [Lifetime](https://github.com/francis150/rank-schema-plugin/releases/download/v3.0.0/rank-schema-lifetime.zip) & [Monthly](https://github.com/francis150/rank-schema-plugin/releases/download/v3.0.0/rank-schema-monthly.zip) <p>![Download Button](https://i.ibb.co/wWR68jC/download-link.png)</p>
+1. After completing your order from [RankFortress](https://rankfortress.com/product-category/gmb-tools/), you will receive an email with the download link and your license key. <p>![Download Button](https://i.ibb.co/wWR68jC/download-link.png)</p>
 
 2. After downloading your .zip file from the download link in your email, go to your WordPress site, and go to `Plugins > Add New > Upload Plugin`
 
