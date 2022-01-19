@@ -27,7 +27,7 @@ if (!class_exists('_geocentric_settings')) {
         * @Return: boolean
         */
         public function settings_isset() {
-            return isset($this->settings);
+            return isset($this->settings['unrestricted_google_api_key']) && isset($this->settings['restricted_google_api_key']);
         }
 
         /* 

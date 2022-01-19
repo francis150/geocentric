@@ -4,6 +4,25 @@
 
 <p>&nbsp;</p>
 
+## 🎯 v1.0.1
+
+### 😎 **Updates**
+
+- **Added dedicated Google API Key for Driving Directions** - The Driving Directions Components uses your Google API Key in the front-end and can be visible to the public. In this update users are required to provide 2 Google API Keys;
+
+    - `Unrestricted API Key` - This API Key will be used on our servers to pull the necessary data needed for the **About Component**, **Neighborhoods Component**, and **Things to Do Component**. This API Key must be unrestricted for our server to use it. **Required API Services;** 
+        - Places API
+        - Geo Coding API
+        - Knowledge Graph Search API
+        
+        <br>
+
+    - `Restricted API Key` - This API Key will be used specifically only by the **Driving Directions Component** and will be visible to the Public. This API Key must be restricted for it to be used only by your domain. **Required API Services;** 
+        - Maps JavaScript API
+        - Directions API
+
+<p>&nbsp;</p>
+
 ## 🎯 v1.0.0 Initial Release
 
 ### 😎 **Updates**

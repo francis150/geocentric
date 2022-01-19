@@ -900,7 +900,7 @@ if (!$componentStylesController->styles_isset()) {
                             <div class="input-wrapper">
                                 <label>Google API Key (Restricted) <span>*</span></label>
                                 <input type="password" class="google-api-key" name="restricted_google_api_key" placeholder="..." required>
-                                <small>This API key will be used by the Driving Directions Component and is visible to the front-end. <b>This must be restricted</b> for it to be used only by your domain. Read <a href="#">the docs</a> here to know how to restrict your API Key. <b>API's Required:</b> Maps JavaScript API, Directions API</small>
+                                <small>This API key will be used by the Driving Directions Component and is visible to the front-end. <b>This must be restricted</b> for it to be used only by your domain. Read <a href="https://github.com/francis150/geocentric#-google-api-key-setup" target="_blank">the docs</a> here to know how to restrict your API Key. <b>API's Required:</b> Maps JavaScript API, Directions API</small>
                             </div>
                         </div>
 
@@ -911,7 +911,7 @@ if (!$componentStylesController->styles_isset()) {
             <sl-divider></sl-divider>
 
             <div class="footer">
-                <p>Powered by © <a href="#">Rank Fortress</a>, 2021 🤘.</p>
+                <p>Powered by © <a href="http://rankfortress.com/" target="_blank">Rank Fortress</a>, 2021 🤘. - Read full <a href="https://github.com/francis150/geocentric#readme" target="_blank">docs here</a>.</p>
             </div>
         </section>
 
