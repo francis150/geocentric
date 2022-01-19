@@ -97,8 +97,14 @@ if (!class_exists('_geocentric_components')) {
 
             $neighbourhoods_anchors = [];
 
+
+
             foreach ($userinput_data['neighbourhoods'] as $neigborhood) {
-                array_push($neighbourhoods_anchors, "<a href=\"https://www.google.com/maps/search/?api=1&query={$neigborhood}, {$api_data['name']}\" target=\"_blank\">{$neigborhood}</a>");
+
+                $neigborhood_query = ($neigborhood . ', ' . $api_data['name']);
+                $encoded_neighbourhood_query = urlencode($neigborhood_query);
+
+                array_push($neighbourhoods_anchors, "<a href=\"https://www.google.com/maps/search/?api=1&query={$encoded_neighbourhood_query}\" target=\"_blank\">{$neigborhood}</a>");
             }
 
             return "
