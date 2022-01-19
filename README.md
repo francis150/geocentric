@@ -20,6 +20,8 @@ A WordPress plugin that pulls all relevant geocentric data and allows you to add
     - [Getting Started](#getting-started)
     - [Creating Your Cloud Console Project](#creating-your-cloud-console-project)
     - [Generate Your API Key](#generate-your-api-key)
+        - [Restricted API Key](#creating-your-restricted-api-key)
+        - [Unrestricted API Key](#creating-your-unrestricted-api-key)
 - 🤔 [Usage](#-usage)
 - 👨‍💻 [Component Shortcodes](#-component-shortcodes)
     - [Weather Component](#weather-component---geocentric-weather)
