@@ -4,16 +4,7 @@
 if (isset($_POST['_get-started'])) {
     $config_data = $pluginConfigController->get_plugin_config_data();
 
-    if ($componentStylesController->init_component_styles()) {
-        if ($settingsController->init_settings_with_google_api_key($_POST['_google-api-key'])) {
-        } else {
-            ?>
-            <div class="notice notice-error is-dismissible">
-                <p><b><?php echo $config_data['plugin_name']; ?></b> - Failed to create <kbd>settings.json</kbd> file.</p>
-            </div>
-            <?php
-        }
-    } else {
+    if (!$componentStylesController->init_component_styles()) {
         ?>
         <div class="notice notice-error is-dismissible">
             <p><b><?php echo $config_data['plugin_name']; ?></b> - Failed to initialize <kbd>component_styles.json</kbd> file.</p>
@@ -347,7 +338,8 @@ if (isset($_POST['_settings-form-update'])) {
     $formdata = $_POST;
 
     $settings = array(
-        "google_api_key" => $_POST['settingsGoogleAPIKey']
+        "unrestricted_google_api_key" => $_POST['unrestricted_google_api_key'],
+        "restricted_google_api_key" => $_POST['restricted_google_api_key']
     );
 
     if ($settingsController->set_settings_data($settings)) {

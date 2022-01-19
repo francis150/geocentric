@@ -40,6 +40,9 @@ if (!class_exists('_geocentric_core')) {
         }
 
         public function init_component_shortcodes() {
+
+            if (!$this->appsero_controller->appsero_check_license()) return;
+            
             add_shortcode('geocentric-weather', array($this->component_controller, 'weather_component'));
             add_shortcode('geocentric-about', array($this->component_controller, 'about_component'));
             add_shortcode('geocentric-neighbourhoods', array($this->component_controller, 'neighbourhoods_component'));

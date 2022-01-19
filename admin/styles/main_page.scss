@@ -136,11 +136,10 @@ sl-divider {
         margin: 0;
         padding: 0;
         width: 45%;
-        gap: 40px;
 
         img {
             height: 70px;
-            margin-bottom: 20px;
+            margin-bottom: 40px;
         }
 
         p {
@@ -152,23 +151,6 @@ sl-divider {
 
         form {
             display: flex;
-
-            .input-wrapper {
-                margin-right: 10px;
-
-                input {
-                    background: rgba($color: #fff, $alpha: .5);
-                    transition: .3s background ease-in-out;
-
-                    &:focus {
-                        background: rgba($color: #fff, $alpha: 1.0);
-                    }
-                }
-
-                small {
-                    color: white;
-                }
-            }
 
             .get-started-btn {
                 height: 40px;

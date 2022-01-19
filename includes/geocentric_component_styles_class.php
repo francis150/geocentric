@@ -72,6 +72,15 @@ if (!class_exists('_geocentric_component_styles')) {
             return $this->styles[$key];
         }
 
+        /**
+         * @description return whether or not component_styles.json is set
+         * @return boolean
+         */
+        public function styles_isset() {
+            $this->load_styles_data();
+            return isset($this->styles);
+        }
+
 
         /* 
         @Description: Get hover effect css value from the userinput

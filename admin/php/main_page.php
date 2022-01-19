@@ -22,17 +22,13 @@ require_once plugin_dir_path(__FILE__) . 'main_page_functions.php';
 $component_styles = $componentStylesController->get_component_styles();
 $settings = $settingsController->get_settings_data();
 
-if (!$settingsController->settings_isset()) {
+if (!$componentStylesController->styles_isset()) {
     ?>
     <div class="_geocentric-main"><section class="get-started-wrapper">
         <div class="content-wrapper">
             <img src="<?php echo $pluginConfigController->get_plugin_logo(); ?>">
             <p><?php echo $config_data['plugin_desc']; ?></p>
             <form action="#" method="POST">
-                <div class="input-wrapper">
-                    <input required name="_google-api-key" type="text">
-                    <small>Enter your Google API Key to get started!</small>
-                </div>
                 <input type="submit" value="Get Started!" name="_get-started" class="get-started-btn">
             </form>
         </div>
@@ -393,8 +389,8 @@ if (!$settingsController->settings_isset()) {
             <img src="<?php echo $pluginConfigController->get_plugin_logo_small(); ?>" class="main-screen-logo">
 
             <sl-tab-group class="main-tab-group">
-                <sl-tab slot="nav" panel="locations" active>Locations</sl-tab>
-                <sl-tab slot="nav" panel="design">Design</sl-tab>
+                <sl-tab slot="nav" panel="locations" <?php if (!$settingsController->settings_isset()) echo 'disabled'; ?>>Locations</sl-tab>
+                <sl-tab slot="nav" panel="design" <?php if (!$settingsController->settings_isset()) echo 'disabled'; ?>>Design</sl-tab>
                 <sl-tab slot="nav" panel="settings">Settings</sl-tab>
 
                 <sl-tab-panel name="locations" class="locations-panel">
@@ -405,7 +401,7 @@ if (!$settingsController->settings_isset()) {
                         </sl-tooltip>
                         <button class="_geocentric_import_all_data" 
                         data-site_domain="<?php echo get_site_url(); ?>" 
-                        data-google_api_key="<?php echo $settings['google_api_key']; ?>" 
+                        data-google_api_key="<?php echo $settings['unrestricted_google_api_key']; ?>" 
                         data-api_server_url="<?php echo $config_data['server_url']; ?>" 
                         data-appsero_api_key="<?php echo $config_data['appsero_api_key']; ?>" 
                         data-appsero_plugin_name="<?php echo $config_data['appsero_plugin_name']; ?>" 
@@ -489,7 +485,7 @@ if (!$settingsController->settings_isset()) {
                                                 <sl-divider></sl-divider>
                                                 <sl-menu-item class="import-data-button" 
                                                 data-site_domain="<?php echo get_site_url(); ?>" 
-                                                data-google_api_key="<?php echo $settings['google_api_key']; ?>" 
+                                                data-google_api_key="<?php echo $settings['unrestricted_google_api_key']; ?>" 
                                                 data-api_server_url="<?php echo $config_data['server_url']; ?>" 
                                                 data-appsero_api_key="<?php echo $config_data['appsero_api_key']; ?>" 
                                                 data-appsero_plugin_name="<?php echo $config_data['appsero_plugin_name']; ?>"
@@ -894,8 +890,17 @@ if (!$settingsController->settings_isset()) {
 
                         <div class="two-col-div">
                             <div class="input-wrapper">
-                                <label>Google API Key</label>
-                                <input type="password" class="google-api-key" name="settingsGoogleAPIKey" placeholder="API key not set..." value="<?php echo $settings['google_api_key']; ?>" require>
+                                <label>Google API Key (Unrestricted) <span>*</span></label>
+                                <input type="password" class="google-api-key" name="unrestricted_google_api_key" placeholder="..." required>
+                                <small>This API Key will be used on our backend server and will not be visible in th front-end. <b>This must be unrestricted</b> for our servers to run. <b>API's Required:</b> Places API, Geo Coding API, Knowledge Graph Search API</small>
+                            </div>
+                        </div>
+
+                        <div class="two-col-div">
+                            <div class="input-wrapper">
+                                <label>Google API Key (Restricted) <span>*</span></label>
+                                <input type="password" class="google-api-key" name="restricted_google_api_key" placeholder="..." required>
+                                <small>This API key will be used by the Driving Directions Component and is visible to the front-end. <b>This must be restricted</b> for it to be used only by your domain. Read <a href="#">the docs</a> here to know how to restrict your API Key. <b>API's Required:</b> Maps JavaScript API, Directions API</small>
                             </div>
                         </div>
 

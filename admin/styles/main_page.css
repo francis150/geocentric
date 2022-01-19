@@ -152,12 +152,11 @@ sl-divider {
   margin: 0;
   padding: 0;
   width: 45%;
-  gap: 40px;
 }
 
 ._geocentric-main .get-started-wrapper .content-wrapper img {
   height: 70px;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 }
 
 ._geocentric-main .get-started-wrapper .content-wrapper p {
@@ -171,24 +170,6 @@ sl-divider {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-}
-
-._geocentric-main .get-started-wrapper .content-wrapper form .input-wrapper {
-  margin-right: 10px;
-}
-
-._geocentric-main .get-started-wrapper .content-wrapper form .input-wrapper input {
-  background: rgba(255, 255, 255, 0.5);
-  -webkit-transition: .3s background ease-in-out;
-  transition: .3s background ease-in-out;
-}
-
-._geocentric-main .get-started-wrapper .content-wrapper form .input-wrapper input:focus {
-  background: white;
-}
-
-._geocentric-main .get-started-wrapper .content-wrapper form .input-wrapper small {
-  color: white;
 }
 
 ._geocentric-main .get-started-wrapper .content-wrapper form .get-started-btn {

@@ -97,8 +97,6 @@ if (!class_exists('_geocentric_components')) {
 
             $neighbourhoods_anchors = [];
 
-
-
             foreach ($userinput_data['neighbourhoods'] as $neigborhood) {
 
                 $neigborhood_query = ($neigborhood . ', ' . $api_data['name']);
@@ -166,6 +164,11 @@ if (!class_exists('_geocentric_components')) {
             foreach ($api_data['thingsToDo'] as $thingstodo) {
 
                 if($attribs['limit'] == count($thingstodo_cards)) break;
+
+                if (!isset($thingstodo['rating'])) {
+                    $thingstodo['rating'] = 0;
+                    $thingstodo['usersTotalRating'] = 'No ratings yet';
+                }
 
                 $ratings = !isset($atts['hide_ratings']) ? "<div><sl-rating readonly value=\"{$thingstodo['rating']}\" style=\"--symbol-size: .9rem;\"></sl-rating><small>{$thingstodo['rating']} ({$thingstodo['usersTotalRating']})</small></div>" : "";
 
@@ -375,7 +378,7 @@ if (!class_exists('_geocentric_components')) {
                 }
 
             </script>
-            <script src=\"https://maps.googleapis.com/maps/api/js?key={$settings['google_api_key']}&callback=initMap&v=weekly\" async></script>";
+            <script src=\"https://maps.googleapis.com/maps/api/js?key={$settings['restricted_google_api_key']}&callback=initMap&v=weekly\" async></script>";
         }
 
         /* 
@@ -391,6 +394,7 @@ if (!class_exists('_geocentric_components')) {
         public function reviews_component($atts) {
             $styles = $this->component_styles_controller->get_component_style('reviews');
             $api_data = $this->api_data_controller->get_api_data($atts['id']);
+            $place_id = $this->getPlaceID($atts['id']);
 
             if (empty($api_data)) return "<pre>No data matched by id...</pre>";
             if (empty($api_data['reviews'])) return "<pre>No data to show...</pre>";
@@ -407,7 +411,7 @@ if (!class_exists('_geocentric_components')) {
 
             foreach ($api_data['reviews'] as $review) {
                 if($attribs['limit'] == count($reviewsString)) break;
-                array_push($reviewsString, "<div class=\"review\"><a class=\"head\" target=\"_blank\" href=\"{$review['authorUrl']}\"><img src=\"{$review['profilePhotoUrl']}\"><div class=\"head-content\"><p class=\"name\">{$review['authorName']}</p><sl-rating readonly value=\"{$review['rating']}\" style=\"--symbol-size: .9rem;\"></sl-rating></div></a><div class=\"message-wrapper\"><p class=\"message\">{$review['text']}</p></div></div>");
+                array_push($reviewsString, "<div class=\"review\"><a class=\"head\" target=\"_blank\" href=\"https://search.google.com/local/writereview?placeid={$place_id}\"><img src=\"{$review['profilePhotoUrl']}\"><div class=\"head-content\"><p class=\"name\">{$review['authorName']}</p><sl-rating readonly value=\"{$review['rating']}\" style=\"--symbol-size: .9rem;\"></sl-rating></div></a><div class=\"message-wrapper\"><p class=\"message\">{$review['text']}</p></div></div>");
             }
 
             $gap_style = $styles['items']['gap'] / 2;
@@ -542,6 +546,21 @@ if (!class_exists('_geocentric_components')) {
                 })
             </script>
             ";
+        }
+
+        private function getPlaceID($id) {
+            $userinput_data = $this->userinput_data_controller->get_userinput_by_id($id);
+
+            if (!isset($userinput_data)) return "";
+
+            if (isset($userinput_data['google_place_id'])) return $userinput_data['google_place_id'];
+
+            foreach ($this->userinput_data_controller->get_userinput_data as $input_data) {
+                if (isset($input_data['primaryLocation']) && isset($input_data['google_place_id']))
+                return $input_data['google_place_id'];
+            }
+
+            return "";
         }
     }
 }
