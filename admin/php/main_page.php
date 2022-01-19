@@ -891,7 +891,9 @@ if (!$componentStylesController->styles_isset()) {
                         <div class="two-col-div">
                             <div class="input-wrapper">
                                 <label>Google API Key (Unrestricted) <span>*</span></label>
-                                <input type="password" class="google-api-key" name="unrestricted_google_api_key" placeholder="..." required>
+                                <input type="password" class="google-api-key" name="unrestricted_google_api_key" placeholder="..." required 
+                                <?php if (isset($settings['unrestricted_google_api_key'])) echo "value=\"{$settings['unrestricted_google_api_key']}\""; ?>
+                                >
                                 <small>This API Key will be used on our backend server and will not be visible in th front-end. <b>This must be unrestricted</b> for our servers to run. <b>API's Required:</b> Places API, Geo Coding API, Knowledge Graph Search API</small>
                             </div>
                         </div>
@@ -899,7 +901,9 @@ if (!$componentStylesController->styles_isset()) {
                         <div class="two-col-div">
                             <div class="input-wrapper">
                                 <label>Google API Key (Restricted) <span>*</span></label>
-                                <input type="password" class="google-api-key" name="restricted_google_api_key" placeholder="..." required>
+                                <input type="password" class="google-api-key" name="restricted_google_api_key" placeholder="..." required 
+                                <?php if (isset($settings['restricted_google_api_key'])) echo "value=\"{$settings['restricted_google_api_key']}\""; ?>
+                                >
                                 <small>This API key will be used by the Driving Directions Component and is visible to the front-end. <b>This must be restricted</b> for it to be used only by your domain. Read <a href="https://github.com/francis150/geocentric#-google-api-key-setup" target="_blank">the docs</a> here to know how to restrict your API Key. <b>API's Required:</b> Maps JavaScript API, Directions API</small>
                             </div>
                         </div>
