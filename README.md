@@ -147,7 +147,8 @@ For this step you are required to create 2 API Keys. There two kinds of API Key'
 
 4. Name this API Key as **Restricted API KEY** and select the HTTP referrers options below <br> <p>![Restrict Api KEY](https://i.imgur.com/2yp8LZA.png)</p> 
 
-5. For every website you will where you will be using the plugin make sure to add a website restriction rule for your domain. <br><br> Make sure to follow this format \*.example.com/* <br> *follow format as shown on image below* <br> <p>![Add Website Restrictions](https://i.imgur.com/V0brrbT.png)</p> 
+5. For every website you will where you will be using the plugin make sure to add a website restriction rule for your domain. <br><br> Make sure to follow this format <br> <strong>\*.example.com/* for subdomains</strong> <br> 
+<strong>example.com/* for single domains</strong> <p>![Add Website Restrictions](https://i.imgur.com/V0brrbT.png)</p> 
 
 6. Click done and once you are done make sure to save.
 
