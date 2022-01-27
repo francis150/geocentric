@@ -248,7 +248,7 @@ Shows all the top sights in that location together with their ratings. <p>![](ht
 - `title` - *(optional)* changes the title of the section.
 - `hide_ratings` - *(optional)* Wether or not to display the rating
 - `limit` - *(optional)* Limit the number of items to display
-- `alt` - *(optinal)* image alt texts
+- `alt` - *(optional)* image alt texts
 
 <p>&nbsp;</p>
 
