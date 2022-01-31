@@ -190,6 +190,10 @@ You will now receive your API Key
 
 Shows the temperature, and weather in that area for the day and 7 days ahead. <p>![](https://i.ibb.co/FY4SbqS/image-36.png)</p>
 
+#### **Attributes**
+
+- `unit` - *(optional)* Use `C` for Celsius and `F` for Fahrenheit.
+
 <p>&nbsp;</p>
 
 ### **About Component** - `[geocentric-about]`

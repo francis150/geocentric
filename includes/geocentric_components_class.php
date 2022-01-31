@@ -32,9 +32,15 @@ if (!class_exists('_geocentric_components')) {
             $api_data = $this->api_data_controller->get_api_data($atts['id']);
             $styles = $this->component_styles_controller->get_component_style('weatherSection');
 
+            $attribs = shortcode_atts(array(
+                "unit" => "c"
+            ), $atts);
+
+            $unit_string = strtolower($attribs['unit']) == 'f' ? '?unit=us' : '';
+
             if (empty($api_data)) return "<pre>No data matched by id...</pre>";
 
-            return "<a class=\"weatherwidget-io\" href=\"https://forecast7.com/en/{$api_data['weatherWidget']}\" data-label_1=\"{$api_data['name']}\" data-label_2=\"Weather\" data-theme=\"original\" data-basecolor=\"{$styles['backgroundColor']}\" data-textcolor=\"{$styles['accentColor']}\">{$api_data['name']}</a>
+            return "<a class=\"weatherwidget-io\" href=\"https://forecast7.com/en/{$api_data['weatherWidget']}{$unit_string}\" data-label_1=\"{$api_data['name']}\" data-label_2=\"Weather\" data-theme=\"original\" data-basecolor=\"{$styles['backgroundColor']}\" data-textcolor=\"{$styles['accentColor']}\">{$api_data['name']}</a>
             <script>
             !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
             </script>";

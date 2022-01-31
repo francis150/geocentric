@@ -4,6 +4,14 @@
 
 <p>&nbsp;</p>
 
+## 🎯 v1.0.2
+
+### 😎 **Updates**
+
+- Added `unit` attribute to Weather Component for choosing between Celsius and Fahrenheit. Read docs [here](#) on how to use `unit` attribute.
+
+<p>&nbsp;</p>
+
 ## 🎯 v1.0.1
 
 ### 😎 **Updates**
