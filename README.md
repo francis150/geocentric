@@ -20,6 +20,8 @@ A WordPress plugin that pulls all relevant geocentric data and allows you to add
     - [Getting Started](#getting-started)
     - [Creating Your Cloud Console Project](#creating-your-cloud-console-project)
     - [Generate Your API Key](#generate-your-api-key)
+        - [Restricted API Key](#creating-your-restricted-api-key)
+        - [Unrestricted API Key](#creating-your-unrestricted-api-key)
 - 🤔 [Usage](#-usage)
 - 👨‍💻 [Component Shortcodes](#-component-shortcodes)
     - [Weather Component](#weather-component---geocentric-weather)
@@ -127,17 +129,39 @@ Go to your [Google Cloud Console Dashboard](https://console.cloud.google.com/hom
 
 7. Click the API you are searching for. <p>![Click API](https://i.imgur.com/NZYWE71.png)</p>
 
-8. Click Enable To Use That API <p>![Enable API](https://i.imgur.com/6xkNDos.png) *Please Make sure you have enable requiredrequired API's enabled For The Plugin To Work!*</p>
+8. Click Enable To Use That API <p>![Enable API](https://i.imgur.com/6xkNDos.png) *Please Make sure you have enable required API's enabled For The Plugin To Work!*</p>
 
 
 
 ### **Generate Your API Key**
-You will now receive your API Key
+
+For this step you are required to create 2 API Keys. There two kinds of API Key's we will be creating. <br><br><strong>`➡ Restricted API Key`</strong> - This API Key is the one that will be exposed to your client site. This key is required for your Driving Directions Component To Work! <br><strong>`➡ Unrestricted API Key`</strong> - This API Key is the one that our servers will need to be build your components. These keys are not exposed to the client side and will be hidden from access. This key is required to build your all the other components aside from the Driving Directions. <br><br> Please make sure that you do not skip these steps and create the right kind of API Keys to secure your account!
+
+###  **Creating Your Restricted API Key**
 
 1. Go Back to your API Overview Dashboard Page <p>![Overview Page](https://i.imgur.com/xr97fVR.png)</p>
 
-2. Click Create Create Credentials and Select API Key <p>![Api KEY](https://i.imgur.com/3nCFHZR.png)</p>
+2. Click Create Create Credentials and Select API Key <br> <p>![Api KEY](https://i.imgur.com/3nCFHZR.png)</p>
+
+3. Click Restrict Key <br> <p>![Restrict Api KEY](https://i.imgur.com/9nxo50M.png)</p> 
+
+4. Name this API Key as **Restricted API KEY** and select the HTTP referrers options below <br> <p>![Restrict Api KEY](https://i.imgur.com/2yp8LZA.png)</p> 
+
+5. For every website you will where you will be using the plugin make sure to add a website restriction rule for your domain. <br><br> Make sure to follow this format <br> <strong>\*.example.com/* for subdomains</strong> <br> 
+<strong>example.com/* for single domains</strong> <p>![Add Website Restrictions](https://i.imgur.com/V0brrbT.png)</p> 
+
+6. Click done and once you are done make sure to save.
+
 <p>&nbsp;</p>
+
+### **Creating Your Unrestricted API Key**
+
+Follow Step 1 to 4 from the last instructions. 
+
+1. Name this key **Unrestricted API Key** and select the None option on the Applications Restrictions Section.<p>![Unrestricted API Key](https://i.imgur.com/NUNTg3E.png)</p>
+
+2. Proceed to the API Restrictions section and select the option Don't restrict key. Click save once you are done.<p>![Done](https://i.imgur.com/AoT8nYw.png)</p> 
+
 
 [Back To The Top](#-geocentric-wp-plugin)
 
@@ -149,26 +173,29 @@ You will now receive your API Key
 
 ## 🤔 Usage
 
-1. After activating your plugin license, you will be prompted into a Welcome Screen, and all you have to do from there is enter your `Google API key` press the `Get Started` button. <p>![Google API Key Input](https://i.ibb.co/HDNNTkZ/image-27.png)</p>
+1. After activating your plugin license, you will be prompted into a Welcome Screen, and all you have to do from there is press the `Get Started` button. <p>![Get Started](https://i.imgur.com/1lojImC.png)</p>
 
-2. After Entering your Google API Key, you will be prompted to the dashboard. Next thing to do is Add your service areas to the list. You can do that by hitting the `Add Service Area` button and a form will pop up. <p>![Add service area button](https://i.ibb.co/hZt0y12/addservice-area.png)</p>
-
-3. On the form, set your location by choosing from the three dropdowns(country, state, city). <p>![](https://i.ibb.co/RBLsNNY/Group-78-1.png)</p>
-
-4. Once you set your location, the `Neighbourhoods` text box will be propagated with the neighbourhoods data we've pulled from google. You can `Add` or `Remove` your own neighbourhoods to the text box as long as you separate them with commas(,) <p>![](https://i.ibb.co/cFwvj30/image-30.png)</p>
-
-5. For the `Google Maps Place ID` section, if a GMB Listing is available for this location, you can add the Place ID here. If you have a physical branch in this location but dont have a GMB Listing, you can tick the `Use street address and zip code` checkbox and enter your `Street Address` and `ZIP Code`. After that you can  <p>![](https://i.ibb.co/xSg5gCL/image-31.png)</p>
-
-6. For the sake of the demo, I've added 2 locations to the list. So now, the next thing you need to do is that we need to set your primary location. To do that, Hit the three dots `more icon`, and hit `Set as Primary Location`. <p>![](https://i.ibb.co/gDTXqzC/Group-80-1.png)</p>
+2. You will then be redirected to the settings page. Here you will enter the API Keys you have created as instructed previously. Save your settings after entering your API Keys.<p>![Enter API Keys](https://i.imgur.com/JDTDQr5.png)</p>
 
 
-7. After all of that, all we need to do now is to import all the data from our server into your website. There are two ways to do that; import them one by one, or import them all together. To import them one by one, you can hit the `More Button > Import Data`. To import them all together, you can hit the `Import All Data Button`. Both of these buttons does not work if you haven't set up your Primary Location. <p>![](https://i.ibb.co/F39JJtT/Group-80-2.png)</p>
+3. After Entering your Google API Key, you will be prompted to the dashboard. Next thing to do is Add your service areas to the list. You can do that by hitting the `Add Service Area` button and a form will pop up. <p>![Add service area button](https://i.ibb.co/hZt0y12/addservice-area.png)</p>
 
-8. After the data is pulled from our server, you can see from the green indicators marked `Available` which means that the data is now available in your website. Also, the `Code Icon` will be enabled, and when you click it, you can see the different shortcodes for each components. You can click them to copy the shortcodes instantly. <p>![](https://i.ibb.co/VtyfFTm/Group-81.png)</p>
+4. On the form, set your location by choosing from the three dropdowns(country, state, city). <p>![](https://i.ibb.co/RBLsNNY/Group-78-1.png)</p>
 
-9. Now, all that is left to do is use it on your actual location page. To do that just simply copy the component shortcode that you want (in my case, I clicked `Copy All Components` to copy all components) and paste the shortcodes to wherever part of the page you want it to be placed. <p>![](https://i.ibb.co/QPXBzxN/image-35.png)</p>
+5. Once you set your location, the `Neighbourhoods` text box will be propagated with the neighbourhoods data we've pulled from google. You can `Add` or `Remove` your own neighbourhoods to the text box as long as you separate them with commas(,) <p>![](https://i.ibb.co/cFwvj30/image-30.png)</p>
 
-10. Hit Save and you're All Good! 👍
+6. For the `Google Maps Place ID` section, if a GMB Listing is available for this location, you can add the Place ID here. If you have a physical branch in this location but dont have a GMB Listing, you can tick the `Use street address and zip code` checkbox and enter your `Street Address` and `ZIP Code`. After that you can  <p>![](https://i.ibb.co/xSg5gCL/image-31.png)</p>
+
+7. For the sake of the demo, I've added 2 locations to the list. So now, the next thing you need to do is that we need to set your primary location. To do that, Hit the three dots `more icon`, and hit `Set as Primary Location`. <p>![](https://i.ibb.co/gDTXqzC/Group-80-1.png)</p>
+
+
+8. After all of that, all we need to do now is to import all the data from our server into your website. There are two ways to do that; import them one by one, or import them all together. To import them one by one, you can hit the `More Button > Import Data`. To import them all together, you can hit the `Import All Data Button`. Both of these buttons does not work if you haven't set up your Primary Location. <p>![](https://i.ibb.co/F39JJtT/Group-80-2.png)</p>
+
+9. After the data is pulled from our server, you can see from the green indicators marked `Available` which means that the data is now available in your website. Also, the `Code Icon` will be enabled, and when you click it, you can see the different shortcodes for each components. You can click them to copy the shortcodes instantly. <p>![](https://i.ibb.co/VtyfFTm/Group-81.png)</p>
+
+10. Now, all that is left to do is use it on your actual location page. To do that just simply copy the component shortcode that you want (in my case, I clicked `Copy All Components` to copy all components) and paste the shortcodes to wherever part of the page you want it to be placed. <p>![](https://i.ibb.co/QPXBzxN/image-35.png)</p>
+
+11. Hit Save and you're All Good! 👍
 
 <p>&nbsp;</p>
 
@@ -225,7 +252,7 @@ Shows all the top sights in that location together with their ratings. <p>![](ht
 - `title` - *(optional)* changes the title of the section.
 - `hide_ratings` - *(optional)* Wether or not to display the rating
 - `limit` - *(optional)* Limit the number of items to display
-- `alt` - *(optinal)* image alt texts
+- `alt` - *(optional)* image alt texts
 
 <p>&nbsp;</p>
 
