@@ -8,7 +8,7 @@
 
 ### 😎 **Updates**
 
-- Added `unit` attribute to Weather Component for choosing between Celsius and Fahrenheit. Read docs [here](#) on how to use `unit` attribute.
+- Added `unit` attribute to Weather Component for choosing between Celsius and Fahrenheit. Read docs [here](https://github.com/francis150/geocentric#:~:text=unit%20%2D%20(optional)%20Use%20C%20for%20Celsius%20and%20F%20for%20Fahrenheit.) on how to use `unit` attribute.
 
 <p>&nbsp;</p>
 
