@@ -561,7 +561,7 @@ if (!class_exists('_geocentric_components')) {
 
             if (isset($userinput_data['google_place_id'])) return $userinput_data['google_place_id'];
 
-            foreach ($this->userinput_data_controller->get_userinput_data as $input_data) {
+            foreach ($this->userinput_data_controller->get_userinput_data() as $input_data) {
                 if (isset($input_data['primaryLocation']) && isset($input_data['google_place_id']))
                 return $input_data['google_place_id'];
             }
