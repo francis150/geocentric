@@ -40,7 +40,7 @@ if (!class_exists('_geocentric_components')) {
 
             if (empty($api_data)) return "<pre>No data matched by id...</pre>";
 
-            return "<a class=\"weatherwidget-io\" href=\"https://forecast7.com/en/{$api_data['weatherWidget']}{$unit_string}\" data-label_1=\"{$api_data['name']}\" data-label_2=\"Weather\" data-theme=\"original\" data-basecolor=\"{$styles['backgroundColor']}\" data-textcolor=\"{$styles['accentColor']}\">{$api_data['name']}</a>
+            return "<a class=\"weatherwidget-io\" href=\"https://forecast7.com/en/{$api_data['weather_widget']}{$unit_string}/\" data-label_1=\"{$api_data['name']}\" data-label_2=\"Weather\" data-theme=\"original\" data-basecolor=\"{$styles['backgroundColor']}\" data-textcolor=\"{$styles['accentColor']}\">{$api_data['name']}</a>
             <script>
             !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
             </script>";
@@ -155,7 +155,7 @@ if (!class_exists('_geocentric_components')) {
             $styles = $this->component_styles_controller->get_component_style('thingsToDo');
 
             if (empty($api_data)) return "<pre>No data matched by id...</pre>";
-            if (empty($api_data['thingsToDo'])) return "<pre>No data to show...</pre>";
+            if (empty($api_data['things_to_do'])) return "<pre>No data to show...</pre>";
 
              $attribs = shortcode_atts(array(
                 "title" => "Things To Do",
@@ -167,18 +167,18 @@ if (!class_exists('_geocentric_components')) {
 
             
 
-            foreach ($api_data['thingsToDo'] as $thingstodo) {
+            foreach ($api_data['things_to_do'] as $thingstodo) {
 
                 if($attribs['limit'] == count($thingstodo_cards)) break;
 
                 if (!isset($thingstodo['rating'])) {
                     $thingstodo['rating'] = 0;
-                    $thingstodo['usersTotalRating'] = 'No ratings yet';
+                    $thingstodo['users_total_rating'] = 'No ratings yet';
                 }
 
-                $ratings = !isset($atts['hide_ratings']) ? "<div><sl-rating readonly value=\"{$thingstodo['rating']}\" style=\"--symbol-size: .9rem;\"></sl-rating><small>{$thingstodo['rating']} ({$thingstodo['usersTotalRating']})</small></div>" : "";
+                $ratings = !isset($atts['hide_ratings']) ? "<div><sl-rating readonly value=\"{$thingstodo['rating']}\" style=\"--symbol-size: .9rem;\"></sl-rating><small>{$thingstodo['rating']} ({$thingstodo['users_total_rating']})</small></div>" : "";
 
-                array_push($thingstodo_cards, "<div><div><a href=\"https://www.google.com/maps/search/?api=1&query={$thingstodo['name']}&query_place_id={$thingstodo['placeID']}\" target=\"_blank\"><img src=\"https://lh3.googleusercontent.com/places/{$thingstodo['photoID']}\" alt=\"{$attribs['alt']}\"/>{$ratings}<p>{$thingstodo['name']}</p></a></div></div>");
+                array_push($thingstodo_cards, "<div><div><a href=\"https://www.google.com/maps/search/?api=1&query={$thingstodo['name']}&query_place_id={$thingstodo['place_id']}\" target=\"_blank\"><img src=\"{$thingstodo['photo_url']}\" alt=\"{$attribs['alt']}\"/>{$ratings}<p>{$thingstodo['name']}</p></a></div></div>");
             }
 
             return "
@@ -417,7 +417,7 @@ if (!class_exists('_geocentric_components')) {
 
             foreach ($api_data['reviews'] as $review) {
                 if($attribs['limit'] == count($reviewsString)) break;
-                array_push($reviewsString, "<div class=\"review\"><a class=\"head\" target=\"_blank\" href=\"https://search.google.com/local/writereview?placeid={$place_id}\"><img src=\"{$review['profilePhotoUrl']}\"><div class=\"head-content\"><p class=\"name\">{$review['authorName']}</p><sl-rating readonly value=\"{$review['rating']}\" style=\"--symbol-size: .9rem;\"></sl-rating></div></a><div class=\"message-wrapper\"><p class=\"message\">{$review['text']}</p></div></div>");
+                array_push($reviewsString, "<div class=\"review\"><a class=\"head\" target=\"_blank\" href=\"https://search.google.com/local/writereview?placeid={$place_id}\"><img src=\"{$review['profile_photo_url']}\"><div class=\"head-content\"><p class=\"name\">{$review['author_name']}</p><sl-rating readonly value=\"{$review['rating']}\" style=\"--symbol-size: .9rem;\"></sl-rating></div></a><div class=\"message-wrapper\"><p class=\"message\">{$review['text']}</p></div></div>");
             }
 
             $gap_style = $styles['items']['gap'] / 2;
