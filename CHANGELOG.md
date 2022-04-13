@@ -4,6 +4,15 @@
 
 <p>&nbsp;</p>
 
+## 🎯 v1.0.3
+
+### 😎 **Updates**
+
+- Server changed to server_v2
+- Changed neigbourhoods to neighborhoods
+
+<p>&nbsp;</p>
+
 ## 🎯 v1.0.2
 
 ### 😎 **Updates**
