@@ -84,7 +84,7 @@ if (!class_exists('_geocentric_components')) {
         }
 
         /* 
-        @Description: Neighbourhoods section component
+        @Description: Neighborhoods section component
         @Atts: {
             * title - (optional) Section title
         }
@@ -98,7 +98,7 @@ if (!class_exists('_geocentric_components')) {
             if (empty($userinput_data['neighbourhoods'])) return "<pre>No data to show...</pre>";
 
             $attribs = shortcode_atts(array(
-                "title" => "Neighbourhoods in {$api_data['name']}"
+                "title" => "Neighborhoods in {$api_data['name']}"
             ), $atts);
 
             $neighbourhoods_anchors = [];
