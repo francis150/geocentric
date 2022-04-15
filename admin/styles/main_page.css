@@ -1,15 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
-* {
-  font-family: 'Poppins', sans-serif;
-  margin: 0;
-  padding: 0;
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
-}
-
 ._geocentric-wrapper {
   margin-top: 20px;
+  margin-right: 20px;
   max-width: 1100px;
+  font-family: 'Poppins', sans-serif;
 }
 
 ._geocentric-wrapper .header {
@@ -19,6 +13,9 @@
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 ._geocentric-wrapper .header h1 {
@@ -27,15 +24,46 @@
 }
 
 ._geocentric-wrapper .header img {
-  width: 300px;
+  width: 200px;
+}
+
+._geocentric-wrapper .nav .nav-tab-wrapper {
+  border: none;
+}
+
+._geocentric-wrapper .nav .nav-tab {
+  padding: 10px;
+  border: none;
+  border-top: solid 4px #f5f5f5;
+  margin: 0;
+  margin-right: 5px;
+  background: #f5f5f5;
+  -webkit-transition: all .3s ease-in-out;
+  transition: all .3s ease-in-out;
+}
+
+._geocentric-wrapper .nav .nav-tab:focus {
+  outline: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+
+._geocentric-wrapper .nav .nav-tab:hover {
+  background: white;
+  border-top: solid 4px #CF321D;
+}
+
+._geocentric-wrapper .nav .nav-tab-active {
+  background: white;
+  border-top: solid 4px #CF321D;
 }
 
 ._geocentric-wrapper ._inner-wrapper {
-  background: #ffffff;
+  background: white;
   -webkit-box-shadow: 1px 1px 25px rgba(0, 0, 0, 0.09);
           box-shadow: 1px 1px 25px rgba(0, 0, 0, 0.09);
-  border-radius: 5px;
-  padding: 10px 20px;
+  border-radius: 0px 5px 5px 5px;
+  padding: 10px 20px 30px 20px;
 }
 
 ._geocentric-wrapper .footer {
@@ -45,5 +73,57 @@
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
+}
+
+._geocentric-wrapper div > h2 {
+  font-size: 24px;
+}
+
+._geocentric-wrapper div > hr {
+  margin: 20px 0;
+}
+
+._geocentric-wrapper .input-group {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 5px;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  margin-bottom: 20px;
+}
+
+._geocentric-wrapper .input-group label {
+  color: black;
+  font-weight: 400;
+}
+
+._geocentric-wrapper .input-group label span {
+  color: #CF321D;
+}
+
+._geocentric-wrapper .input-group input {
+  padding: 2px 10px;
+}
+
+._geocentric-wrapper .form-footer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+._geocentric-wrapper .form-footer input[type=submit], ._geocentric-wrapper .form-footer input[type=button] {
+  padding: 3px 20px;
+  font-size: 13px;
+}
+
+._geocentric-wrapper .settings-tab form {
+  display: block;
+}
+
+._geocentric-wrapper .settings-tab form .input-group {
+  max-width: 500px;
 }
 /*# sourceMappingURL=main_page.css.map */

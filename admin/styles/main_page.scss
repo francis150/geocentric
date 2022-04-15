@@ -1,22 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
 
-$background: #ffffff;
+$background: white;
+$mutedBackground: #f5f5f5;
+$textColor: black;
+$accentColor: #CF321D;
 $dropShadow: 1px 1px 25px rgba(0, 0, 0, 0.09);
-
-* {
-    font-family: 'Poppins', sans-serif;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
 
 ._geocentric-wrapper {
     margin-top: 20px;
+    margin-right: 20px;
     max-width: 1100px;
+    font-family: 'Poppins', sans-serif;
 
     .header {
         display: flex;
         justify-content: space-between;
+        align-items: center;
 
         h1 {
             font-size: 34px;
@@ -24,19 +23,98 @@ $dropShadow: 1px 1px 25px rgba(0, 0, 0, 0.09);
         }
 
         img {
-            width: 300px;
+            width: 200px;
+        }
+    }
+
+    .nav {
+
+        .nav-tab-wrapper {
+            border: none;
+        }
+
+        .nav-tab {
+            padding: 10px;
+            border: none;
+            border-top: solid 4px $mutedBackground;
+            margin: 0;
+            margin-right: 5px;
+            background: $mutedBackground;
+            transition: all .3s ease-in-out;
+
+            &:focus {
+                outline: none;
+                box-shadow: none;
+            }
+
+            &:hover {
+                background: $background;
+                border-top: solid 4px $accentColor;
+            }
+        }
+
+        .nav-tab-active {
+            background: $background;
+            border-top: solid 4px $accentColor;
         }
     }
 
     ._inner-wrapper {
         background: $background;
         box-shadow: $dropShadow;
-        border-radius: 5px;
-        padding: 10px 20px;
+        border-radius: 0px 5px 5px 5px;
+        padding: 10px 20px 30px 20px;
     }
 
     .footer {
         display: flex;
         justify-content: space-between;
+    }
+
+    div > h2 {
+        font-size: 24px;
+    }
+
+    div > hr {
+        margin: 20px 0;
+    }
+
+    .input-group {
+        display: flex;
+        gap: 5px;
+        flex-direction: column;
+        margin-bottom: 20px;
+
+        label {
+            color: $textColor;
+            font-weight: 400;
+
+            span {
+                color: $accentColor;
+            }
+        }
+
+        input {
+            padding: 2px 10px;
+        }
+    }
+    
+    .form-footer {
+        display: flex;
+
+        input[type=submit], input[type=button] {
+            padding: 3px 20px;
+            font-size: 13px;
+        }
+    }
+}
+
+._geocentric-wrapper .settings-tab {
+    form {
+        display: block;
+
+        .input-group {
+            max-width: 500px;
+        }
     }
 }

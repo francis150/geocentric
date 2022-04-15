@@ -1,17 +1,45 @@
 <?php
 
-// Get started button
-if (isset($_POST['_get-started'])) {
-    $config_data = $pluginConfigController->get_plugin_config_data();
+// User Submits Settings Form
+if (isset($_POST['_settings-form-update'])) {
+    $formdata = $_POST;
 
-    if (!$componentStylesController->init_component_styles()) {
+    $settings = array(
+        "unrestricted_google_api_key" => $_POST['unrestricted_google_api_key'],
+        "restricted_google_api_key" => $_POST['restricted_google_api_key']
+    );
+
+    //  init component styles
+    if ($componentStylesController->init_component_styles()) {
+        
+        // save settings data
+        if ($settingsController->set_settings_data($settings)) {
+            ?>
+            <div class="notice notice-success is-dismissible">
+                <p><b><?php echo $config_data['plugin_name']; ?></b> - Settings Updated Successfully!</p>
+            </div>
+            <?php
+        } else {
+            ?>
+            <div class="notice notice-error is-dismissible">
+                <p><b><?php echo $config_data['plugin_name']; ?></b> - Failed to update Settings.</p>
+            </div>
+            <?php
+        }
+
+    } else {
         ?>
         <div class="notice notice-error is-dismissible">
             <p><b><?php echo $config_data['plugin_name']; ?></b> - Failed to initialize <kbd>component_styles.json</kbd> file.</p>
         </div>
         <?php
     }
+
+    
 }
+
+
+# =========================================================== #
 
 // Location form submit
 if (isset($_POST['_location-form-submit'])) {
@@ -333,29 +361,7 @@ if (isset($_POST['_style-form-update'])) {
     }
 }
 
-// User Submits Settings Form
-if (isset($_POST['_settings-form-update'])) {
-    $formdata = $_POST;
 
-    $settings = array(
-        "unrestricted_google_api_key" => $_POST['unrestricted_google_api_key'],
-        "restricted_google_api_key" => $_POST['restricted_google_api_key']
-    );
-
-    if ($settingsController->set_settings_data($settings)) {
-        ?>
-        <div class="notice notice-success is-dismissible">
-            <p><b><?php echo $config_data['plugin_name']; ?></b> - Settings Updated Successfully!</p>
-        </div>
-        <?php
-    } else {
-        ?>
-        <div class="notice notice-error is-dismissible">
-            <p><b><?php echo $config_data['plugin_name']; ?></b> - Failed to update Settings.</p>
-        </div>
-        <?php
-    }
-}
 
 // Single API Data import
 if (!empty($_POST['_single_api_data'])) {
