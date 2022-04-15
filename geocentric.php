@@ -2,12 +2,12 @@
 /**
  * Plugin Name: Geocentric
  * Description: Pull all relevant geocentric data to your service area page in one click!
- * Version: 1.0.3
+ * Version: 2.0.0
  * Requires at least: 5.2
  * Tested up to: 5.8
  * Requires PHP: 7.2
- * Author: Rankfortress Digital Agency
- * Author URI: https://rankfortress.com/
+ * Author: SEO Rocket Tools
+ * Author URI: http://seorockettools.com/
  * Text Domain: _geocentric
  */
 
