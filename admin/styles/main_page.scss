@@ -9,7 +9,7 @@ $dropShadow: 1px 1px 25px rgba(0, 0, 0, 0.09);
 ._geocentric-wrapper {
     margin-top: 20px;
     margin-right: 20px;
-    max-width: 1100px;
+    max-width: 1000px;
     font-family: 'Poppins', sans-serif;
 
     .header {
@@ -97,6 +97,10 @@ $dropShadow: 1px 1px 25px rgba(0, 0, 0, 0.09);
         input {
             padding: 2px 10px;
         }
+        
+        select {
+            padding: 2px 10px;
+        }
     }
     
     .form-footer {
@@ -116,5 +120,40 @@ $dropShadow: 1px 1px 25px rgba(0, 0, 0, 0.09);
         .input-group {
             max-width: 500px;
         }
+    }
+}
+
+._geocentric-wrapper .styling-tab {
+    .summary {
+        margin-bottom: 30px;
+        h4 {
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin: 0;
+        }
+    }
+    
+    .group {
+        margin-bottom: 40px;
+
+        .row {
+            display: flex;
+            gap: 10px;
+        }
+    }
+
+    .input-group {
+        max-width: 150px;
+
+        select {
+            min-width: 150px;
+        }
+    }
+
+    .thingstodocomponent_showratings {
+        display: inline;
+        max-width: 400px;
     }
 }
