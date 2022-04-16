@@ -18,8 +18,8 @@ if (!class_exists('_geocentric_core')) {
             $this->component_controller = new _geocentric_components();
             $this->appsero_controller = new _geocentric_appsero();
 
-            add_action( 'admin_menu', array($this, 'add_admin_menu_items'));
             add_action('admin_head', array($this, 'addto_admin_head'));
+            add_action( 'admin_menu', array($this, 'add_admin_menu_items'));
             add_action('admin_footer', array($this, 'addto_admin_footer'));
             add_action('wp_head', array($this, 'add_to_wp_head'));
             add_action('init', array($this, 'init_component_shortcodes'));
@@ -71,9 +71,6 @@ if (!class_exists('_geocentric_core')) {
             
             // npm-uuid cdn import
             wp_enqueue_script('_geocentric_uuid_cdn_script', 'https://cdn.jsdelivr.net/npm/uuid@latest/dist/umd/uuidv4.min.js');
-
-            // axios
-            wp_enqueue_script('_geocentric_axios_cdn_script', 'https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js');
         }
 
         public function addto_admin_head() {
@@ -82,6 +79,9 @@ if (!class_exists('_geocentric_core')) {
 
             // Shoelace styles
             wp_enqueue_style('_geocentric_adminpage_shoelace_styles', 'https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.60/dist/themes/light.css');
+
+            // axios
+            wp_enqueue_script('_geocentric_axios_cdn_script', 'https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js');
         }
 
     }

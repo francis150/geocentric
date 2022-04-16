@@ -80,27 +80,26 @@ switch ($tab) {
         <div class="styling-tab">
             <h2>Component Styling 🎨</h2>
             <p>Style how your geocentric data gets displayed on your page.</p>
-            <hr>
-
-            <!-- <div class="summary">
-                <h4>Quick jump to...</h4>
+            <div class="summary">
                 <p>
-                    <a href="#">General</a> |
-                    <a href="#">Weather Component</a> |
-                    <a href="#">About Component</a> |
-                    <a href="#">Neighborhoods Component</a> |
-                    <a href="#">Things to Do Component</a> |
-                    <a href="#">Bus Stops Component</a> |
-                    <a href="#">Map Embed Component</a> |
-                    <a href="#">Driving Directions Component</a> |
-                    <a href="#">Reviews Component</a>
+                    <b>Quick jump to...</b> 
+                    <a href="#:~:text=Component%20%7C%20Reviews%20Component-,General,-Components%20Gap">General</a> |
+                    <a href="#:~:text=Components%20Padding-,Weather%20Component,-Background%20Color">Weather Component</a> |
+                    <a href="#:~:text=About%20Component,-Title">About Component</a> |
+                    <a href="#:~:text=Neighborhoods%20Component,-Title">Neighborhoods Component</a> |
+                    <a href="#:~:text=Things%20to%20Do%20Component,-Title">Things to Do Component</a> |
+                    <a href="#:~:text=for%20each%20item%3F-,Bus%20Stops%20Component,-Title">Bus Stops Component</a> |
+                    <a href="#:~:text=Map%20Embed%20Component,-Title">Map Embed Component</a> |
+                    <a href="#:~:text=Width%20(%25)-,Driving%20Directions%20Component,-Title">Driving Directions Component</a> |
+                    <a href="#:~:text=Width%20(%25)-,Reviews%20Component,-Title">Reviews Component</a>
                 </p>
-            </div> -->
+            </div>
+            <hr>
 
             <form action="?page=_geocentric&tab=styling" method="POST">
                 
                 <div class="general-group group">
-                    <h3>General</h3>
+                    <h3  id="general">General</h3>
                     <div class="row">
                         <div class="input-group">
                             <label>Components Gap</label>
@@ -110,10 +109,20 @@ switch ($tab) {
                             <label>Components Padding</label>
                             <input type="number" required name="general_component-padding">
                         </div>
+                        <div class="input-group">
+                            <label>Font Family</label>
+                            <input list="fonts" type="text" required name="general_font-family">
+                            <datalist id="fonts">
+                                <option value="">Font 1</option>
+                                <option value="">Font 2</option>
+                                <option value="">Font 3</option>
+                                <option value="">Font 4</option>
+                            </datalist>
+                        </div>
                     </div>
                 </div>
 
-                <div class="weathercomponent-group group">
+                <div id="weathercomponent" class="weathercomponent-group group">
                     <h3>Weather Component</h3>
                     <div class="row">
                         <div class="input-group">
@@ -134,7 +143,7 @@ switch ($tab) {
                     </div>
                 </div>
 
-                <div class="aboutcomponent-group group">
+                <div id="aboutcomponent" class="aboutcomponent-group group">
                     <h3>About Component</h3>
 
                     <h4>Title</h4>
@@ -186,7 +195,7 @@ switch ($tab) {
                     </div>
                 </div>
                 
-                <div class="neighborhoodscomponent-group group">
+                <div id="neighborhoodscomponent" class="neighborhoodscomponent-group group">
                     <h3>Neighborhoods Component</h3>
 
                     <h4>Title</h4>
@@ -263,7 +272,7 @@ switch ($tab) {
 
                 </div>
                 
-                <div class="thingstodocomponent-group group">
+                <div id="thingstodocomponent" class="thingstodocomponent-group group">
                     <h3>Things to Do Component</h3>
 
                     <h4>Title</h4>
@@ -336,11 +345,11 @@ switch ($tab) {
                         </div>
                         <div class="input-group">
                             <label>Border Radius</label>
-                            <input type="text" required name="thingstodocomponent_image_border-radius">
+                            <input type="number" required name="thingstodocomponent_image_border-radius">
                         </div>
                         <div class="input-group">
                             <label>Border Width</label>
-                            <input type="text" required name="thingstodocomponent_image_border-width">
+                            <input type="number" required name="thingstodocomponent_image_border-width">
                         </div>
                     </div>
 
@@ -375,7 +384,7 @@ switch ($tab) {
 
                 </div>
 
-                <div class="busstopscomponent-group group">
+                <div id="busstopscomponent" class="busstopscomponent-group group">
                     <h3>Bus Stops Component</h3>
 
                     <h4>Title</h4>
@@ -465,7 +474,7 @@ switch ($tab) {
                     </div>
                 </div>
 
-                <div class="mapembedcomponent-group group">
+                <div id="mapembedcomponent" class="mapembedcomponent-group group">
                     <h3>Map Embed Component</h3>
 
                     <h4>Title</h4>
@@ -505,7 +514,7 @@ switch ($tab) {
                     </div>
                 </div>
 
-                <div class="drivingdirectionscomponent-group group">
+                <div id="drivingdirectionscomponent" class="drivingdirectionscomponent-group group">
                     <h3>Driving Directions Component</h3>
 
                     <h4>Title</h4>
@@ -545,7 +554,7 @@ switch ($tab) {
                     </div>
                 </div>
 
-                <div class="reviewscomponent-group group">
+                <div id="reviewscomponent" class="reviewscomponent-group group">
                     <h3>Reviews Component</h3>
 
                     <h4>Title</h4>
