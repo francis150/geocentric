@@ -18,10 +18,9 @@ if (!class_exists('_geocentric_core')) {
             $this->component_controller = new _geocentric_components();
             $this->appsero_controller = new _geocentric_appsero();
 
-            add_action('admin_head', array($this, 'addto_admin_head'));
             add_action( 'admin_menu', array($this, 'add_admin_menu_items'));
+            add_action('admin_head', array($this, 'addto_admin_head'));
             add_action('admin_footer', array($this, 'addto_admin_footer'));
-            add_action('wp_head', array($this, 'add_to_wp_head'));
             add_action('init', array($this, 'init_component_shortcodes'));
         }
 
@@ -60,11 +59,6 @@ if (!class_exists('_geocentric_core')) {
             }
         }
 
-        public function add_to_wp_head() {
-            // Shoelace
-            wp_enqueue_style('_geocentric_wp_shoelace_styles', 'https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.60/dist/themes/light.css');
-        }
-
         public function addto_admin_footer() {
             // Admin page script file
             wp_enqueue_script('_geocentric_adminpage_scripts', plugins_url( '../admin/js/main_page.js', __FILE__ ));
@@ -76,9 +70,6 @@ if (!class_exists('_geocentric_core')) {
         public function addto_admin_head() {
             // Admin page style file
             wp_enqueue_style('_geocentric_adminpage_styles', plugins_url( '../admin/styles/main_page.css', __FILE__ ));
-
-            // Shoelace styles
-            wp_enqueue_style('_geocentric_adminpage_shoelace_styles', 'https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.60/dist/themes/light.css');
 
             // axios
             wp_enqueue_script('_geocentric_axios_cdn_script', 'https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js');
