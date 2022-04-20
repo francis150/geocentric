@@ -1,8 +1,12 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+html {
+  scroll-behavior: smooth;
+}
+
 ._geocentric-wrapper {
   margin-top: 20px;
   margin-right: 20px;
-  max-width: 1000px;
+  max-width: 900px;
   font-family: 'Poppins', sans-serif;
 }
 
@@ -104,21 +108,25 @@
   color: #CF321D;
 }
 
-._geocentric-wrapper .input-group input {
+._geocentric-wrapper .input-group input, ._geocentric-wrapper .input-group select {
   padding: 2px 10px;
 }
 
-._geocentric-wrapper .input-group select {
-  padding: 2px 10px;
+._geocentric-wrapper .input-group textarea {
+  padding: 10px;
 }
 
 ._geocentric-wrapper .form-footer {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 10px;
 }
 
-._geocentric-wrapper .form-footer input[type=submit], ._geocentric-wrapper .form-footer input[type=button] {
+._geocentric-wrapper .form-footer input[type=submit], ._geocentric-wrapper .form-footer input[type=button], ._geocentric-wrapper .form-footer button {
   padding: 3px 20px;
   font-size: 13px;
 }
@@ -165,5 +173,66 @@
 ._geocentric-wrapper .styling-tab .thingstodocomponent_showratings {
   display: inline;
   max-width: 400px;
+}
+
+._geocentric-wrapper .locations-tab .header-wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: baseline;
+      -ms-flex-align: baseline;
+          align-items: baseline;
+}
+
+._geocentric-wrapper .locations-tab hr {
+  margin-top: 5px;
+}
+
+._geocentric-wrapper .locations-tab button {
+  padding: 3px 20px;
+  font-size: 13px;
+}
+
+._geocentric-wrapper .new-location-form .row {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 10px;
+}
+
+._geocentric-wrapper .new-location-form .input-group {
+  max-width: 250px;
+}
+
+._geocentric-wrapper .new-location-form .input-group select {
+  min-width: 250px;
+}
+
+._geocentric-wrapper .new-location-form .full-width {
+  max-width: 770px;
+}
+
+._geocentric-wrapper .new-location-form .streetzip-input-group {
+  display: none;
+}
+
+._geocentric-wrapper .new-location-form .input-checkbox {
+  max-width: 500px;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-bottom: 40px;
+}
+
+._geocentric-wrapper .new-location-form .form-footer img {
+  max-height: 30px;
+  display: none;
 }
 /*# sourceMappingURL=main_page.css.map */

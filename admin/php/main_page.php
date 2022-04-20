@@ -19,6 +19,7 @@ $config_data = $pluginConfigController->get_plugin_config_data();
 
 require_once plugin_dir_path(__FILE__) . 'main_page_functions.php';
 
+
 $component_styles = $componentStylesController->get_component_styles();
 $settings = $settingsController->get_settings_data();
 
@@ -29,7 +30,16 @@ $pluginConfigured = $componentStylesController->styles_isset();
 $default_tab = null;
 $tab = !$pluginConfigured ? 'settings' : (isset($_GET['tab']) ? $_GET['tab'] : $default_tab);
 
-?><div class="_geocentric-wrapper" data-api_server_url="<?php echo $config_data['server_url']; ?>">
+?><div 
+    class="_geocentric-wrapper" 
+    style="display: none;" 
+    data-api_server_url="<?php echo $config_data['server_url']; ?>" 
+    data-geodatabase_url="<?php echo $config_data['geodatabase_url']; ?>" 
+    data-appsero_api_key="<?php echo $config_data['appsero_api_key']; ?>" 
+    data-appsero_plugin_name="<?php echo $config_data['appsero_plugin_name']; ?>" 
+    data-google_api_key="<?php echo $settings['unrestricted_google_api_key']; ?>" 
+    data-user_input_data="<?php echo str_replace("\"", "&#34;" ,json_encode($userInputDataController->get_userinput_data())); ?>" 
+    >
     <div class="header"><h1>Geocentric Plugin</h1> <a href="http://seorockettools.com/"><img src="<?php echo plugin_dir_url(dirname(__FILE__)) . 'assets/seorocket-text-logo.svg'; ?>" alt="SEO Rocket Tools"></a></div>
     
     <div class="nav">
@@ -39,14 +49,21 @@ $tab = !$pluginConfigured ? 'settings' : (isset($_GET['tab']) ? $_GET['tab'] : $
             <a href="?page=_geocentric&tab=settings" class="nav-tab <?php if($tab==="settings"):?>nav-tab-active<?php endif; ?>">Settings</a>
         </nav>
     </div>
-    
+
     <div class="_inner-wrapper">
     <?php
 
 switch ($tab) {
     default:
         ?>
-        <h2>Locations Tab</h2>
+        <div class="locations-tab">
+            <h2>Locations 📌</h2>
+            <div class="header-wrapper">
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus, atque.</p>
+                <a href="?page=_geocentric&tab=new-location-form"><button class="button-primary">Add location</button></a>
+            </div>
+            <hr>
+        </div>
         <?php
         break;
     case 'settings':
@@ -608,9 +625,77 @@ switch ($tab) {
         </div>
         <?php
         break;
+    case 'new-location-form':
+        ?>
+        <div class="new-location-form">
+            <h2>Create New Location</h2>
+            <hr>
+            <form action="?page=_geocentric" method="POST">
+
+                <div class="row">
+                    <div class="input-group">
+                        <label>Country <span>*</span></label>
+                        <select required autocomplete name="newlocationform_country" class="newlocationform_country">
+                            <option value="" selected disabled>---</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>State <span>*</span></label>
+                        <select required autocomplete name="newlocationform_state" class="newlocationform_state">
+                            <option value="" selected disabled>---</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>City/Town <span>*</span></label>
+                        <select required autocomplete class="newlocationform_city" name="newlocationform_city">
+                            <option value="" selected disabled>---</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-group full-width">
+                    <label>Neighborhoods</label>
+                    <textarea disabled name="newlocationform_neigborhoods" class="newlocationform_neigborhoods" rows="5"></textarea>
+                    <small>These are the available neighbourhoods for this area on our database. You can manually add or edit them by entering your neighbourhoods here. Enter them properly and separate each with comma(,)</small>
+                </div>
+
+                <div class="input-group full-width gbp-input-group">
+                    <label>GBP Place ID</label>
+                    <input type="text" name="newlocationform_gbp_placeid">
+                    <small>If you have physical branch in this area, you can manually enter either the Google Maps Place ID or tick the checkbox below to use street address and zip code.</small>
+                </div>
+
+                <div class="row streetzip-input-group">
+                    <div class="input-group">
+                        <label>Street Address <span>*</span></label>
+                        <input type="text" name="newlocationform_street" class="newlocationform_street">
+                    </div>
+                    <div class="input-group">
+                        <label>ZIP Code <span>*</span></label>
+                        <input type="text" name="newlocationform_zipcode" class="newlocationform_zipcode">
+                    </div>
+                </div>
+
+                <div class="input-group input-checkbox">
+                    <input type="checkbox" name="newlocationform_useStreetzip" class="newlocationform_use-streetzip">
+                    <label>Use <b>street address</b> and <b>zip code</b>.</label>
+                </div>
+
+                <div class="form-footer">
+                    <textarea name="_newlocationform_submit_api_data" class="_newlocationform-submit-api-data" style="display: none;"></textarea>
+                    <textarea name="_newlocationform_submit_userinput_data" class="_newlocationform-submit-userinput-data" style="display: none;"></textarea>
+                    <input type="checkbox" style="display: none;" name="_newlocationform_importlocation_failed">
+                    <button type="button" class="button-primary create-button">Create</button>
+                    <img src="<?php echo plugin_dir_url(dirname(__FILE__)) . 'assets/Rocket.gif'; ?>">
+                    <button type="button" class="button-secondary discard-button" style="margin-left: auto;">Discard Location</button>
+                </div>
+            </form>
+        </div>
+        <?php
+        break;
 }
 
 ?></div><div class="footer">
     <p>Powered by © <a href="http://seorockettools.com/" target="_blank">SEO Rocket Tools</a>, 2022 🚀.</p>
-    <p><a href="https://github.com/francis150/geocentric#readme">Documentation</a> | <a href="http://support.seorockettools.com/">Support</a></p>
+    <p><a href="https://github.com/francis150/geocentric#readme" target="_blank">Documentation</a> | <a href="http://support.seorockettools.com/"  target="_blank">Support</a></p>
 </div></div>

@@ -13,7 +13,7 @@ html {
 ._geocentric-wrapper {
     margin-top: 20px;
     margin-right: 20px;
-    max-width: 1000px;
+    max-width: 900px;
     font-family: 'Poppins', sans-serif;
     
 
@@ -99,19 +99,21 @@ html {
             }
         }
 
-        input {
+        input, select {
             padding: 2px 10px;
         }
-        
-        select {
-            padding: 2px 10px;
+
+        textarea {
+            padding: 10px;
         }
     }
     
     .form-footer {
         display: flex;
+        align-items: center;
+        gap: 10px;
 
-        input[type=submit], input[type=button] {
+        input[type=submit], input[type=button], button {
             padding: 3px 20px;
             font-size: 13px;
         }
@@ -160,5 +162,59 @@ html {
     .thingstodocomponent_showratings {
         display: inline;
         max-width: 400px;
+    }
+}
+
+._geocentric-wrapper .locations-tab {
+
+    .header-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+    }
+
+    hr {
+        margin-top: 5px;
+    }
+
+    button {
+        padding: 3px 20px;
+        font-size: 13px;
+    }
+}
+
+._geocentric-wrapper .new-location-form {
+
+    .row {
+        display: flex;
+        gap: 10px;
+    }
+
+    .input-group {
+        max-width: 250px;
+
+        select {
+            min-width: 250px;
+        }
+    }
+
+    .full-width {
+        max-width: 770px;
+    }
+
+    .streetzip-input-group {
+        display: none;
+    }
+
+    .input-checkbox {
+        max-width: 500px;
+        flex-direction: row;
+        align-items: center;
+        margin-bottom: 40px;
+    }
+
+    .form-footer img {
+        max-height: 30px;
+        display: none;
     }
 }

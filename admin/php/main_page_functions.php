@@ -248,6 +248,11 @@ if (isset($_POST['_style-form-reset'])) {
     }
 }
 
+// Create new location form submit
+if (isset($_POST['_newlocationform_submit_userinput_data']) && isset($_POST['_newlocationform_submit_api_data'])) {
+    
+}
+
 # =========================================================== #
 
 // Location form submit

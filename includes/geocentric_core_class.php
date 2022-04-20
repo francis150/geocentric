@@ -70,7 +70,6 @@ if (!class_exists('_geocentric_core')) {
         public function addto_admin_head() {
             // Admin page style file
             wp_enqueue_style('_geocentric_adminpage_styles', plugins_url( '../admin/styles/main_page.css', __FILE__ ));
-
             // axios
             wp_enqueue_script('_geocentric_axios_cdn_script', 'https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js');
         }
