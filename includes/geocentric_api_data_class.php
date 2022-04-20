@@ -53,7 +53,7 @@ if (!class_exists('_geocentric_api_data')) {
             $res = false;
 
             foreach ($this->api_data as $data) {
-                if ($data['id'] == $id) {
+                if (isset($data['id']) && $data['id'] == $id) {
                     $res = true;
                     break;
                 }
