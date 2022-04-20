@@ -4,6 +4,14 @@
 
 <p>&nbsp;</p>
 
+## 🎯 v1.0.4
+
+### 🕷 **Bug Fixes**
+
+- API Data Compatability Issue Fixed
+
+<p>&nbsp;</p>
+
 ## 🎯 v1.0.3
 
 ### 😎 **Updates**
