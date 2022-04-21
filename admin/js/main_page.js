@@ -1,9 +1,5 @@
 
 
-window.addEventListener('load', () => {
-    document.querySelector('._geocentric-main').style.display = 'inherit'
-})
-
 /* *****LOCATION FORM**** */
 // Add New Location Form
 document.querySelector('._geocentric-main .main-view-wrapper .locations-panel .add-location-button').addEventListener('click', () =>{

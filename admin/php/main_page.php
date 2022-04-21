@@ -24,7 +24,7 @@ $settings = $settingsController->get_settings_data();
 
 if (!$componentStylesController->styles_isset()) {
     ?>
-    <div class="_geocentric-main" style="display: none;"><section class="get-started-wrapper">
+    <div class="_geocentric-main"><section class="get-started-wrapper">
         <div class="content-wrapper">
             <img src="<?php echo $pluginConfigController->get_plugin_logo(); ?>">
             <p><?php echo $config_data['plugin_desc']; ?></p>
@@ -40,7 +40,7 @@ if (!$componentStylesController->styles_isset()) {
     ?>
     <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.55/dist/shoelace.js"></script>    
 
-    <div class="_geocentric-main" style="display: none;">
+    <div class="_geocentric-main">
 
         <section class="overlay-form newlocation-form">
             <form action="#" method="POST">
