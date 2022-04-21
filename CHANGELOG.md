@@ -4,6 +4,14 @@
 
 <p>&nbsp;</p>
 
+## 🎯 v1.0.5
+
+### 🕷 **Bug Fixes**
+
+- Dashboard UI Missing Issue Fixed
+
+<p>&nbsp;</p>
+
 ## 🎯 v1.0.4
 
 ### 🕷 **Bug Fixes**

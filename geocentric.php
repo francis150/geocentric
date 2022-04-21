@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Geocentric
  * Description: Pull all relevant geocentric data to your service area page in one click!
- * Version: 1.0.4
+ * Version: 1.0.5
  * Requires at least: 5.2
  * Tested up to: 5.8
  * Requires PHP: 7.2
