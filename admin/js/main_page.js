@@ -5,9 +5,9 @@ const SERVER_URL = MAIN_WRAPPER_DATA.api_server_url
 const GEODATABASE_URL = MAIN_WRAPPER_DATA.geodatabase_url
 const APPSERO_API_KEY = MAIN_WRAPPER_DATA.appsero_api_key
 const APPSERO_PLUGIN_NAME = MAIN_WRAPPER_DATA.appsero_plugin_name
+const PRIMARY_KEYWORD = MAIN_WRAPPER_DATA.primary_keyword
 const URL_PARAMS = new URLSearchParams(window.location.search)
 const USER_INPUT_DATA = JSON.parse(MAIN_WRAPPER_DATA.user_input_data)
-const GOOGLE_API_KEY = MAIN_WRAPPER_DATA.google_api_key
 
 window.addEventListener('load', () => {
     document.querySelector('._geocentric-wrapper').style.display = 'inherit'
@@ -217,7 +217,7 @@ if (URL_PARAMS.get('tab') == 'new-location-form') {
         const mainLocation = getPrimaryLocation() ? getPrimaryLocation() : newLocation
 
         const payload = {
-            requesting_domain: window.location.hostname,
+            requesting_domain: window.location.origin,
             id: uuidv4(),
             city: {
                 id: newLocationForm.newlocationform_city.value,
@@ -235,7 +235,7 @@ if (URL_PARAMS.get('tab') == 'new-location-form') {
                 appsero_api_key: APPSERO_API_KEY,
                 appsero_plugin_name: APPSERO_PLUGIN_NAME
             },
-            google_api_key: GOOGLE_API_KEY,
+            primary_keyword: PRIMARY_KEYWORD,
             mainLocation: {
                 country_iso2: mainLocation.country.iso2,
                 state_code: mainLocation.state.code,

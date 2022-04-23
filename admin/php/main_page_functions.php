@@ -5,8 +5,7 @@ if (isset($_POST['_settings-form-update'])) {
     $formdata = $_POST;
 
     $settings = array(
-        "unrestricted_google_api_key" => $_POST['unrestricted_google_api_key'],
-        "restricted_google_api_key" => $_POST['restricted_google_api_key']
+        "primary_keyword" => $_POST['primary_keyword']
     );
 
     //  init component styles

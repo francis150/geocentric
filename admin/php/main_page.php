@@ -30,14 +30,15 @@ $pluginConfigured = $componentStylesController->styles_isset();
 $default_tab = null;
 $tab = !$pluginConfigured ? 'settings' : (isset($_GET['tab']) ? $_GET['tab'] : $default_tab);
 
+
 ?><div 
     class="_geocentric-wrapper" 
     style="display: none;" 
     data-api_server_url="<?php echo $config_data['server_url']; ?>" 
     data-geodatabase_url="<?php echo $config_data['geodatabase_url']; ?>" 
     data-appsero_api_key="<?php echo $config_data['appsero_api_key']; ?>" 
+    data-primary_keyword="<?php echo $settings['primary_keyword'] ?>" 
     data-appsero_plugin_name="<?php echo $config_data['appsero_plugin_name']; ?>" 
-    data-google_api_key="<?php echo $settings['unrestricted_google_api_key']; ?>" 
     data-user_input_data="<?php echo str_replace("\"", "&#34;" ,json_encode($userInputDataController->get_userinput_data())); ?>" 
     >
     <div class="header"><h1>Geocentric Plugin</h1> <a href="http://seorockettools.com/"><img src="<?php echo plugin_dir_url(dirname(__FILE__)) . 'assets/seorocket-text-logo.svg'; ?>" alt="SEO Rocket Tools"></a></div>
@@ -74,15 +75,9 @@ switch ($tab) {
             <hr>
             <form action="#" method="POST">
                 <div class="input-group">
-                    <label>Google API Key (Unrestricted) <span>*</span></label>
-                    <input type="text" required name="unrestricted_google_api_key" <?php if (isset($settings['unrestricted_google_api_key'])) echo "value=\"{$settings['unrestricted_google_api_key']}\""; ?>>
-                    <small>This API Key will be used on our backend server and will not be visible in th front-end. <b>This must be unrestricted</b> for our servers to run. <b>API's Required:</b> Places API, Geo Coding API, Knowledge Graph Search API</small>
-                </div>
-
-                <div class="input-group">
-                    <label>Google API Key (Restricted) <span>*</span></label>
-                    <input type="text" name="restricted_google_api_key" required <?php if (isset($settings['restricted_google_api_key'])) echo "value=\"{$settings['restricted_google_api_key']}\""; ?>>
-                    <small>This API key will be used by the Driving Directions Component and is visible to the front-end. <b>This must be restricted</b> for it to be used only by your domain. Read <a href="https://github.com/francis150/geocentric#-google-api-key-setup" target="_blank">the docs</a> here to know how to restrict your API Key. <b>API's Required:</b> Maps JavaScript API, Directions API</small>
+                    <label>Primary Keyword<span>*</span></label>
+                    <input type="text" required name="primary_keyword" <?php if (isset($settings['primary_keyword'])) echo "value=\"{$settings['primary_keyword']}\""; ?>>
+                    <small>Properly Input your Main Keyword here <b>WITHOUT LOCATION</b> for best results.</small>
                 </div>
 
                 <div class="form-footer">
