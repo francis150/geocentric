@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons+Outlined");
 html {
   scroll-behavior: smooth;
 }
@@ -196,6 +197,109 @@ html {
   font-size: 13px;
 }
 
+._geocentric-wrapper .locations-tab .locations-list {
+  min-height: 300px;
+}
+
+._geocentric-wrapper .locations-tab .locations-list .location {
+  background: #f5f5f5;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-bottom: 10px;
+  padding: 0 20px;
+  -webkit-transition: all .3s ease-in-out;
+  transition: all .3s ease-in-out;
+}
+
+._geocentric-wrapper .locations-tab .locations-list .location:hover {
+  background: #e7e7e7;
+}
+
+._geocentric-wrapper .locations-tab .locations-list .location p {
+  font-size: 14px;
+  font-weight: 500;
+  margin-right: 10px;
+}
+
+._geocentric-wrapper .locations-tab .locations-list .location span {
+  background: #CF321D;
+  padding: 0 5px;
+  color: #f5f5f5;
+  border-radius: 2px;
+  font-size: 11px;
+}
+
+._geocentric-wrapper .locations-tab .locations-list .location .shortcodes-button {
+  margin-left: auto;
+}
+
+._geocentric-wrapper .locations-tab .locations-list .location .options-button {
+  margin-left: 10px;
+  position: relative;
+}
+
+._geocentric-wrapper .locations-tab .locations-list .location .options-button .dropdown-menu {
+  background: white;
+  position: absolute;
+  min-width: 150px;
+  display: none;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-shadow: 1px 1px 25px rgba(0, 0, 0, 0.09);
+          box-shadow: 1px 1px 25px rgba(0, 0, 0, 0.09);
+  border-radius: 5px;
+  padding: 5px 0;
+  z-index: 10;
+}
+
+._geocentric-wrapper .locations-tab .locations-list .location .options-button .dropdown-menu a {
+  text-decoration: none;
+  text-align: left;
+  font-size: 14px;
+  color: black;
+  padding: 7px 20px;
+  -webkit-transition: all .3s ease-in-out;
+  transition: all .3s ease-in-out;
+}
+
+._geocentric-wrapper .locations-tab .locations-list .location .options-button .dropdown-menu a:hover {
+  background: #e7e7e7;
+}
+
+._geocentric-wrapper .locations-tab .locations-list .location a, ._geocentric-wrapper .locations-tab .locations-list .location button {
+  border: none;
+  padding: 5px;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background: none;
+  cursor: pointer;
+}
+
+._geocentric-wrapper .locations-tab .locations-list .location a:focus, ._geocentric-wrapper .locations-tab .locations-list .location a:active, ._geocentric-wrapper .locations-tab .locations-list .location button:focus, ._geocentric-wrapper .locations-tab .locations-list .location button:active {
+  outline: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+
+._geocentric-wrapper .locations-tab .locations-list .location a:hover i, ._geocentric-wrapper .locations-tab .locations-list .location button:hover i {
+  color: black;
+}
+
+._geocentric-wrapper .locations-tab .locations-list .location a i, ._geocentric-wrapper .locations-tab .locations-list .location button i {
+  margin-top: 5px;
+  font-size: 18px;
+  color: #8b8b8b;
+  -webkit-transition: color .3s ease-in-out;
+  transition: color .3s ease-in-out;
+}
+
 ._geocentric-wrapper .new-location-form .row {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -234,5 +338,12 @@ html {
 ._geocentric-wrapper .new-location-form .form-footer img {
   max-height: 30px;
   display: none;
+}
+
+div#TB_window .shortcode-tb textarea {
+  width: 100%;
+  resize: none;
+  padding: 10px;
+  margin-bottom: 20px;
 }
 /*# sourceMappingURL=main_page.css.map */

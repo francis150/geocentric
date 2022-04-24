@@ -6,8 +6,8 @@ const GEODATABASE_URL = MAIN_WRAPPER_DATA.geodatabase_url
 const APPSERO_API_KEY = MAIN_WRAPPER_DATA.appsero_api_key
 const APPSERO_PLUGIN_NAME = MAIN_WRAPPER_DATA.appsero_plugin_name
 const PRIMARY_KEYWORD = MAIN_WRAPPER_DATA.primary_keyword
+const PRIMARY_LOCATION = JSON.parse(MAIN_WRAPPER_DATA.primary_location)
 const URL_PARAMS = new URLSearchParams(window.location.search)
-const USER_INPUT_DATA = JSON.parse(MAIN_WRAPPER_DATA.user_input_data)
 
 window.addEventListener('load', () => {
     document.querySelector('._geocentric-wrapper').style.display = 'inherit'
@@ -49,6 +49,7 @@ if (URL_PARAMS.get('tab') == 'styling') {
         }
     })
 }
+
 
 /** New Location Form Tab **/
 if (URL_PARAMS.get('tab') == 'new-location-form') {
@@ -196,27 +197,8 @@ if (URL_PARAMS.get('tab') == 'new-location-form') {
         e.target.innerHTML = 'Importing data...'
         document.querySelector('._geocentric-wrapper .new-location-form .form-footer img').style.display = 'inherit'
 
-        const uuid = uuidv4()
 
-        const newLocation = {
-            id: uuid,
-            city: {
-                id: newLocationForm.newlocationform_city.value,
-                name: newLocationForm.newlocationform_city.dataset.cityName
-            },
-            state: {
-                code: newLocationForm.newlocationform_state.value,
-                name: newLocationForm.newlocationform_state.dataset.stateName
-            },
-            country: {
-                iso2: newLocationForm.newlocationform_country.value,
-                name: newLocationForm.newlocationform_country.dataset.countryName
-            }
-        }
-
-        const mainLocation = getPrimaryLocation() ? getPrimaryLocation() : newLocation
-
-        const payload = {
+        const payload = clean({
             requesting_domain: window.location.origin,
             id: uuidv4(),
             city: {
@@ -236,44 +218,64 @@ if (URL_PARAMS.get('tab') == 'new-location-form') {
                 appsero_plugin_name: APPSERO_PLUGIN_NAME
             },
             primary_keyword: PRIMARY_KEYWORD,
-            mainLocation: {
-                country_iso2: mainLocation.country.iso2,
-                state_code: mainLocation.state.code,
-                city: mainLocation.city
-            }
-        }
+            place_id: newLocationForm.newlocationform_gbp_placeid.value || undefined,
+            street: newLocationForm.newlocationform_street.value || undefined,
+            zip_code: newLocationForm.newlocationform_zipcode.value || undefined
+        })
 
-        if (newLocationForm.newlocationform_useStreetzip.checked) {
-            newLocation.street = newLocationForm.newlocationform_street.value
-            newLocation.zip_code = newLocationForm.newlocationform_zipcode.value
-            payload.mainLocation.street = newLocationForm.newlocationform_street.value
-            payload.mainLocation.zip_code = newLocationForm.newlocationform_zipcode.value
-        } else {
-            newLocation.google_place_id = newLocationForm.newlocationform_gbp_placeid.value
-            payload.mainLocation.place_id = newLocationForm.newlocationform_gbp_placeid.value
-        }
+        payload.mainLocation = PRIMARY_LOCATION ? clean({
+            country_iso2: PRIMARY_LOCATION.country_iso2,
+            state_code: PRIMARY_LOCATION.state_code,
+            city: PRIMARY_LOCATION.city,
+            place_id: PRIMARY_LOCATION.place_id || undefined,
+            street: PRIMARY_LOCATION.street || undefined,
+            zip_code: PRIMARY_LOCATION.zip_code || undefined
+        }) : clean({
+            country_iso2: payload.country.iso2,
+            state_code: payload.state.code,
+            city: payload.city,
+            place_id: payload.place_id || undefined,
+            street: payload.street || undefined,
+            zip_code: payload.zip_code || undefined
+        })
 
-        if (newLocationForm.newlocationform_neigborhoods.value)
-        newLocation.neighbourhoods = newLocationForm.newlocationform_neigborhoods.value.split(",")
+
+        // if (newLocationForm.newlocationform_neigborhoods.value)
+        // newLocation.neighbourhoods = newLocationForm.newlocationform_neigborhoods.value.split(",")
 
         // ==============================================================
 
-        axios({
-            method: "POST",
-            url: SERVER_URL + 'locations-generator/generate',
-            data: payload
-        })
-        .then(res => {
-            newLocationForm._newlocationform_submit_userinput_data.value = JSON.stringify(newLocation)
-            newLocationForm._newlocationform_submit_api_data.value = JSON.stringify(res.data)
-        })
-        .catch(err => {
-            newLocationForm._newlocationform_importlocation_failed.checked = true
-            console.log(`ERROR IMPORTING LOCATION DATA: ${err.message}`)
-        })
-        .then(() => {
-            newLocationForm.submit()
-        })
+        console.log('PAYLOAD', payload)
+
+        // axios({
+        //     method: "POST",
+        //     url: SERVER_URL + 'locations-generator/generate',
+        //     data: payload
+        // })
+        // .then(res => {
+
+        //     res.data.meta = clean({
+        //         country_iso2: payload.country.iso2,
+        //         state_code: payload.state.code,
+        //         city: payload.city,
+        //         place_id: payload.place_id || undefined,
+        //         street: payload.street || undefined,
+        //         zip_code: payload.zip_code || undefined,
+        //         is_primary: false,
+        //         neighborhoods: newLocationForm.newlocationform_neigborhoods.value.split(",") || undefined
+        //     })
+
+        //     console.log(res.data)
+            
+        //     // newLocationForm._newlocationform_submit_api_data.value = JSON.stringify(res.data)
+        // })
+        // .catch(err => {
+        //     newLocationForm._newlocationform_importlocation_failed.checked = true
+        //     console.log(`ERROR IMPORTING LOCATION DATA: ${err.message}`)
+        // })
+        // .then(() => {
+        //     // newLocationForm.submit()
+        // })
     })
 
     function disasbleNewLocationForm() {
@@ -282,13 +284,61 @@ if (URL_PARAMS.get('tab') == 'new-location-form') {
             element.disabled = true
         })
     }
+
+    function clean(obj) {
+        for (var propName in obj) {
+            if (obj[propName] === null || obj[propName] === undefined) {
+                delete obj[propName];
+            }
+        }
+        return obj
+    }
 }
 
 /** Locations Tab **/
 if (URL_PARAMS.get('tab') == null) {
-    // code...
-}
 
-function getPrimaryLocation() {
-    return USER_INPUT_DATA.filter(loc => loc.primaryLocation)[0]
+    // on shortcodes thickbox show
+    document.querySelectorAll('._geocentric-wrapper .locations-tab .location .shortcodes-button').forEach(button => {
+        button.addEventListener('click', () => {
+            const location = button.parentElement
+            document.querySelector('#shortcode-tb-wrapper .shortcodes-tb-title').innerHTML = location.dataset.name + ' Shortcodes'
+            document.querySelector('#shortcode-tb-wrapper .shortcodes-tb-textarea').value = `[weather_component id="${location.id}"]\n\n[about_component id="${location.id}"]\n\n[neighborhoods_component id="${location.id}"]\n\n[thingstodo_component id="${location.id}"]\n\n[busstops_component id="${location.id}"]\n\n[mapembed_component id="${location.id}"]\n\n[drivingdirections_component id="${location.id}"]\n\n[reviews_component id="${location.id}"]`
+        })
+    })
+
+    // shortcode copy all button
+    document.querySelector('#tb-copy-shortcodes-button').addEventListener('click', (e) => {
+        const shortcodeTextArea = e.target.parentElement.children[2]
+        shortcodeTextArea.select()
+        shortcodeTextArea.setSelectionRange(0, 999999999)
+        navigator.clipboard.writeText(shortcodeTextArea.value)
+        e.target.innerHTML = 'Copied!'
+    })
+
+    // location more options button
+    document.querySelectorAll('._geocentric-wrapper .locations-tab .location .options-button').forEach(button => {
+        button.addEventListener('click', () => {
+            button.children[1].style.display = button.children[1].style.display == 'flex' ? 'none' : 'flex'
+        })
+    })
+
+    // menu on mouse leave
+    document.querySelectorAll('._geocentric-wrapper .locations-tab .location .dropdown-menu').forEach(menu => {
+        menu.addEventListener('mouseleave', () => {
+            menu.style.display = 'none'
+        })
+    })
+
+    // location on remove button
+    document.querySelectorAll('._geocentric-wrapper .locations-tab .location .remove-location-button').forEach(button => {
+        button.addEventListener('click', (e) => {
+            if (button.dataset.isPrimary) {
+                e.preventDefault()
+                return alert('The location you are trying to remove is your Primary Location. Please re-assign a Primary Location and try again.')
+            }
+
+            if (!confirm('Are you sure you want to remove this location?')) return e.preventDefault()
+        })
+    })
 }

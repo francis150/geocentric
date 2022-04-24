@@ -9,9 +9,6 @@ $pluginConfigController = new _geocentric_plugin_config();
 require_once plugin_dir_path(__FILE__) . '../../includes/geocentric_component_styles_class.php';
 $componentStylesController = new _geocentric_component_styles();
 
-require_once plugin_dir_path(__FILE__) . '../../includes/geocentric_userinput_data_class.php';
-$userInputDataController = new _geocentric_userinput_data();
-
 require_once plugin_dir_path(__FILE__) . '../../includes/geocentric_api_data_class.php';
 $apiDataController = new _geocentric_api_data();
 
@@ -21,6 +18,7 @@ require_once plugin_dir_path(__FILE__) . 'main_page_functions.php';
 
 
 $component_styles = $componentStylesController->get_component_styles();
+$api_data = $apiDataController->get_all_api_data();
 $settings = $settingsController->get_settings_data();
 
 // Is the plugin configured?
@@ -33,13 +31,12 @@ $tab = !$pluginConfigured ? 'settings' : (isset($_GET['tab']) ? $_GET['tab'] : $
 
 ?><div 
     class="_geocentric-wrapper" 
-    style="display: none;" 
     data-api_server_url="<?php echo $config_data['server_url']; ?>" 
     data-geodatabase_url="<?php echo $config_data['geodatabase_url']; ?>" 
     data-appsero_api_key="<?php echo $config_data['appsero_api_key']; ?>" 
     data-primary_keyword="<?php echo $settings['primary_keyword'] ?>" 
     data-appsero_plugin_name="<?php echo $config_data['appsero_plugin_name']; ?>" 
-    data-user_input_data="<?php echo str_replace("\"", "&#34;" ,json_encode($userInputDataController->get_userinput_data())); ?>" 
+    data-primary_location="<?php echo str_replace("\"", "&#34;" ,json_encode($apiDataController->primary_location())); ?>" 
     >
     <div class="header"><h1>Geocentric Plugin</h1> <a href="http://seorockettools.com/"><img src="<?php echo plugin_dir_url(dirname(__FILE__)) . 'assets/seorocket-text-logo.svg'; ?>" alt="SEO Rocket Tools"></a></div>
     
@@ -64,6 +61,39 @@ switch ($tab) {
                 <a href="?page=_geocentric&tab=new-location-form"><button class="button-primary">Add location</button></a>
             </div>
             <hr>
+            <div class="locations-list">
+                <?php
+                foreach ($api_data as $location) {
+                    ?>
+                    <div class="location" 
+                    id="<?php echo $location['id']; ?>"
+                    data-name="<?php echo $location['name']; ?>">
+                        <p><?php echo $location['name']; ?></p>
+                        <?php if ($location['meta']['is_primary']) echo '<span>Primary</span>'; ?>
+                        <a title="Shortcodes" href="#TB_inline?height=200&width=550&inlineId=shortcode-tb-wrapper" class="thickbox shortcodes-button" ><i class="material-icons-outlined">data_array</i></a>
+                        <button title="Options" class="options-button">
+                            <i class="material-icons-outlined">more_vert</i>
+                            <div class="dropdown-menu">
+                                <a class="remove-location-button" href="?page=_geocentric&remove-id=<?php echo $location['id']; ?>" <?php if($location['meta']['is_primary']) echo 'data-is-primary="true"'; ?>>Remove</a>
+                                <a class="set-as-primary-button" href="?page=_geocentric&set-as-primary-id=<?php echo $location['id']; ?>">Set as Primary</a>
+                            </div>
+                        </button>
+                    </div>
+                    <?php
+                }
+                ?>
+            </div>
+
+            <!-- shortcodes thickbox -->
+            <div id="shortcode-tb-wrapper" style="display: none;">
+                <div class="shortcode-tb">
+                    <h3 class="shortcodes-tb-title">_LOCATION</h3>
+                    <p>Add these shortcodes to your <b>Service Area Pages</b> to display the geo-relevant information.</p>
+                    <textarea readonly class="shortcodes-tb-textarea" rows="11"></textarea>
+                    <button id="tb-copy-shortcodes-button" class="button-secondary">Copy All</button>
+                </div>
+            </div>
+
         </div>
         <?php
         break;
@@ -678,7 +708,6 @@ switch ($tab) {
 
                 <div class="form-footer">
                     <textarea name="_newlocationform_submit_api_data" class="_newlocationform-submit-api-data" style="display: none;"></textarea>
-                    <textarea name="_newlocationform_submit_userinput_data" class="_newlocationform-submit-userinput-data" style="display: none;"></textarea>
                     <input type="checkbox" style="display: none;" name="_newlocationform_importlocation_failed">
                     <button type="button" class="button-primary create-button">Create</button>
                     <img src="<?php echo plugin_dir_url(dirname(__FILE__)) . 'assets/Rocket.gif'; ?>">
@@ -690,7 +719,12 @@ switch ($tab) {
         break;
 }
 
-?></div><div class="footer">
+?></div>
+
+<!-- <a href="#TB_inline?height=100&width=400&inlineId=shortcode-tb-wrapper" id="test-button" class="thickbox"><button>Test</button></a> -->
+
+
+<div class="footer">
     <p>Powered by © <a href="http://seorockettools.com/" target="_blank">SEO Rocket Tools</a>, 2022 🚀.</p>
-    <p><a href="https://github.com/francis150/geocentric#readme" target="_blank">Documentation</a> | <a href="http://support.seorockettools.com/"  target="_blank">Support</a></p>
+    <p><a href="https://github.com/francis150/geocentric#readme" target="_blank">Documentation</a> | <a href="#">Community</a> | <a href="http://support.seorockettools.com/"  target="_blank">Support</a></p>
 </div></div>

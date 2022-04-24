@@ -5,7 +5,7 @@ if (!class_exists('_geocentric_components')) {
     require_once plugin_dir_path( __FILE__ ) . 'geocentric_settings_class.php';
     require_once plugin_dir_path( __FILE__ ) . 'geocentric_plugin_config_class.php';
     require_once plugin_dir_path( __FILE__ ) . 'geocentric_component_styles_class.php';
-    require_once plugin_dir_path( __FILE__ ) . 'geocentric_userinput_data_class.php';
+    // require_once plugin_dir_path( __FILE__ ) . 'geocentric_userinput_data_class.php';
     require_once plugin_dir_path( __FILE__ ) . 'geocentric_api_data_class.php';
 
     class _geocentric_components {
@@ -17,7 +17,7 @@ if (!class_exists('_geocentric_components')) {
 
         function __construct() {
             $this->api_data_controller = new _geocentric_api_data();
-            $this->userinput_data_controller = new _geocentric_userinput_data();
+            // $this->userinput_data_controller = new _geocentric_userinput_data();
             $this->component_styles_controller = new _geocentric_component_styles();
             $this->settings_data_controller = new _geocentric_settings();
         }

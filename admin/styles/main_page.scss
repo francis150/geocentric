@@ -1,7 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons+Outlined');
 
 $background: white;
 $mutedBackground: #f5f5f5;
+$mutedBackgroundHovered: #e7e7e7;
+$iconColor: #8b8b8b;
 $textColor: black;
 $accentColor: #CF321D;
 $dropShadow: 1px 1px 25px rgba(0, 0, 0, 0.09);
@@ -181,6 +184,96 @@ html {
         padding: 3px 20px;
         font-size: 13px;
     }
+
+    .locations-list {
+        min-height: 300px;
+
+        .location {
+            background: $mutedBackground;
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 0 20px;
+            transition: all .3s ease-in-out;
+
+            &:hover {
+                background: $mutedBackgroundHovered;
+            }
+
+            p {
+                font-size: 14px;
+                font-weight: 500;
+                margin-right: 10px;
+            }
+
+            span {
+                background: $accentColor;
+                padding: 0 5px;
+                color: $mutedBackground;
+                border-radius: 2px;
+                font-size: 11px;
+            }
+
+            .shortcodes-button {
+                margin-left: auto;
+            }
+
+            .options-button {
+                margin-left: 10px;
+                position: relative;
+
+                .dropdown-menu {
+                    background: $background;
+                    position: absolute;
+                    min-width: 150px;
+                    // display: flex;
+                    display: none;
+                    flex-direction: column;
+                    box-shadow: $dropShadow;
+                    border-radius: 5px;
+                    padding: 5px 0;
+                    z-index: 10;
+
+                    a {
+                        text-decoration: none;
+                        text-align: left;
+                        font-size: 14px;
+                        color: $textColor;
+                        padding: 7px 20px;
+                        transition: all .3s ease-in-out;
+
+                        &:hover {
+                            background: $mutedBackgroundHovered;
+                        }
+                    }
+                }
+            }
+
+            a, button {
+                border: none;
+                padding: 5px;
+                align-items: center;
+                background: none;
+                cursor: pointer;
+
+                &:focus, &:active {
+                    outline: none;
+                    box-shadow: none;
+                }
+
+                &:hover i {
+                    color: $textColor;
+                }
+
+                i {
+                    margin-top: 5px;
+                    font-size: 18px;
+                    color: $iconColor;
+                    transition: color .3s ease-in-out;
+                }
+            }
+        }
+    }
 }
 
 ._geocentric-wrapper .new-location-form {
@@ -216,5 +309,14 @@ html {
     .form-footer img {
         max-height: 30px;
         display: none;
+    }
+}
+
+div#TB_window .shortcode-tb {
+    textarea {
+        width: 100%;
+        resize: none;
+        padding: 10px;
+        margin-bottom: 20px;
     }
 }
