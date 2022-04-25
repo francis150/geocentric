@@ -6,7 +6,7 @@ const GEODATABASE_URL = MAIN_WRAPPER_DATA.geodatabase_url
 const APPSERO_API_KEY = MAIN_WRAPPER_DATA.appsero_api_key
 const APPSERO_PLUGIN_NAME = MAIN_WRAPPER_DATA.appsero_plugin_name
 const PRIMARY_KEYWORD = MAIN_WRAPPER_DATA.primary_keyword
-const PRIMARY_LOCATION = JSON.parse(MAIN_WRAPPER_DATA.primary_location)
+const PRIMARY_LOCATION = MAIN_WRAPPER_DATA.primary_location ? JSON.parse(MAIN_WRAPPER_DATA.primary_location) : undefined
 const URL_PARAMS = new URLSearchParams(window.location.search)
 
 window.addEventListener('load', () => {
@@ -16,7 +16,7 @@ window.addEventListener('load', () => {
 // =========================================================== //
 
 /** Styling Tab **/
-if (URL_PARAMS.get('tab') == 'styling') {
+if (URL_PARAMS.get('tab') == 'styling' && PRIMARY_KEYWORD) {
     
     // Load fonts
     function loadFontsToOptions() {
@@ -50,9 +50,8 @@ if (URL_PARAMS.get('tab') == 'styling') {
     })
 }
 
-
 /** New Location Form Tab **/
-if (URL_PARAMS.get('tab') == 'new-location-form') {
+if (URL_PARAMS.get('tab') == 'new-location-form' && PRIMARY_KEYWORD) {
 
     const selectCountryElement = document.querySelector('._geocentric-wrapper .new-location-form .newlocationform_country')
     const selectStateElement = document.querySelector('._geocentric-wrapper .new-location-form .newlocationform_state')
@@ -271,6 +270,8 @@ if (URL_PARAMS.get('tab') == 'new-location-form') {
         })
     })
 
+    // Set as primary
+
     function disasbleNewLocationForm() {
         newLocationForm.newlocationform_country.disabled = true
         newLocationForm.newlocationform_state.disabled = true
@@ -294,14 +295,15 @@ if (URL_PARAMS.get('tab') == 'new-location-form') {
 }
 
 /** Locations Tab **/
-if (URL_PARAMS.get('tab') == null) {
+if (URL_PARAMS.get('tab') == null && PRIMARY_KEYWORD) {
+    console.log(PRIMARY_KEYWORD)
 
     // on shortcodes thickbox show
     document.querySelectorAll('._geocentric-wrapper .locations-tab .location .shortcodes-button').forEach(button => {
         button.addEventListener('click', () => {
             const location = button.parentElement
             document.querySelector('#shortcode-tb-wrapper .shortcodes-tb-title').innerHTML = location.dataset.name + ' Shortcodes'
-            document.querySelector('#shortcode-tb-wrapper .shortcodes-tb-textarea').value = `[weather_component id="${location.id}"]\n\n[about_component id="${location.id}"]\n\n[neighborhoods_component id="${location.id}"]\n\n[thingstodo_component id="${location.id}"]\n\n[busstops_component id="${location.id}"]\n\n[mapembed_component id="${location.id}"]\n\n[drivingdirections_component id="${location.id}"]\n\n[reviews_component id="${location.id}"]`
+            document.querySelector('#shortcode-tb-wrapper .shortcodes-tb-textarea').value = `[geocentric_weather id="${location.id}"]\n\n[geocentric_about id="${location.id}"]\n\n[geocentric_neighborhoods id="${location.id}"]\n\n[geocentric_thingstodo id="${location.id}"]\n\n[geocentric_busstops id="${location.id}"]\n\n[geocentric_mapembed id="${location.id}"]\n\n[geocentric_drivingdirections id="${location.id}"]\n\n[geocentric_reviews id="${location.id}"]`
         })
     })
 

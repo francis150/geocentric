@@ -42,13 +42,14 @@ if (!class_exists('_geocentric_core')) {
 
             if (!$this->appsero_controller->appsero_check_license()) return;
             
-            add_shortcode('geocentric-weather', array($this->component_controller, 'weather_component'));
-            add_shortcode('geocentric-about', array($this->component_controller, 'about_component'));
-            add_shortcode('geocentric-neighbourhoods', array($this->component_controller, 'neighbourhoods_component'));
-            add_shortcode('geocentric-thingstodo', array($this->component_controller, 'thingstodo_component'));
-            add_shortcode('geocentric-mapembed', array($this->component_controller, 'mapembed_component'));
-            add_shortcode('geocentric-drivingdirections', array($this->component_controller, 'drivingdirections_component'));
-            add_shortcode('geocentric-reviews', array($this->component_controller, 'reviews_component'));
+            add_shortcode('geocentric_weather', array($this->component_controller, 'weather_component'));
+            add_shortcode('geocentric_about', array($this->component_controller, 'about_component'));
+            add_shortcode('geocentric_neighborhoods', array($this->component_controller, 'neighborhoods_component'));
+            add_shortcode('geocentric_thingstodo', array($this->component_controller, 'thingstodo_component'));
+            add_shortcode('geocentric_busstops', array($this->component_controller, 'busstops_component'));
+            add_shortcode('geocentric_mapembed', array($this->component_controller, 'mapembed_component'));
+            add_shortcode('geocentric_drivingdirections', array($this->component_controller, 'drivingdirections_component'));
+            add_shortcode('geocentric_reviews', array($this->component_controller, 'reviews_component'));
         }
 
         public function navto_main_admin_page() {

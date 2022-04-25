@@ -7,7 +7,7 @@ if (!class_exists('_geocentric_settings')) {
         private $settings;
 
         function __construct() {
-            $this->config_dir = WP_CONTENT_DIR . '/uploads/_geocentric/';
+            $this->config_dir = WP_CONTENT_DIR . '/uploads/_geocentric/v2.0.0/';
 
             $this->load_settings();
         }

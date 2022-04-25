@@ -7,7 +7,7 @@ if (!class_exists('_geocentric_component_styles')) {
         private $config_dir;
 
         function __construct() {
-            $this->config_dir = WP_CONTENT_DIR . '/uploads/_geocentric/';
+            $this->config_dir = WP_CONTENT_DIR . '/uploads/_geocentric/v2.0.0/';
             $this->load_styles_data();
         }
 

@@ -29,21 +29,23 @@ if (!class_exists('_geocentric_components')) {
         }
         */
         public function weather_component($atts) {
+            // return "<h1>Weather Component</h1>";
             $api_data = $this->api_data_controller->get_api_data($atts['id']);
-            $styles = $this->component_styles_controller->get_component_style('weatherSection');
+            $styles = $this->component_styles_controller->get_component_style('weatherComponent');
+
+            if (empty($api_data)) return "<pre>No data matched by id...</pre>";
 
             $attribs = shortcode_atts(array(
-                "unit" => "c"
+                "unit" => "f"
             ), $atts);
 
             $unit_string = strtolower($attribs['unit']) == 'f' ? '?unit=us' : '';
 
-            if (empty($api_data)) return "<pre>No data matched by id...</pre>";
 
-            return "<a class=\"weatherwidget-io\" href=\"https://forecast7.com/en/{$api_data['weather_widget']}{$unit_string}/\" data-label_1=\"{$api_data['name']}\" data-label_2=\"Weather\" data-theme=\"original\" data-basecolor=\"{$styles['backgroundColor']}\" data-textcolor=\"{$styles['accentColor']}\">{$api_data['name']}</a>
+            return "<div class=\"_geocentric-component _geocentric-weather-component\"><a class=\"weatherwidget-io\" href=\"https://forecast7.com/en/{$api_data['weather_widget']}{$unit_string}\" data-label_1=\"{$api_data['name']}\" data-label_2=\"Weather\" data-theme=\"original\" data-basecolor=\"{$styles['backgroundColor']}\" data-textcolor=\"{$styles['textColor']}\">{$api_data['name']}</a>
             <script>
             !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
-            </script>";
+            </script></div>";
         }
 
         /* 
@@ -53,7 +55,10 @@ if (!class_exists('_geocentric_components')) {
         }
         */
         public function about_component($atts) {
-            $api_data = $this->api_data_controller->get_api_data($atts['id']);
+
+            return "<h1>About Component</h1>";
+
+            /* $api_data = $this->api_data_controller->get_api_data($atts['id']);
             $styles = $this->component_styles_controller->get_component_style('aboutSection');
 
             if (empty($api_data)) return "<pre>No data matched by id...</pre>";
@@ -80,7 +85,7 @@ if (!class_exists('_geocentric_components')) {
                 }
             </style>
             <div class=\"_geocentric-about_component\"><h2>{$attribs['title']}</h2><p>{$api_data['about']}</p></div>
-            ";
+            "; */
         }
 
         /* 
@@ -89,8 +94,11 @@ if (!class_exists('_geocentric_components')) {
             * title - (optional) Section title
         }
         */
-        public function neighbourhoods_component($atts) {
-            $api_data = $this->api_data_controller->get_api_data($atts['id']);
+        public function neighborhoods_component($atts) {
+
+            return "<h1>Neighborhoods Component</h1>";
+
+            /* $api_data = $this->api_data_controller->get_api_data($atts['id']);
             $styles = $this->component_styles_controller->get_component_style('neighborhoods');
             $userinput_data = $this->userinput_data_controller->get_userinput_by_id($atts['id']);
 
@@ -138,7 +146,7 @@ if (!class_exists('_geocentric_components')) {
                 }
             </style>
             <div class=\"_geocentric-neighbourhoods\"><h2>{$attribs['title']}</h2><p>".implode(', ', $neighbourhoods_anchors)."</p></div>
-            ";
+            "; */
         }
 
         /* 
@@ -151,7 +159,10 @@ if (!class_exists('_geocentric_components')) {
         }
         */
         public function thingstodo_component($atts) {
-            $api_data = $this->api_data_controller->get_api_data($atts['id']);
+
+            return "<h1>Things To Do Component</h1>";
+
+            /* $api_data = $this->api_data_controller->get_api_data($atts['id']);
             $styles = $this->component_styles_controller->get_component_style('thingsToDo');
 
             if (empty($api_data)) return "<pre>No data matched by id...</pre>";
@@ -255,7 +266,18 @@ if (!class_exists('_geocentric_components')) {
                 }
             </style>
             <div class=\"_geocentric-thingstodo\"><h2>{$attribs['title']}</h2><div class=\"wrapper\">".implode("", $thingstodo_cards)."</div></div>
-            ";
+            "; */
+        }
+
+        /**
+         * @Desccription: Bus Stops Component
+         * @Atts: {
+            * title - (optional) Section title
+         * }
+         */
+        public function busstops_component($atts) {
+            return "<h1>Bus Stop Component</h1>";
+            # code...
         }
 
         /* 
@@ -265,7 +287,10 @@ if (!class_exists('_geocentric_components')) {
         }
         */
         public function mapembed_component($atts) {
-            $userinput_data = $this->userinput_data_controller->get_userinput_by_id($atts['id']);
+
+            return "<h1>Map Embed Component</h1>";
+
+            /* $userinput_data = $this->userinput_data_controller->get_userinput_by_id($atts['id']);
             $styles = $this->component_styles_controller->get_component_style('mapEmbed');
 
             if (empty($userinput_data)) return "<pre>No data matched by id...</pre>";
@@ -303,7 +328,7 @@ if (!class_exists('_geocentric_components')) {
                 }
             </style>
             <div class=\"_geocentric-mapembed\"><h2>{$attribs['title']}</h2>
-            <div class=\"iframe_wrapper\"><div><iframe height=\"{$styles['map']['height']}\" frameborder=\"0\" scrolling=\"no\" marginheight=\"0\" marginwidth=\"0\" id=\"gmap_canvas\" src=\"https://maps.google.com/maps?width=520&amp;height=400&amp;hl=en&amp;q={$userinput_data['city']['name']}, {$userinput_data['state']['code']}, {$userinput_data['country']['iso2']}&amp;t=&amp;z=12&amp;ie=UTF8&amp;iwloc=B&amp;output=embed\"></iframe></div></div></div>";
+            <div class=\"iframe_wrapper\"><div><iframe height=\"{$styles['map']['height']}\" frameborder=\"0\" scrolling=\"no\" marginheight=\"0\" marginwidth=\"0\" id=\"gmap_canvas\" src=\"https://maps.google.com/maps?width=520&amp;height=400&amp;hl=en&amp;q={$userinput_data['city']['name']}, {$userinput_data['state']['code']}, {$userinput_data['country']['iso2']}&amp;t=&amp;z=12&amp;ie=UTF8&amp;iwloc=B&amp;output=embed\"></iframe></div></div></div>"; */
         }
 
         /* 
@@ -313,78 +338,82 @@ if (!class_exists('_geocentric_components')) {
         }
         */
         public function drivingdirections_component($atts) {
-            $userinput_data = $this->userinput_data_controller->get_userinput_by_id($atts['id']);
-            $styles = $this->component_styles_controller->get_component_style('drivingDirections');
-            $api_data = $this->api_data_controller->get_api_data($atts['id']);
-            $settings = $this->settings_data_controller->get_settings_data();
+
+            return "<h1>Driving Directions Component</h1>";
+
+
+            // $userinput_data = $this->userinput_data_controller->get_userinput_by_id($atts['id']);
+            // $styles = $this->component_styles_controller->get_component_style('drivingDirections');
+            // $api_data = $this->api_data_controller->get_api_data($atts['id']);
+            // $settings = $this->settings_data_controller->get_settings_data();
             
-            if (empty($api_data)) return "<pre>No data matched by id...</pre>";
+            // if (empty($api_data)) return "<pre>No data matched by id...</pre>";
 
-            $attribs = shortcode_atts(array(
-                "title" => "{$userinput_data['city']['name']}, {$userinput_data['state']['code']} Driving Directions"
-            ), $atts);
+            // $attribs = shortcode_atts(array(
+            //     "title" => "{$userinput_data['city']['name']}, {$userinput_data['state']['code']} Driving Directions"
+            // ), $atts);
 
-            return "
-            <style>
-                ._geocentric-drivingdirections > h2 {
-                    font-size: {$styles['title']['fontSize']}px;
-                    font-weight: {$styles['title']['fontWeight']};
-                    color: {$styles['title']['fontColor']};
-                    text-align: {$styles['title']['textAlignment']};
+            // return "
+            // <style>
+            //     ._geocentric-drivingdirections > h2 {
+            //         font-size: {$styles['title']['fontSize']}px;
+            //         font-weight: {$styles['title']['fontWeight']};
+            //         color: {$styles['title']['fontColor']};
+            //         text-align: {$styles['title']['textAlignment']};
 
-                    margin-bottom: 40px;
-                }
+            //         margin-bottom: 40px;
+            //     }
 
-                ._geocentric-drivingdirections {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                }
-            </style>
-            <div class=\"_geocentric-drivingdirections\">
-                <h2>{$attribs['title']}</h2>
-                <div style=\"height: {$styles['map']['height']}px; width: {$styles['map']['width']}%;\" class=\"map\"></div>
-            </div>
-            <script>
-                async function initMap() {
-                    var directionsService = new google.maps.DirectionsService();
-                    var directionsDisplay = new google.maps.DirectionsRenderer();
-                    var map;
+            //     ._geocentric-drivingdirections {
+            //         display: flex;
+            //         flex-direction: column;
+            //         align-items: center;
+            //     }
+            // </style>
+            // <div class=\"_geocentric-drivingdirections\">
+            //     <h2>{$attribs['title']}</h2>
+            //     <div style=\"height: {$styles['map']['height']}px; width: {$styles['map']['width']}%;\" class=\"map\"></div>
+            // </div>
+            // <script>
+            //     async function initMap() {
+            //         var directionsService = new google.maps.DirectionsService();
+            //         var directionsDisplay = new google.maps.DirectionsRenderer();
+            //         var map;
 
-                    /* Fetch Streets From Geo Streets API */
-                    const directions = ".json_encode($api_data['directions'])."
+            //         /* Fetch Streets From Geo Streets API */
+            //         const directions = ".json_encode($api_data['directions'])."
                     
-                    /* Initialize Map ID and Options */
-                    map = new google.maps.Map(document.querySelector('._geocentric-drivingdirections > .map'), {
-                        zoom: 14, 
-                        center: directions.destination
-                    });
+            //         /* Initialize Map ID and Options */
+            //         map = new google.maps.Map(document.querySelector('._geocentric-drivingdirections > .map'), {
+            //             zoom: 14, 
+            //             center: directions.destination
+            //         });
 
-                    /* Pin Point Routes Into Map And Set Markers  */
-                    function calculateRoute(mapOrigin, mapDestination) {
-                        var request = {
-                            origin: mapOrigin,
-                            destination: mapDestination,
-                            travelMode: 'DRIVING'
-                        };
+            //         /* Pin Point Routes Into Map And Set Markers  */
+            //         function calculateRoute(mapOrigin, mapDestination) {
+            //             var request = {
+            //                 origin: mapOrigin,
+            //                 destination: mapDestination,
+            //                 travelMode: 'DRIVING'
+            //             };
 
-                        directionsService.route(request, function (result, status) {
-                            if (status == \"OK\") {
-                                var directionsDisplay = new google.maps.DirectionsRenderer({
-                                    map: map
-                                });
-                                directionsDisplay.setDirections(result);
-                            }
-                        });
-                    }
+            //             directionsService.route(request, function (result, status) {
+            //                 if (status == \"OK\") {
+            //                     var directionsDisplay = new google.maps.DirectionsRenderer({
+            //                         map: map
+            //                     });
+            //                     directionsDisplay.setDirections(result);
+            //                 }
+            //             });
+            //         }
 
-                    directions.origins.forEach(origin =>{
-                        calculateRoute(origin, directions.destination)
-                    })
-                }
+            //         directions.origins.forEach(origin =>{
+            //             calculateRoute(origin, directions.destination)
+            //         })
+            //     }
 
-            </script>
-            <script src=\"https://maps.googleapis.com/maps/api/js?key={$settings['restricted_google_api_key']}&callback=initMap&v=weekly\" async></script>";
+            // </script>
+            // <script src=\"https://maps.googleapis.com/maps/api/js?key={$settings['restricted_google_api_key']}&callback=initMap&v=weekly\" async></script>";
         }
 
         /* 
@@ -398,160 +427,163 @@ if (!class_exists('_geocentric_components')) {
         }
         */
         public function reviews_component($atts) {
-            $styles = $this->component_styles_controller->get_component_style('reviews');
-            $api_data = $this->api_data_controller->get_api_data($atts['id']);
-            $place_id = $this->getPlaceID($atts['id']);
 
-            if (empty($api_data)) return "<pre>No data matched by id...</pre>";
-            if (empty($api_data['reviews'])) return "<pre>No data to show...</pre>";
+            return "<h1>Reviews Component</h1>";
 
-            $attribs = shortcode_atts(array(
-                "title" => "Reviews",
-                "limit" => 1000,
-                "items-on-desktop" => 3,
-                "items-on-tablet" => 2,
-                "items-on-mobile" => 1
-            ), $atts);
+            // $styles = $this->component_styles_controller->get_component_style('reviews');
+            // $api_data = $this->api_data_controller->get_api_data($atts['id']);
+            // $place_id = $this->getPlaceID($atts['id']);
 
-            $reviewsString = [];
+            // if (empty($api_data)) return "<pre>No data matched by id...</pre>";
+            // if (empty($api_data['reviews'])) return "<pre>No data to show...</pre>";
 
-            foreach ($api_data['reviews'] as $review) {
-                if($attribs['limit'] == count($reviewsString)) break;
-                array_push($reviewsString, "<div class=\"review\"><a class=\"head\" target=\"_blank\" href=\"https://search.google.com/local/writereview?placeid={$place_id}\"><img src=\"{$review['profile_photo_url']}\"><div class=\"head-content\"><p class=\"name\">{$review['author_name']}</p><sl-rating readonly value=\"{$review['rating']}\" style=\"--symbol-size: .9rem;\"></sl-rating></div></a><div class=\"message-wrapper\"><p class=\"message\">{$review['text']}</p></div></div>");
-            }
+            // $attribs = shortcode_atts(array(
+            //     "title" => "Reviews",
+            //     "limit" => 1000,
+            //     "items-on-desktop" => 3,
+            //     "items-on-tablet" => 2,
+            //     "items-on-mobile" => 1
+            // ), $atts);
 
-            $gap_style = $styles['items']['gap'] / 2;
+            // $reviewsString = [];
 
-            return "
-            <script type=\"module\" src=\"https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.62/dist/components/icon/icon.js\"></script>
-            <script type=\"module\" src=\"https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.60/dist/components/rating/rating.js\"></script>
-            <link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/glider-js@1/glider.min.css\">
-            <style>
-                ._geocentric-reviewscomponent *::-webkit-scrollbar-track {
-                    background-color: #ebebeb;
-                }
+            // foreach ($api_data['reviews'] as $review) {
+            //     if($attribs['limit'] == count($reviewsString)) break;
+            //     array_push($reviewsString, "<div class=\"review\"><a class=\"head\" target=\"_blank\" href=\"https://search.google.com/local/writereview?placeid={$place_id}\"><img src=\"{$review['profile_photo_url']}\"><div class=\"head-content\"><p class=\"name\">{$review['author_name']}</p><sl-rating readonly value=\"{$review['rating']}\" style=\"--symbol-size: .9rem;\"></sl-rating></div></a><div class=\"message-wrapper\"><p class=\"message\">{$review['text']}</p></div></div>");
+            // }
 
-                ._geocentric-reviewscomponent *::-webkit-scrollbar {
-                    width: 5px;
-                    background-color: #ebebeb;
-                }
+            // $gap_style = $styles['items']['gap'] / 2;
 
-                ._geocentric-reviewscomponent *::-webkit-scrollbar-thumb {
-                    background-color: #363636;
-                }
+            // return "
+            // <script type=\"module\" src=\"https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.62/dist/components/icon/icon.js\"></script>
+            // <script type=\"module\" src=\"https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.60/dist/components/rating/rating.js\"></script>
+            // <link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/glider-js@1/glider.min.css\">
+            // <style>
+            //     ._geocentric-reviewscomponent *::-webkit-scrollbar-track {
+            //         background-color: #ebebeb;
+            //     }
 
-                ._geocentric-reviewscomponent h2 {
-                    font-size: {$styles['title']['fontSize']}px;
-                    font-weight: {$styles['title']['fontWeight']};
-                    color: {$styles['title']['fontColor']};
-                    text-align: {$styles['title']['textAlignment']};
+            //     ._geocentric-reviewscomponent *::-webkit-scrollbar {
+            //         width: 5px;
+            //         background-color: #ebebeb;
+            //     }
 
-                    margin-bottom: 40px;
-                }
+            //     ._geocentric-reviewscomponent *::-webkit-scrollbar-thumb {
+            //         background-color: #363636;
+            //     }
 
-                ._geocentric-reviewscomponent .glider {
-                    padding-top: 5px;
-                }
+            //     ._geocentric-reviewscomponent h2 {
+            //         font-size: {$styles['title']['fontSize']}px;
+            //         font-weight: {$styles['title']['fontWeight']};
+            //         color: {$styles['title']['fontColor']};
+            //         text-align: {$styles['title']['textAlignment']};
 
-                ._geocentric-reviewscomponent .review {
-                    background: {$styles['items']['backgroundColor']};
-                    display: flex;
-                    flex-direction: column;
-                    margin: 0 {$gap_style}px;
-                    padding: {$styles['items']['padding']}px;
-                    border-width: {$styles['items']['borderWidth']}px;
-                    border-color: {$styles['items']['borderColor']}px;
-                    border-radius: {$styles['items']['borderRadius']}px;
-                    transition: .3s transform ease-in-out;
-                }
+            //         margin-bottom: 40px;
+            //     }
 
-                ._geocentric-reviewscomponent .review:hover {
-                    transform: {$this->component_styles_controller->get_hover_effect($styles['items']['hoverEffect'])};
-                }
+            //     ._geocentric-reviewscomponent .glider {
+            //         padding-top: 5px;
+            //     }
 
-                ._geocentric-reviewscomponent .head {
-                    display: flex;
-                    flex-direction: row;
-                    margin-bottom: 10px;
-                    align-items: center;
-                    text-decoration: none;
-                    color: black;
-                    font-weight: 500;
-                }
+            //     ._geocentric-reviewscomponent .review {
+            //         background: {$styles['items']['backgroundColor']};
+            //         display: flex;
+            //         flex-direction: column;
+            //         margin: 0 {$gap_style}px;
+            //         padding: {$styles['items']['padding']}px;
+            //         border-width: {$styles['items']['borderWidth']}px;
+            //         border-color: {$styles['items']['borderColor']}px;
+            //         border-radius: {$styles['items']['borderRadius']}px;
+            //         transition: .3s transform ease-in-out;
+            //     }
 
-                ._geocentric-reviewscomponent img {
-                    height: 40px;
-                    margin-right: 10px;
-                }
+            //     ._geocentric-reviewscomponent .review:hover {
+            //         transform: {$this->component_styles_controller->get_hover_effect($styles['items']['hoverEffect'])};
+            //     }
 
-                ._geocentric-reviewscomponent .head-content {
-                    display: flex;
-                    flex-direction: column;
-                }
+            //     ._geocentric-reviewscomponent .head {
+            //         display: flex;
+            //         flex-direction: row;
+            //         margin-bottom: 10px;
+            //         align-items: center;
+            //         text-decoration: none;
+            //         color: black;
+            //         font-weight: 500;
+            //     }
 
-                ._geocentric-reviewscomponent .name {
-                    margin: 0;
-                }
+            //     ._geocentric-reviewscomponent img {
+            //         height: 40px;
+            //         margin-right: 10px;
+            //     }
 
-                ._geocentric-reviewscomponent .message-wrapper {
-                    height: 100px;
-                    overflow-y: hidden;
-                    padding-right: 8px;
-                }
+            //     ._geocentric-reviewscomponent .head-content {
+            //         display: flex;
+            //         flex-direction: column;
+            //     }
 
-                ._geocentric-reviewscomponent .message-wrapper:hover {
-                    overflow-y: auto;
-                    padding-right: 3px;
-                }
+            //     ._geocentric-reviewscomponent .name {
+            //         margin: 0;
+            //     }
 
-                ._geocentric-reviewscomponent .message {
-                    text-align: justify;
-                    font-size: 16px;
-                    line-height: 1.5em;
-                }
+            //     ._geocentric-reviewscomponent .message-wrapper {
+            //         height: 100px;
+            //         overflow-y: hidden;
+            //         padding-right: 8px;
+            //     }
 
-                ._geocentric-reviewscomponent .glider-dots {
-                    margin-top: 20px;
-                    gap: 10px;
-                }
-            </style>
-            <div class=\"glider-contain multiple _geocentric-reviewscomponent\">
+            //     ._geocentric-reviewscomponent .message-wrapper:hover {
+            //         overflow-y: auto;
+            //         padding-right: 3px;
+            //     }
 
-                <h2>{$attribs['title']}</h2>
+            //     ._geocentric-reviewscomponent .message {
+            //         text-align: justify;
+            //         font-size: 16px;
+            //         line-height: 1.5em;
+            //     }
 
-                <div class=\"glider\">".implode("", $reviewsString)."</div>
+            //     ._geocentric-reviewscomponent .glider-dots {
+            //         margin-top: 20px;
+            //         gap: 10px;
+            //     }
+            // </style>
+            // <div class=\"glider-contain multiple _geocentric-reviewscomponent\">
 
-            </div>
+            //     <h2>{$attribs['title']}</h2>
 
-            <script src=\"https://cdn.jsdelivr.net/npm/glider-js@1/glider.min.js\"></script>
-            <script>
-                new Glider(document.querySelector('.glider'), {
-                    slidesToShow: ". $attribs['items-on-desktop'] .",
-                    draggable: true,
-                    duration: .5,
-                    responsive: [
-                        {
-                            breakpoint: 375,
-                            settings: {
-                                slidesToShow: ". $attribs['items-on-mobile'] ."
-                            }
-                        },
-                        {
-                            breakpoint: 1024,
-                            settings: {
-                                slidesToShow: ". $attribs['items-on-tablet'] ."
-                            }
-                        },
-                        {
-                            breakpoint: 1333,
-                            settings: {
-                                slidesToShow: ". $attribs['items-on-desktop'] ."
-                            }
-                        }
-                    ]
-                })
-            </script>
-            ";
+            //     <div class=\"glider\">".implode("", $reviewsString)."</div>
+
+            // </div>
+
+            // <script src=\"https://cdn.jsdelivr.net/npm/glider-js@1/glider.min.js\"></script>
+            // <script>
+            //     new Glider(document.querySelector('.glider'), {
+            //         slidesToShow: ". $attribs['items-on-desktop'] .",
+            //         draggable: true,
+            //         duration: .5,
+            //         responsive: [
+            //             {
+            //                 breakpoint: 375,
+            //                 settings: {
+            //                     slidesToShow: ". $attribs['items-on-mobile'] ."
+            //                 }
+            //             },
+            //             {
+            //                 breakpoint: 1024,
+            //                 settings: {
+            //                     slidesToShow: ". $attribs['items-on-tablet'] ."
+            //                 }
+            //             },
+            //             {
+            //                 breakpoint: 1333,
+            //                 settings: {
+            //                     slidesToShow: ". $attribs['items-on-desktop'] ."
+            //                 }
+            //             }
+            //         ]
+            //     })
+            // </script>
+            // ";
         }
 
         private function getPlaceID($id) {

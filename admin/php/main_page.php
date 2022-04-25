@@ -34,9 +34,11 @@ $tab = !$pluginConfigured ? 'settings' : (isset($_GET['tab']) ? $_GET['tab'] : $
     data-api_server_url="<?php echo $config_data['server_url']; ?>" 
     data-geodatabase_url="<?php echo $config_data['geodatabase_url']; ?>" 
     data-appsero_api_key="<?php echo $config_data['appsero_api_key']; ?>" 
-    data-primary_keyword="<?php echo $settings['primary_keyword'] ?>" 
     data-appsero_plugin_name="<?php echo $config_data['appsero_plugin_name']; ?>" 
+    <?php if ($pluginConfigured) { ?>
+    data-primary_keyword="<?php echo $settings['primary_keyword'] ?>" 
     data-primary_location="<?php echo str_replace("\"", "&#34;" ,json_encode($apiDataController->primary_location())); ?>" 
+    <?php } ?>
     >
     <div class="header"><h1>Geocentric Plugin</h1> <a href="http://seorockettools.com/"><img src="<?php echo plugin_dir_url(dirname(__FILE__)) . 'assets/seorocket-text-logo.svg'; ?>" alt="SEO Rocket Tools"></a></div>
     
