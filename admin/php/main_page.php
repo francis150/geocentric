@@ -150,10 +150,6 @@ switch ($tab) {
                             <input type="number" name="general_component-gap" value="<?php echo $component_styles['general']['componentsGap'] ?>">
                         </div>
                         <div class="input-group">
-                            <label>Components Padding</label>
-                            <input type="number" name="general_component-padding" value="<?php echo $component_styles['general']['componentsPadding'] ?>">
-                        </div>
-                        <div class="input-group">
                             <label>Font Family</label>
                             <select class="general_font-family" autocomplete="on" name="general_font-family" data-setvalue="<?php echo $component_styles['general']['compooenentsFontFamily'] ?>">
                             </select>
@@ -229,6 +225,7 @@ switch ($tab) {
                                 <option <?php if ($component_styles['aboutComponent']['content']['textAlignment'] == "right") echo 'selected'; ?> value="right">Right</option>
                                 <option <?php if ($component_styles['aboutComponent']['content']['textAlignment'] == "left") echo 'selected'; ?> value="left">Left</option>
                                 <option <?php if ($component_styles['aboutComponent']['content']['textAlignment'] == "center") echo 'selected'; ?> value="center">Center</option>
+                                <option <?php if ($component_styles['aboutComponent']['content']['textAlignment'] == "justify") echo 'selected'; ?> value="justify">Justify</option>
                             </select>
                         </div>
                     </div>

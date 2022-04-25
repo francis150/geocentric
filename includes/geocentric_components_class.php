@@ -14,12 +14,14 @@ if (!class_exists('_geocentric_components')) {
         private $userinput_data_controller;
         private $component_styles_controller;
         private $settings_data_controller;
+        private $general_styles;
 
         function __construct() {
             $this->api_data_controller = new _geocentric_api_data();
-            // $this->userinput_data_controller = new _geocentric_userinput_data();
             $this->component_styles_controller = new _geocentric_component_styles();
             $this->settings_data_controller = new _geocentric_settings();
+
+            $this->general_styles = $this->component_styles_controller->get_component_style('general');
         }
 
         /* 
@@ -29,7 +31,7 @@ if (!class_exists('_geocentric_components')) {
         }
         */
         public function weather_component($atts) {
-            // return "<h1>Weather Component</h1>";
+
             $api_data = $this->api_data_controller->get_api_data($atts['id']);
             $styles = $this->component_styles_controller->get_component_style('weatherComponent');
 
@@ -42,7 +44,13 @@ if (!class_exists('_geocentric_components')) {
             $unit_string = strtolower($attribs['unit']) == 'f' ? '?unit=us' : '';
 
 
-            return "<div class=\"_geocentric-component _geocentric-weather-component\"><a class=\"weatherwidget-io\" href=\"https://forecast7.com/en/{$api_data['weather_widget']}{$unit_string}\" data-label_1=\"{$api_data['name']}\" data-label_2=\"Weather\" data-theme=\"original\" data-basecolor=\"{$styles['backgroundColor']}\" data-textcolor=\"{$styles['textColor']}\">{$api_data['name']}</a>
+            return "
+            <style>
+                ._geocentric-component {
+                    margin-bottom: {$this->general_styles['componentsGap']}px;
+                }
+            </style>
+            <div class=\"_geocentric-component _geocentric-weather-component\"><a class=\"weatherwidget-io\" href=\"https://forecast7.com/en/{$api_data['weather_widget']}{$unit_string}\" data-label_1=\"{$api_data['name']}\" data-label_2=\"Weather\" data-theme=\"original\" data-basecolor=\"{$styles['backgroundColor']}\" data-textcolor=\"{$styles['textColor']}\">{$api_data['name']}</a>
             <script>
             !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
             </script></div>";
@@ -56,10 +64,8 @@ if (!class_exists('_geocentric_components')) {
         */
         public function about_component($atts) {
 
-            return "<h1>About Component</h1>";
-
-            /* $api_data = $this->api_data_controller->get_api_data($atts['id']);
-            $styles = $this->component_styles_controller->get_component_style('aboutSection');
+            $api_data = $this->api_data_controller->get_api_data($atts['id']);
+            $styles = $this->component_styles_controller->get_component_style('aboutComponent');
 
             if (empty($api_data)) return "<pre>No data matched by id...</pre>";
 
@@ -69,23 +75,23 @@ if (!class_exists('_geocentric_components')) {
 
             return "
             <style>
-                ._geocentric-about_component > h2 {
+                ._geocentric-about-component > h2 {
                     font-size: {$styles['title']['fontSize']}px;
                     font-weight: {$styles['title']['fontWeight']};
                     color: {$styles['title']['fontColor']};
                     text-align: {$styles['title']['textAlignment']};
-                    margin-bottom: 40px;
+                    margin-bottom: 20px;
                 }
 
-                ._geocentric-about_component > p {
+                ._geocentric-about-component > p {
                     font-size: {$styles['content']['fontSize']}px;
                     color: {$styles['content']['fontColor']};
                     text-align: {$styles['content']['textAlignment']};
                     font-weight: {$styles['content']['fontWeight']};
                 }
             </style>
-            <div class=\"_geocentric-about_component\"><h2>{$attribs['title']}</h2><p>{$api_data['about']}</p></div>
-            "; */
+            <div class=\"_geocentric-component _geocentric-about-component\"><h2>{$attribs['title']}</h2><p>{$api_data['about']}</p></div>
+            ";
         }
 
         /* 

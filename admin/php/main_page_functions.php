@@ -47,7 +47,6 @@ if (isset($_POST['_style-form-update'])) {
         'general' => 
         array (
           'componentsGap' => !empty($formdata['general_component-gap']) ? $formdata['general_component-gap'] : 40,
-          'componentsPadding' => !empty($formdata['general_component-padding']) ? $formdata['general_component-padding'] : 0,
           'compooenentsFontFamily' => !empty($formdata['general_font-family']) ? $formdata['general_font-family'] : 'Roboto sans-serif',
         ),
         'weatherComponent' => 
