@@ -162,26 +162,6 @@ if (!class_exists('_geocentric_api_data')) {
         }
 
         /**
-         * @Description: Sets the primary location by id
-         * @Returns: boolean
-         * @Params: string $id
-         */
-        public function set_primary_location($id) {
-            if (!isset($this->api_data)) return;
-
-            foreach ($this->api_data as $location) {
-                $location['meta']['is_primary'] = (isset($location['id']) && $location['id'] == $id) ? true : false;
-            }
-
-            if (file_put_contents($this->config_dir . 'api_data.json', json_encode($this->api_data))) {
-                $this->load_api_data();
-                echo 'Success';
-            } else {
-                echo 'Fail';
-            }
-        }
-
-        /**
          * @Description: Check if the location is primary by ID
          * @Returns: boolean
          * @params: string $id

@@ -194,6 +194,7 @@ if (URL_PARAMS.get('tab') == 'new-location-form') {
         return alert('Please fill up all required fields (*)')
 
         disasbleNewLocationForm()
+        
         e.target.innerHTML = 'Importing data...'
         document.querySelector('._geocentric-wrapper .new-location-form .form-footer img').style.display = 'inherit'
 
@@ -239,50 +240,47 @@ if (URL_PARAMS.get('tab') == 'new-location-form') {
             zip_code: payload.zip_code || undefined
         })
 
-
-        // if (newLocationForm.newlocationform_neigborhoods.value)
-        // newLocation.neighbourhoods = newLocationForm.newlocationform_neigborhoods.value.split(",")
-
         // ==============================================================
 
-        console.log('PAYLOAD', payload)
+        axios({
+            method: "POST",
+            url: SERVER_URL + 'locations-generator/generate',
+            data: payload
+        })
+        .then(res => {
 
-        // axios({
-        //     method: "POST",
-        //     url: SERVER_URL + 'locations-generator/generate',
-        //     data: payload
-        // })
-        // .then(res => {
-
-        //     res.data.meta = clean({
-        //         country_iso2: payload.country.iso2,
-        //         state_code: payload.state.code,
-        //         city: payload.city,
-        //         place_id: payload.place_id || undefined,
-        //         street: payload.street || undefined,
-        //         zip_code: payload.zip_code || undefined,
-        //         is_primary: false,
-        //         neighborhoods: newLocationForm.newlocationform_neigborhoods.value.split(",") || undefined
-        //     })
-
-        //     console.log(res.data)
+            res.data.meta = clean({
+                country_iso2: payload.country.iso2,
+                state_code: payload.state.code,
+                city: payload.city,
+                place_id: payload.place_id || undefined,
+                street: payload.street || undefined,
+                zip_code: payload.zip_code || undefined,
+                is_primary: false,
+                neighborhoods: newLocationForm.newlocationform_neigborhoods.value.split(",") || undefined
+            })
             
-        //     // newLocationForm._newlocationform_submit_api_data.value = JSON.stringify(res.data)
-        // })
-        // .catch(err => {
-        //     newLocationForm._newlocationform_importlocation_failed.checked = true
-        //     console.log(`ERROR IMPORTING LOCATION DATA: ${err.message}`)
-        // })
-        // .then(() => {
-        //     // newLocationForm.submit()
-        // })
+            newLocationForm._newlocationform_submit_api_data.value = JSON.stringify(res.data)
+        })
+        .catch(err => {
+            newLocationForm._newlocationform_importlocation_failed.checked = true
+            console.log(`ERROR IMPORTING LOCATION DATA: ${err.message}`)
+        })
+        .then(() => {
+            newLocationForm.submit()
+        })
     })
 
     function disasbleNewLocationForm() {
-        newLocationForm.elements.forEach(element => {
-            if (element.className == '_newlocationform-submit') return
-            element.disabled = true
-        })
+        newLocationForm.newlocationform_country.disabled = true
+        newLocationForm.newlocationform_state.disabled = true
+        newLocationForm.newlocationform_city.disabled = true
+        newLocationForm.newlocationform_neigborhoods.disabled = true
+        newLocationForm.newlocationform_gbp_placeid.disabled = true
+        newLocationForm.newlocationform_street.disabled = true
+        newLocationForm.newlocationform_zipcode.disabled = true
+        document.querySelector('._geocentric-wrapper .new-location-form .create-button').disabled = true
+        document.querySelector('._geocentric-wrapper .new-location-form .discard-button').disabled = true
     }
 
     function clean(obj) {

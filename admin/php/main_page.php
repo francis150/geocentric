@@ -72,10 +72,10 @@ switch ($tab) {
                         <?php if ($location['meta']['is_primary']) echo '<span>Primary</span>'; ?>
                         <a title="Shortcodes" href="#TB_inline?height=200&width=550&inlineId=shortcode-tb-wrapper" class="thickbox shortcodes-button" ><i class="material-icons-outlined">data_array</i></a>
                         <button title="Options" class="options-button">
-                            <i class="material-icons-outlined">more_vert</i>
+                            <i class="material-icons-outlined">expand_circle_down</i>
                             <div class="dropdown-menu">
                                 <a class="remove-location-button" href="?page=_geocentric&remove-id=<?php echo $location['id']; ?>" <?php if($location['meta']['is_primary']) echo 'data-is-primary="true"'; ?>>Remove</a>
-                                <a class="set-as-primary-button" href="?page=_geocentric&set-as-primary-id=<?php echo $location['id']; ?>">Set as Primary</a>
+                                <a class="set-as-primary-button" href="#">Set as Primary</a>
                             </div>
                         </button>
                     </div>

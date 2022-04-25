@@ -23,7 +23,7 @@ if (isset($_POST['_settings-form-update'])) {
         } else {
             ?>
             <div class="notice notice-error is-dismissible">
-                <p><b><?php echo $config_data['plugin_name']; ?></b> - Failed to update Settings.</p>
+              <p><b><?php echo $config_data['plugin_name']; ?></b> - Failed to update Settings.</p>
             </div>
             <?php
         }
@@ -248,8 +248,21 @@ if (isset($_POST['_style-form-reset'])) {
 }
 
 // Create new location form submit
-if (isset($_POST['_newlocationform_submit_userinput_data']) && isset($_POST['_newlocationform_submit_api_data'])) {
-    
+if (isset($_POST['_newlocationform_submit_api_data'])) {
+
+  if ($apiDataController->set_single_api_data($_POST['_newlocationform_submit_api_data'])) {
+    ?>
+    <div class="notice notice-success is-dismissible">
+        <p><b><?php echo $config_data['plugin_name']; ?></b> - Location successfully created!</p>
+    </div>
+    <?php
+  } else {
+    ?>
+    <div class="notice notice-success is-dismissible">
+        <p><b><?php echo $config_data['plugin_name']; ?></b> - Failed to create location!</p>
+    </div>
+    <?php
+  }
 }
 
 // Remove location
@@ -270,12 +283,4 @@ if (isset($_GET['remove-id'])) {
         </div>
         <?php
     }
-}
-
-// Set Location as Primary 
-if (isset($_GET['set-as-primary-id'])) {
-    if (!$apiDataController->api_data_is_available($_GET['set-as-primary-id'])) return;
-    if ($apiDataController->is_primary($_GET['set-as-primary-id'])) return;
-    $apiDataController->set_primary_location($_GET['set-as-primary-id']);
-    // Still not working...
 }
