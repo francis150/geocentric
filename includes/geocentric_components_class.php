@@ -16,12 +16,18 @@ if (!class_exists('_geocentric_components')) {
         private $settings_data_controller;
         private $general_styles;
 
+        private $font;
+        private $font_family;
+
         function __construct() {
             $this->api_data_controller = new _geocentric_api_data();
             $this->component_styles_controller = new _geocentric_component_styles();
             $this->settings_data_controller = new _geocentric_settings();
 
             $this->general_styles = $this->component_styles_controller->get_component_style('general');
+
+            $this->font = explode(" ", $this->general_styles['componentsFontFamily']);
+            $this->font_family = str_replace("+", " ", $this->font[0]);
         }
 
         /* 
@@ -42,7 +48,6 @@ if (!class_exists('_geocentric_components')) {
             ), $atts);
 
             $unit_string = strtolower($attribs['unit']) == 'f' ? '?unit=us' : '';
-
 
             return "
             <style>
@@ -75,8 +80,11 @@ if (!class_exists('_geocentric_components')) {
 
             return "
             <style>
-                ._geocentric-about-component {
+                @import url('https://fonts.googleapis.com/css2?family={$this->font[0]}&display=swap');
+
+                ._geocentric-component {
                     margin-bottom: {$this->general_styles['componentsGap']}px;
+                    font-family: '{$this->font_family}', {$this->font[1]};
                 }
 
                 ._geocentric-about-component > h2 {
@@ -128,13 +136,20 @@ if (!class_exists('_geocentric_components')) {
 
             return "
             <style>
+                @import url('https://fonts.googleapis.com/css2?family={$this->font[0]}&display=swap');
+
+                ._geocentric-component {
+                    margin-bottom: {$this->general_styles['componentsGap']}px;
+                    font-family: '{$this->font_family}', {$this->font[1]};
+                }
+
                 ._geocentric-neighbourhoods > h2 {
                     font-size: {$styles['title']['fontSize']}px;
                     font-weight: {$styles['title']['fontWeight']};
                     color: {$styles['title']['fontColor']};
                     text-align: {$styles['title']['textAlignment']};
 
-                    margin-bottom: 40px;
+                    margin-bottom: 20px;
                 }
 
                 ._geocentric-neighbourhoods > p {
@@ -152,7 +167,7 @@ if (!class_exists('_geocentric_components')) {
                     color: {$styles['neighborhoods']['fontColorHovered']};
                 }
             </style>
-            <div class=\"_geocentric-neighbourhoods\"><h2>{$attribs['title']}</h2><p>".implode(', ', $neighbourhoods_anchors)."</p></div>
+            <div class=\"_geocentric-neighbourhoods _geocentric-component\"><h2>{$attribs['title']}</h2><p>".implode(', ', $neighbourhoods_anchors)."</p></div>
             ";
         }
 
@@ -167,9 +182,7 @@ if (!class_exists('_geocentric_components')) {
         */
         public function thingstodo_component($atts) {
 
-            return "<h1>Things To Do Component</h1>";
-
-            /* $api_data = $this->api_data_controller->get_api_data($atts['id']);
+            $api_data = $this->api_data_controller->get_api_data($atts['id']);
             $styles = $this->component_styles_controller->get_component_style('thingsToDo');
 
             if (empty($api_data)) return "<pre>No data matched by id...</pre>";
@@ -182,8 +195,6 @@ if (!class_exists('_geocentric_components')) {
             ), $atts);
 
             $thingstodo_cards = [];
-
-            
 
             foreach ($api_data['things_to_do'] as $thingstodo) {
 
@@ -199,7 +210,7 @@ if (!class_exists('_geocentric_components')) {
                 array_push($thingstodo_cards, "<div><div><a href=\"https://www.google.com/maps/search/?api=1&query={$thingstodo['name']}&query_place_id={$thingstodo['place_id']}\" target=\"_blank\"><img src=\"{$thingstodo['photo_url']}\" alt=\"{$attribs['alt']}\"/>{$ratings}<p>{$thingstodo['name']}</p></a></div></div>");
             }
 
-            return "
+            /* return "
             <script type=\"module\" src=\"https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.60/dist/components/rating/rating.js\"></script>
             <style>
                 ._geocentric-thingstodo > h2 {
