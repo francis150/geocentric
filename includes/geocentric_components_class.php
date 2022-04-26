@@ -75,6 +75,10 @@ if (!class_exists('_geocentric_components')) {
 
             return "
             <style>
+                ._geocentric-about-component {
+                    margin-bottom: {$this->general_styles['componentsGap']}px;
+                }
+
                 ._geocentric-about-component > h2 {
                     font-size: {$styles['title']['fontSize']}px;
                     font-weight: {$styles['title']['fontWeight']};
@@ -102,14 +106,11 @@ if (!class_exists('_geocentric_components')) {
         */
         public function neighborhoods_component($atts) {
 
-            return "<h1>Neighborhoods Component</h1>";
+            $api_data = $this->api_data_controller->get_api_data($atts['id']);
+            $styles = $this->component_styles_controller->get_component_style('neigborhoodsComponent');
 
-            /* $api_data = $this->api_data_controller->get_api_data($atts['id']);
-            $styles = $this->component_styles_controller->get_component_style('neighborhoods');
-            $userinput_data = $this->userinput_data_controller->get_userinput_by_id($atts['id']);
-
-            if (empty($userinput_data)) return "<pre>No data matched by id...</pre>";
-            if (empty($userinput_data['neighbourhoods'])) return "<pre>No data to show...</pre>";
+            if (empty($api_data)) return "<pre>No data matched by id...</pre>";
+            if (empty($api_data['meta']['neighborhoods'])) return "<pre>No data to show...</pre>";
 
             $attribs = shortcode_atts(array(
                 "title" => "Neighborhoods in {$api_data['name']}"
@@ -117,12 +118,12 @@ if (!class_exists('_geocentric_components')) {
 
             $neighbourhoods_anchors = [];
 
-            foreach ($userinput_data['neighbourhoods'] as $neigborhood) {
+            foreach ($api_data['meta']['neighborhoods'] as $neigborhood) {
 
                 $neigborhood_query = ($neigborhood . ', ' . $api_data['name']);
-                $encoded_neighbourhood_query = urlencode($neigborhood_query);
+                $encoded_neighborhood_query = urlencode($neigborhood_query);
 
-                array_push($neighbourhoods_anchors, "<a href=\"https://www.google.com/maps/search/?api=1&query={$encoded_neighbourhood_query}\" target=\"_blank\">{$neigborhood}</a>");
+                array_push($neighbourhoods_anchors, "<a href=\"https://www.google.com/maps/search/?api=1&query={$encoded_neighborhood_query}\" target=\"_blank\">{$neigborhood}</a>");
             }
 
             return "
@@ -152,7 +153,7 @@ if (!class_exists('_geocentric_components')) {
                 }
             </style>
             <div class=\"_geocentric-neighbourhoods\"><h2>{$attribs['title']}</h2><p>".implode(', ', $neighbourhoods_anchors)."</p></div>
-            "; */
+            ";
         }
 
         /* 
