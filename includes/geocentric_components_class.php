@@ -24,10 +24,11 @@ if (!class_exists('_geocentric_components')) {
             $this->component_styles_controller = new _geocentric_component_styles();
             $this->settings_data_controller = new _geocentric_settings();
 
-            $this->general_styles = $this->component_styles_controller->get_component_style('general');
-
-            $this->font = explode(" ", $this->general_styles['componentsFontFamily']);
-            $this->font_family = str_replace("+", " ", $this->font[0]);
+            if ($this->component_styles_controller->get_component_styles() !== null) {
+                $this->general_styles = $this->component_styles_controller->get_component_style('general');
+                $this->font = explode(" ", $this->general_styles['componentsFontFamily']);
+                $this->font_family = str_replace("+", " ", $this->font[0]);
+            }   
         }
 
         /* 
@@ -183,13 +184,13 @@ if (!class_exists('_geocentric_components')) {
         public function thingstodo_component($atts) {
 
             $api_data = $this->api_data_controller->get_api_data($atts['id']);
-            $styles = $this->component_styles_controller->get_component_style('thingsToDo');
+            $styles = $this->component_styles_controller->get_component_style('thingsToDoComponent');
 
             if (empty($api_data)) return "<pre>No data matched by id...</pre>";
             if (empty($api_data['things_to_do'])) return "<pre>No data to show...</pre>";
 
              $attribs = shortcode_atts(array(
-                "title" => "Things To Do",
+                "title" => "Things To Do in {$api_data['name']}",
                 "limit" => 1000,
                 "alt" => ""
             ), $atts);
@@ -205,21 +206,41 @@ if (!class_exists('_geocentric_components')) {
                     $thingstodo['users_total_rating'] = 'No ratings yet';
                 }
 
-                $ratings = !isset($atts['hide_ratings']) ? "<div><sl-rating readonly value=\"{$thingstodo['rating']}\" style=\"--symbol-size: .9rem;\"></sl-rating><small>{$thingstodo['rating']} ({$thingstodo['users_total_rating']})</small></div>" : "";
+                $star = '';
+                $whole = floor($thingstodo['rating']);
+                $decimal = $thingstodo['rating'] - $whole;
+                $diff = 5 - ceil($thingstodo['rating']);
+
+                for ($i=0; $i < $whole; $i++) $star = $star . '<span class="material-icons-outlined checked">star</span>';
+                if ($decimal > 0) $star = $star . '<span class="material-icons-outlined half-checked">star</span>';
+                for ($i=0; $i < $diff; $i++) $star = $star . '<span class="material-icons-outlined">star</span>';
+
+                $ratings = !isset($atts['hide_ratings']) ? "<div>
+                <div class=\"rating-stars\">
+                    {$star}
+                </div>
+                <small>{$thingstodo['rating']} ({$thingstodo['users_total_rating']})</small></div>" : "";
 
                 array_push($thingstodo_cards, "<div><div><a href=\"https://www.google.com/maps/search/?api=1&query={$thingstodo['name']}&query_place_id={$thingstodo['place_id']}\" target=\"_blank\"><img src=\"{$thingstodo['photo_url']}\" alt=\"{$attribs['alt']}\"/>{$ratings}<p>{$thingstodo['name']}</p></a></div></div>");
             }
 
-            /* return "
-            <script type=\"module\" src=\"https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.60/dist/components/rating/rating.js\"></script>
+            return "
             <style>
+                @import url('https://fonts.googleapis.com/icon?family=Material+Icons+Outlined');
+                @import url('https://fonts.googleapis.com/css2?family={$this->font[0]}&display=swap');
+
+                ._geocentric-component {
+                    margin-bottom: {$this->general_styles['componentsGap']}px;
+                    font-family: '{$this->font_family}', {$this->font[1]};
+                }
+
                 ._geocentric-thingstodo > h2 {
                     font-size: {$styles['title']['fontSize']}px;
                     font-weight: {$styles['title']['fontWeight']};
                     color: {$styles['title']['fontColor']};
                     text-align: {$styles['title']['textAlignment']};
 
-                    margin-bottom: 40px;
+                    margin-bottom: 20px;
                 }
 
                 ._geocentric-thingstodo > .wrapper {
@@ -270,6 +291,21 @@ if (!class_exists('_geocentric_components')) {
                     opacity: .7;
                 }
 
+                ._geocentric-thingstodo > .wrapper > div > div a > div .rating-stars > span {
+                    color: #b4b4b4;
+                    font-size: 16px;
+                }
+
+                ._geocentric-thingstodo > .wrapper > div > div a > div .rating-stars > span.checked {
+                    color: #FF9529;
+                }
+
+                ._geocentric-thingstodo > .wrapper > div > div a > div .rating-stars > span.half-checked {
+                    background: linear-gradient(90deg, rgba(255,149,41,1) 50%, rgba(180,180,180,1) 50%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                }
+
                 ._geocentric-thingstodo > .wrapper > div > div p {
                     white-space: nowrap;
                     overflow: hidden;
@@ -277,14 +313,14 @@ if (!class_exists('_geocentric_components')) {
                     width: 100%;
 
                     margin-bottom: 0;
-                    text-align: {$styles['name']['textAlignment']};
-                    color: {$styles['name']['fontColor']};
-                    font-size: {$styles['name']['fontSize']}px;
-                    font-weight: {$styles['name']['fontWeight']};
+                    text-align: {$styles['itemName']['textAlignment']};
+                    color: {$styles['itemName']['fontColor']};
+                    font-size: {$styles['itemName']['fontSize']}px;
+                    font-weight: {$styles['itemName']['fontWeight']};
                 }
             </style>
-            <div class=\"_geocentric-thingstodo\"><h2>{$attribs['title']}</h2><div class=\"wrapper\">".implode("", $thingstodo_cards)."</div></div>
-            "; */
+            <div class=\"_geocentric-thingstodo _geocentric-component\"><h2>{$attribs['title']}</h2><div class=\"wrapper\">".implode("", $thingstodo_cards)."</div></div>
+            ";
         }
 
         /**

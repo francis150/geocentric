@@ -296,7 +296,6 @@ if (URL_PARAMS.get('tab') == 'new-location-form' && PRIMARY_KEYWORD) {
 
 /** Locations Tab **/
 if (URL_PARAMS.get('tab') == null && PRIMARY_KEYWORD) {
-    console.log(PRIMARY_KEYWORD)
 
     // on shortcodes thickbox show
     document.querySelectorAll('._geocentric-wrapper .locations-tab .location .shortcodes-button').forEach(button => {
