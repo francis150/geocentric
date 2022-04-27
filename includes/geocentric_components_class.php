@@ -5,7 +5,6 @@ if (!class_exists('_geocentric_components')) {
     require_once plugin_dir_path( __FILE__ ) . 'geocentric_settings_class.php';
     require_once plugin_dir_path( __FILE__ ) . 'geocentric_plugin_config_class.php';
     require_once plugin_dir_path( __FILE__ ) . 'geocentric_component_styles_class.php';
-    // require_once plugin_dir_path( __FILE__ ) . 'geocentric_userinput_data_class.php';
     require_once plugin_dir_path( __FILE__ ) . 'geocentric_api_data_class.php';
 
     class _geocentric_components {
@@ -14,8 +13,9 @@ if (!class_exists('_geocentric_components')) {
         private $userinput_data_controller;
         private $component_styles_controller;
         private $settings_data_controller;
-        private $general_styles;
+        private $plugin_config;
 
+        private $general_styles;
         private $font;
         private $font_family;
 
@@ -23,11 +23,14 @@ if (!class_exists('_geocentric_components')) {
             $this->api_data_controller = new _geocentric_api_data();
             $this->component_styles_controller = new _geocentric_component_styles();
             $this->settings_data_controller = new _geocentric_settings();
+            $this->plugin_config_controller = new _geocentric_plugin_config();
 
             if ($this->component_styles_controller->get_component_styles() !== null) {
                 $this->general_styles = $this->component_styles_controller->get_component_style('general');
                 $this->font = explode(" ", $this->general_styles['componentsFontFamily']);
                 $this->font_family = str_replace("+", " ", $this->font[0]);
+
+                $this->plugin_config = $this->plugin_config_controller->get_plugin_config_data();
             }   
         }
 
@@ -342,27 +345,39 @@ if (!class_exists('_geocentric_components')) {
         */
         public function mapembed_component($atts) {
 
-            return "<h1>Map Embed Component</h1>";
+            $styles = $this->component_styles_controller->get_component_style('mapEmbedComponent');
+            $api_data = $this->api_data_controller->get_api_data($atts['id']);
 
-            /* $userinput_data = $this->userinput_data_controller->get_userinput_by_id($atts['id']);
-            $styles = $this->component_styles_controller->get_component_style('mapEmbed');
-
-            if (empty($userinput_data)) return "<pre>No data matched by id...</pre>";
+            if (empty($api_data)) return "<pre>No data matched by id...</pre>";
 
             $attribs = shortcode_atts(array(
-                "title" => "{$userinput_data['city']['name']}, {$userinput_data['state']['code']}"
+                "title" => "Map of {$api_data['name']}"
             ), $atts);
 
+            $query = '';
+
+            if (isset($api_data['meta']['place_id'])) {
+                $query = "place_id:" . $api_data['meta']['place_id'];
+            } else {
+                $query = $api_data['name'] . " " . $api_data['meta']['country_iso2'];
+            }
 
             return "
             <style>
+                @import url('https://fonts.googleapis.com/css2?family={$this->font[0]}&display=swap');
+
+                ._geocentric-component {
+                    margin-bottom: {$this->general_styles['componentsGap']}px;
+                    font-family: '{$this->font_family}', {$this->font[1]};
+                }
+
                 ._geocentric-mapembed > h2 {
                     font-size: {$styles['title']['fontSize']}px;
                     font-weight: {$styles['title']['fontWeight']};
                     color: {$styles['title']['fontColor']};
                     text-align: {$styles['title']['textAlignment']};
 
-                    margin-bottom: 40px;
+                    margin-bottom: 20px;
                 }
 
                 ._geocentric-mapembed .iframe_wrapper {
@@ -381,8 +396,10 @@ if (!class_exists('_geocentric_components')) {
                     min-width: 100%;
                 }
             </style>
-            <div class=\"_geocentric-mapembed\"><h2>{$attribs['title']}</h2>
-            <div class=\"iframe_wrapper\"><div><iframe height=\"{$styles['map']['height']}\" frameborder=\"0\" scrolling=\"no\" marginheight=\"0\" marginwidth=\"0\" id=\"gmap_canvas\" src=\"https://maps.google.com/maps?width=520&amp;height=400&amp;hl=en&amp;q={$userinput_data['city']['name']}, {$userinput_data['state']['code']}, {$userinput_data['country']['iso2']}&amp;t=&amp;z=12&amp;ie=UTF8&amp;iwloc=B&amp;output=embed\"></iframe></div></div></div>"; */
+            <div class=\"_geocentric-mapembed _geocentric-component\"><h2>{$attribs['title']}</h2>
+            <div class=\"iframe_wrapper\"><div>
+            <iframe src=\"https://www.google.com/maps/embed/v1/place?key={$this->plugin_config['g_api_key']}&q={$query}\" width=\"600\" height=\"{$styles['map']['height']}\" style=\"border:0;\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>
+            </div></div></div>";
         }
 
         /* 
