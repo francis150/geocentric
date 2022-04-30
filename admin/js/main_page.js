@@ -271,7 +271,6 @@ if (URL_PARAMS.get('tab') == 'new-location-form' && PRIMARY_KEYWORD) {
     })
 
     // Set as primary
-
     function disasbleNewLocationForm() {
         newLocationForm.newlocationform_country.disabled = true
         newLocationForm.newlocationform_state.disabled = true

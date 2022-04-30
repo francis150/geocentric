@@ -69,6 +69,7 @@ if (!class_exists('_geocentric_core')) {
         }
 
         public function addto_admin_head() {
+            // WP Thickbox
             add_thickbox();
             // Admin page style file
             wp_enqueue_style('_geocentric_adminpage_styles', plugins_url( '../admin/styles/main_page.css', __FILE__ ));

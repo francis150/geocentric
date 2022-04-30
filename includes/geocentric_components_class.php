@@ -18,6 +18,7 @@ if (!class_exists('_geocentric_components')) {
         private $general_styles;
         private $font;
         private $font_family;
+        private $settings_data;
 
         function __construct() {
             $this->api_data_controller = new _geocentric_api_data();
@@ -31,6 +32,7 @@ if (!class_exists('_geocentric_components')) {
                 $this->font_family = str_replace("+", " ", $this->font[0]);
 
                 $this->plugin_config = $this->plugin_config_controller->get_plugin_config_data();
+                $this->settings_data = $this->settings_data_controller->get_settings_data();
             }   
         }
 
@@ -192,7 +194,7 @@ if (!class_exists('_geocentric_components')) {
             if (empty($api_data)) return "<pre>No data matched by id...</pre>";
             if (empty($api_data['things_to_do'])) return "<pre>No data to show...</pre>";
 
-             $attribs = shortcode_atts(array(
+            $attribs = shortcode_atts(array(
                 "title" => "Things To Do in {$api_data['name']}",
                 "limit" => 1000,
                 "alt" => ""
@@ -249,11 +251,12 @@ if (!class_exists('_geocentric_components')) {
                 ._geocentric-thingstodo > .wrapper {
                     display: flex;
                     flex-wrap: wrap;
+                    justify-content: space-evenly;
                     gap: {$styles['items']['gap']}px;
                 }
 
                 ._geocentric-thingstodo > .wrapper > div {
-                    flex: 1 1 300px;
+                    width: 350px;
                 }
 
                 ._geocentric-thingstodo > .wrapper > div > div {
@@ -330,11 +333,76 @@ if (!class_exists('_geocentric_components')) {
          * @Desccription: Bus Stops Component
          * @Atts: {
             * title - (optional) Section title
+            * limit - (optional) Limit the number of bus stops to display
          * }
          */
         public function busstops_component($atts) {
-            return "<h1>Bus Stop Component</h1>";
-            # code...
+
+            $styles = $this->component_styles_controller->get_component_style('busStopsComponent');
+            $api_data = $this->api_data_controller->get_api_data($atts['id']);
+
+            if (empty($api_data)) return "<pre>No data matched by id...</pre>";
+            if (empty($api_data['bus_stops'])) return "<pre>No data to show...</pre>";
+
+            $attribs = shortcode_atts(array(
+                "title" => "Bus Stops  in {$api_data['name']} to {$this->settings_data['business_name']}",
+                "limit" => 12,
+            ), $atts);
+
+            $busstops = [];
+
+            foreach ($api_data['bus_stops'] as $busstop) {
+
+                if($attribs['limit'] == count($busstops)) break;
+
+                array_push($busstops, "<div class=\"bus-stop\">
+                    <iframe src=\"https://www.google.com/maps/embed/v1/place?key={$this->plugin_config['g_api_key']}&q={$busstop['query']}\" width=\"300\" height=\"320\" style=\"border:0;\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>
+                    <h3>Bus Stop in {$busstop['name']} {$api_data['name']} to {$this->settings_data['business_name']}</h3>
+                </div>");
+            }
+
+            return "<style>
+                @import url('https://fonts.googleapis.com/css2?family={$this->font[0]}&display=swap');
+
+                ._geocentric-component {
+                    margin-bottom: {$this->general_styles['componentsGap']}px;
+                    font-family: '{$this->font_family}', {$this->font[1]};
+                }
+
+                ._geocentric-busstops > h2 {
+                    font-size: {$styles['title']['fontSize']}px;
+                    font-weight: {$styles['title']['fontWeight']};
+                    color: {$styles['title']['fontColor']};
+                    text-align: {$styles['title']['textAlignment']};
+                    margin-bottom: 20px;
+                }
+
+                ._geocentric-busstops .busstops {
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: space-evenly;
+                    gap: {$styles['items']['gap']}px;
+                }
+
+                ._geocentric-busstops .bus-stop {
+                    margin-bottom: 10px;
+                    width: 350px;
+                }
+
+                ._geocentric-busstops .bus-stop h3 {
+                    font-size: {$styles['itemName']['fontSize']}px;
+                    font-weight: {$styles['itemName']['fontWeight']};
+                    color: {$styles['itemName']['fontColor']};
+                    text-align: {$styles['itemName']['textAlignment']};
+                    margin: 0;
+                }
+            </style>
+            <div class=\"_geocentric-busstops _geocentric-component\">
+                <h2>{$attribs['title']}</h2>
+                <div class=\"busstops\">"
+                    .implode("", $busstops).
+                "</div>
+            </div>";
         }
 
         /* 
@@ -406,85 +474,77 @@ if (!class_exists('_geocentric_components')) {
         @Description: Driving Directions Component
         @Atts: {
             * title - (optional) Section title
+            * limit - (optional) Limit the number of driving directions to display
         }
         */
         public function drivingdirections_component($atts) {
 
-            return "<h1>Driving Directions Component</h1>";
-
-
-            // $userinput_data = $this->userinput_data_controller->get_userinput_by_id($atts['id']);
-            // $styles = $this->component_styles_controller->get_component_style('drivingDirections');
-            // $api_data = $this->api_data_controller->get_api_data($atts['id']);
-            // $settings = $this->settings_data_controller->get_settings_data();
+            $styles = $this->component_styles_controller->get_component_style('drivingDirectionsComponent');
+            $api_data = $this->api_data_controller->get_api_data($atts['id']);
             
-            // if (empty($api_data)) return "<pre>No data matched by id...</pre>";
+            if (empty($api_data)) return "<pre>No data matched by id...</pre>";
 
-            // $attribs = shortcode_atts(array(
-            //     "title" => "{$userinput_data['city']['name']}, {$userinput_data['state']['code']} Driving Directions"
-            // ), $atts);
+            $attribs = shortcode_atts(array(
+                "title" => "Driving Directions in {$api_data['name']} to {$this->settings_data['business_name']}",
+                "limit" => 12
+            ), $atts);
 
-            // return "
-            // <style>
-            //     ._geocentric-drivingdirections > h2 {
-            //         font-size: {$styles['title']['fontSize']}px;
-            //         font-weight: {$styles['title']['fontWeight']};
-            //         color: {$styles['title']['fontColor']};
-            //         text-align: {$styles['title']['textAlignment']};
+            $driving_directions = [];
 
-            //         margin-bottom: 40px;
-            //     }
+            foreach ($api_data['directions']['origins'] as $origin) {
 
-            //     ._geocentric-drivingdirections {
-            //         display: flex;
-            //         flex-direction: column;
-            //         align-items: center;
-            //     }
-            // </style>
-            // <div class=\"_geocentric-drivingdirections\">
-            //     <h2>{$attribs['title']}</h2>
-            //     <div style=\"height: {$styles['map']['height']}px; width: {$styles['map']['width']}%;\" class=\"map\"></div>
-            // </div>
-            // <script>
-            //     async function initMap() {
-            //         var directionsService = new google.maps.DirectionsService();
-            //         var directionsDisplay = new google.maps.DirectionsRenderer();
-            //         var map;
+                if($attribs['limit'] == count($driving_directions)) break;
 
-            //         /* Fetch Streets From Geo Streets API */
-            //         const directions = ".json_encode($api_data['directions'])."
-                    
-            //         /* Initialize Map ID and Options */
-            //         map = new google.maps.Map(document.querySelector('._geocentric-drivingdirections > .map'), {
-            //             zoom: 14, 
-            //             center: directions.destination
-            //         });
+                array_push($driving_directions, "<div class=\"direction\">
+                    <iframe src=\"https://www.google.com/maps/embed/v1/directions?key={$this->plugin_config['g_api_key']}&origin={$origin['query']}&destination={$api_data['directions']['destination']['query']}\" width=\"600\" height=\"320\" style=\"border:0;\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>
+                    <h3>Driving Directions from {$origin['name']} to {$api_data['directions']['destination']['name']}</h3>
+                </div>");
+            }
 
-            //         /* Pin Point Routes Into Map And Set Markers  */
-            //         function calculateRoute(mapOrigin, mapDestination) {
-            //             var request = {
-            //                 origin: mapOrigin,
-            //                 destination: mapDestination,
-            //                 travelMode: 'DRIVING'
-            //             };
+            return "
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family={$this->font[0]}&display=swap');
 
-            //             directionsService.route(request, function (result, status) {
-            //                 if (status == \"OK\") {
-            //                     var directionsDisplay = new google.maps.DirectionsRenderer({
-            //                         map: map
-            //                     });
-            //                     directionsDisplay.setDirections(result);
-            //                 }
-            //             });
-            //         }
+                ._geocentric-component {
+                    margin-bottom: {$this->general_styles['componentsGap']}px;
+                    font-family: '{$this->font_family}', {$this->font[1]};
+                }
 
-            //         directions.origins.forEach(origin =>{
-            //             calculateRoute(origin, directions.destination)
-            //         })
-            //     }
+                ._geocentric-drivingdirections > h2 {
+                    font-size: {$styles['title']['fontSize']}px;
+                    font-weight: {$styles['title']['fontWeight']};
+                    color: {$styles['title']['fontColor']};
+                    text-align: {$styles['title']['textAlignment']};
+                    margin-bottom: 20px;
+                }
 
-            // </script>
-            // <script src=\"https://maps.googleapis.com/maps/api/js?key={$settings['restricted_google_api_key']}&callback=initMap&v=weekly\" async></script>";
+                ._geocentric-drivingdirections .drivingdirections {
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: space-evenly;
+                    gap: {$styles['items']['gap']}px;
+                }
+
+                ._geocentric-drivingdirections .direction {
+                    margin-bottom: 10px;
+                    width: 350px;
+                }
+
+                ._geocentric-drivingdirections .direction h3 {
+                    font-size: {$styles['itemName']['fontSize']}px;
+                    font-weight: {$styles['itemName']['fontWeight']};
+                    color: {$styles['itemName']['fontColor']};
+                    text-align: {$styles['itemName']['textAlignment']};
+                    margin: 0;
+                }
+
+            </style>
+            <div class=\"_geocentric-drivingdirections _geocentric-component\">
+            <h2>{$attribs['title']}</h2>
+            <div class=\"drivingdirections\">"
+            .implode("", $driving_directions).
+            "</div>
+            </div>";
         }
 
         /* 
@@ -498,163 +558,113 @@ if (!class_exists('_geocentric_components')) {
         }
         */
         public function reviews_component($atts) {
+            $api_data = $this->api_data_controller->get_api_data($atts['id']);
+            $styles = $this->component_styles_controller->get_component_style('reviewsComponent');
 
-            return "<h1>Reviews Component</h1>";
+            if (empty($api_data)) return "<pre>No data matched by id...</pre>";
+            
+            $attribs = shortcode_atts(array(
+                "title" => "Reviews for {$this->settings_data['business_name']} {$api_data['name']}",
+                "limit" => 6
+            ), $atts);
 
-            // $styles = $this->component_styles_controller->get_component_style('reviews');
-            // $api_data = $this->api_data_controller->get_api_data($atts['id']);
-            // $place_id = $this->getPlaceID($atts['id']);
+            $reviews = [];
 
-            // if (empty($api_data)) return "<pre>No data matched by id...</pre>";
-            // if (empty($api_data['reviews'])) return "<pre>No data to show...</pre>";
+            foreach ($api_data['reviews'] as $review) {
 
-            // $attribs = shortcode_atts(array(
-            //     "title" => "Reviews",
-            //     "limit" => 1000,
-            //     "items-on-desktop" => 3,
-            //     "items-on-tablet" => 2,
-            //     "items-on-mobile" => 1
-            // ), $atts);
+                if($attribs['limit'] == count($reviews)) break;
 
-            // $reviewsString = [];
+                $star = '';
+                $whole = floor($review['rating']);
+                $decimal = $review['rating'] - $whole;
+                $diff = 5 - ceil($review['rating']);
 
-            // foreach ($api_data['reviews'] as $review) {
-            //     if($attribs['limit'] == count($reviewsString)) break;
-            //     array_push($reviewsString, "<div class=\"review\"><a class=\"head\" target=\"_blank\" href=\"https://search.google.com/local/writereview?placeid={$place_id}\"><img src=\"{$review['profile_photo_url']}\"><div class=\"head-content\"><p class=\"name\">{$review['author_name']}</p><sl-rating readonly value=\"{$review['rating']}\" style=\"--symbol-size: .9rem;\"></sl-rating></div></a><div class=\"message-wrapper\"><p class=\"message\">{$review['text']}</p></div></div>");
-            // }
+                for ($i=0; $i < $whole; $i++) $star = $star . '<span class="material-icons-outlined checked">star</span>';
+                if ($decimal > 0) $star = $star . '<span class="material-icons-outlined half-checked">star</span>';
+                for ($i=0; $i < $diff; $i++) $star = $star . '<span class="material-icons-outlined">star</span>';
+                
+                array_push($reviews, "<div class=\"review\">
+                    <a href=\"{$review['author_url']}\" target=\"_blank\" class=\"head\">
+                        <img src=\"{$review['profile_photo_url']}\" alt=\"{$this->settings_data['business_name']} Reviews\">
+                        <div class=\"info\">
+                            <h3>{$review['author_name']}</h3>
+                            <div class=\"stars\">
+                                {$star} <span>({$review['rating']})</span>
+                            </div>
+                        </div>
+                    </a>
+                    <p>{$review['text']}</p>
+                </div>");
+            }
 
-            // $gap_style = $styles['items']['gap'] / 2;
+            return "
+            <style>
+                @import url('https://fonts.googleapis.com/icon?family=Material+Icons+Outlined');
+                @import url('https://fonts.googleapis.com/css2?family={$this->font[0]}&display=swap');
 
-            // return "
-            // <script type=\"module\" src=\"https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.62/dist/components/icon/icon.js\"></script>
-            // <script type=\"module\" src=\"https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.60/dist/components/rating/rating.js\"></script>
-            // <link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/glider-js@1/glider.min.css\">
-            // <style>
-            //     ._geocentric-reviewscomponent *::-webkit-scrollbar-track {
-            //         background-color: #ebebeb;
-            //     }
+                ._geocentric-component {
+                    margin-bottom: {$this->general_styles['componentsGap']}px;
+                    font-family: '{$this->font_family}', {$this->font[1]};
+                }
 
-            //     ._geocentric-reviewscomponent *::-webkit-scrollbar {
-            //         width: 5px;
-            //         background-color: #ebebeb;
-            //     }
+                ._geocentric-reviews > h2 {
+                    font-size: {$styles['title']['fontSize']}px;
+                    font-weight: {$styles['title']['fontWeight']};
+                    color: {$styles['title']['fontColor']};
+                    text-align: {$styles['title']['textAlignment']};
 
-            //     ._geocentric-reviewscomponent *::-webkit-scrollbar-thumb {
-            //         background-color: #363636;
-            //     }
+                    margin-bottom: 20px;
+                }
 
-            //     ._geocentric-reviewscomponent h2 {
-            //         font-size: {$styles['title']['fontSize']}px;
-            //         font-weight: {$styles['title']['fontWeight']};
-            //         color: {$styles['title']['fontColor']};
-            //         text-align: {$styles['title']['textAlignment']};
+                ._geocentric-reviews .reviews {
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: space-evenly;
+                    gap: 20px;
+                }
 
-            //         margin-bottom: 40px;
-            //     }
+                ._geocentric-reviews .review {
+                    padding: 20px;
+                    border-radius: 5px;
+                    background: #f5f5f5;
+                    max-width: 580px;
+                }
 
-            //     ._geocentric-reviewscomponent .glider {
-            //         padding-top: 5px;
-            //     }
+                ._geocentric-reviews .review a {
+                    color: #000000;
+                    display: flex;
+                    align-items: center;
+                }
 
-            //     ._geocentric-reviewscomponent .review {
-            //         background: {$styles['items']['backgroundColor']};
-            //         display: flex;
-            //         flex-direction: column;
-            //         margin: 0 {$gap_style}px;
-            //         padding: {$styles['items']['padding']}px;
-            //         border-width: {$styles['items']['borderWidth']}px;
-            //         border-color: {$styles['items']['borderColor']}px;
-            //         border-radius: {$styles['items']['borderRadius']}px;
-            //         transition: .3s transform ease-in-out;
-            //     }
+                ._geocentric-reviews .review a img {
+                    height: 45px;
+                    margin-right: 10px;
+                }
 
-            //     ._geocentric-reviewscomponent .review:hover {
-            //         transform: {$this->component_styles_controller->get_hover_effect($styles['items']['hoverEffect'])};
-            //     }
+                ._geocentric-reviews .review a h3 {
+                    margin-bottom: 3px;
+                    font-size: 18px;
+                }
 
-            //     ._geocentric-reviewscomponent .head {
-            //         display: flex;
-            //         flex-direction: row;
-            //         margin-bottom: 10px;
-            //         align-items: center;
-            //         text-decoration: none;
-            //         color: black;
-            //         font-weight: 500;
-            //     }
+                ._geocentric-reviews .review .stars .material-icons-outlined {
+                    color: #b4b4b4;
+                    font-size: 16px;
+                }
 
-            //     ._geocentric-reviewscomponent img {
-            //         height: 40px;
-            //         margin-right: 10px;
-            //     }
+                ._geocentric-reviews .review .stars .material-icons-outlined.checked {
+                    color: #FF9529;
+                }
 
-            //     ._geocentric-reviewscomponent .head-content {
-            //         display: flex;
-            //         flex-direction: column;
-            //     }
-
-            //     ._geocentric-reviewscomponent .name {
-            //         margin: 0;
-            //     }
-
-            //     ._geocentric-reviewscomponent .message-wrapper {
-            //         height: 100px;
-            //         overflow-y: hidden;
-            //         padding-right: 8px;
-            //     }
-
-            //     ._geocentric-reviewscomponent .message-wrapper:hover {
-            //         overflow-y: auto;
-            //         padding-right: 3px;
-            //     }
-
-            //     ._geocentric-reviewscomponent .message {
-            //         text-align: justify;
-            //         font-size: 16px;
-            //         line-height: 1.5em;
-            //     }
-
-            //     ._geocentric-reviewscomponent .glider-dots {
-            //         margin-top: 20px;
-            //         gap: 10px;
-            //     }
-            // </style>
-            // <div class=\"glider-contain multiple _geocentric-reviewscomponent\">
-
-            //     <h2>{$attribs['title']}</h2>
-
-            //     <div class=\"glider\">".implode("", $reviewsString)."</div>
-
-            // </div>
-
-            // <script src=\"https://cdn.jsdelivr.net/npm/glider-js@1/glider.min.js\"></script>
-            // <script>
-            //     new Glider(document.querySelector('.glider'), {
-            //         slidesToShow: ". $attribs['items-on-desktop'] .",
-            //         draggable: true,
-            //         duration: .5,
-            //         responsive: [
-            //             {
-            //                 breakpoint: 375,
-            //                 settings: {
-            //                     slidesToShow: ". $attribs['items-on-mobile'] ."
-            //                 }
-            //             },
-            //             {
-            //                 breakpoint: 1024,
-            //                 settings: {
-            //                     slidesToShow: ". $attribs['items-on-tablet'] ."
-            //                 }
-            //             },
-            //             {
-            //                 breakpoint: 1333,
-            //                 settings: {
-            //                     slidesToShow: ". $attribs['items-on-desktop'] ."
-            //                 }
-            //             }
-            //         ]
-            //     })
-            // </script>
-            // ";
+                ._geocentric-reviews .review .stars .material-icons-outlined.half-checked {
+                    background: linear-gradient(90deg, rgba(255,149,41,1) 50%, rgba(180,180,180,1) 50%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                }
+            </style>
+            <div class=\"_geocentric-reviews _geocentric-component\">
+                <h2>{$attribs['title']}</h2>
+                <div class=\"reviews\">".implode("", $reviews)."</div>
+            </div>";
         }
 
         private function getPlaceID($id) {

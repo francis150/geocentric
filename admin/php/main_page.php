@@ -112,6 +112,11 @@ switch ($tab) {
                     <small>Properly Input your Main Keyword here <b>WITHOUT LOCATION</b> for best results.</small>
                 </div>
 
+                <div class="input-group">
+                    <label>Business Name<span>*</span></label>
+                    <input type="text" required name="business_name" <?php if (isset($settings['business_name'])) echo "value=\"{$settings['business_name']}\""; ?>>
+                </div>
+
                 <div class="form-footer">
                     <input name="_settings-form-update" type="submit" class="button-primary" value="Save"/>
                 </div>

@@ -5,7 +5,8 @@ if (isset($_POST['_settings-form-update'])) {
     $formdata = $_POST;
 
     $settings = array(
-        "primary_keyword" => $_POST['primary_keyword']
+        "primary_keyword" => $_POST['primary_keyword'],
+        "business_name" => $_POST['business_name']
     );
 
     //  init component styles
