@@ -156,7 +156,7 @@ switch ($tab) {
                         </div>
                         <div class="input-group">
                             <label>Font Family</label>
-                            <select class="general_font-family" autocomplete="on" name="general_font-family" data-setvalue="<?php echo $component_styles['general']['compooenentsFontFamily'] ?>">
+                            <select class="general_font-family" autocomplete="on" name="general_font-family" data-setvalue="<?php echo $component_styles['general']['componentsFontFamily'] ?>">
                             </select>
                         </div>
                     </div>
@@ -243,22 +243,22 @@ switch ($tab) {
                     <div class="row">
                         <div class="input-group">
                             <label>Font Size</label>
-                            <input type="number" name="neighborhoodscomponent_title_font-size" value="<?php echo $component_styles['neigborhoodsComponent']['title']['fontSize'] ?>">
+                            <input type="number" name="neighborhoodscomponent_title_font-size" value="<?php echo $component_styles['neighborhoodsComponent']['title']['fontSize'] ?>">
                         </div>
                         <div class="input-group">
                             <label>Font Weight</label>
-                            <input type="number" name="neighborhoodscomponent_title_font-weight" value="<?php echo $component_styles['neigborhoodsComponent']['title']['fontWeight'] ?>">
+                            <input type="number" name="neighborhoodscomponent_title_font-weight" value="<?php echo $component_styles['neighborhoodsComponent']['title']['fontWeight'] ?>">
                         </div>
                         <div class="input-group">
                             <label>Font Color</label>
-                            <input type="text" name="neighborhoodscomponent_title_font-color" value="<?php echo $component_styles['neigborhoodsComponent']['title']['fontColor'] ?>">
+                            <input type="text" name="neighborhoodscomponent_title_font-color" value="<?php echo $component_styles['neighborhoodsComponent']['title']['fontColor'] ?>">
                         </div>
                         <div class="input-group">
                             <label>Text Alignment</label>
                             <select name="neighborhoodscomponent_title_text-alignment">
-                                <option <?php if ($component_styles['neigborhoodsComponent']['title']['textAlignment'] == "right") echo 'selected'; ?> value="right">Right</option>
-                                <option <?php if ($component_styles['neigborhoodsComponent']['title']['textAlignment'] == "left") echo 'selected'; ?> value="left">Left</option>
-                                <option <?php if ($component_styles['neigborhoodsComponent']['title']['textAlignment'] == "center") echo 'selected'; ?> value="center">Center</option>
+                                <option <?php if ($component_styles['neighborhoodsComponent']['title']['textAlignment'] == "right") echo 'selected'; ?> value="right">Right</option>
+                                <option <?php if ($component_styles['neighborhoodsComponent']['title']['textAlignment'] == "left") echo 'selected'; ?> value="left">Left</option>
+                                <option <?php if ($component_styles['neighborhoodsComponent']['title']['textAlignment'] == "center") echo 'selected'; ?> value="center">Center</option>
                             </select>
                         </div>
                     </div>
@@ -267,29 +267,30 @@ switch ($tab) {
                     <div class="row">
                         <div class="input-group">
                             <label>Font Size</label>
-                            <input type="number" name="neighborhoodscomponent_neighborhoods_font-size" value="<?php echo $component_styles['neigborhoodsComponent']['neigborhoods']['fontSize'] ?>">
+                            <input type="number" name="neighborhoodscomponent_neighborhoods_font-size" value="<?php echo $component_styles['neighborhoodsComponent']['neighborhoods']['fontSize'] ?>">
                         </div>
                         <div class="input-group">
                             <label>Font Weight</label>
-                            <input type="number" name="neighborhoodscomponent_neighborhoods_font-weight" value="<?php echo $component_styles['neigborhoodsComponent']['neigborhoods']['fontWeight'] ?>">
+                            <input type="number" name="neighborhoodscomponent_neighborhoods_font-weight" value="<?php echo $component_styles['neighborhoodsComponent']['neighborhoods']['fontWeight'] ?>">
                         </div>
                         <div class="input-group">
                             <label>Font Color</label>
-                            <input type="text" name="neighborhoodscomponent_neighborhoods_font-color" value="<?php echo $component_styles['neigborhoodsComponent']['neigborhoods']['fontColor'] ?>">
+                            <input type="text" name="neighborhoodscomponent_neighborhoods_font-color" value="<?php echo $component_styles['neighborhoodsComponent']['neighborhoods']['fontColor'] ?>">
                         </div>
                         <div class="input-group">
                             <label>Text Alignment</label>
                             <select name="neighborhoodscomponent_neighborhoods_text-alignment">
-                                <option <?php if ($component_styles['neigborhoodsComponent']['neigborhoods']['textAlignment'] == "right") echo 'selected'; ?> value="right">Right</option>
-                                <option <?php if ($component_styles['neigborhoodsComponent']['neigborhoods']['textAlignment'] == "left") echo 'selected'; ?> value="left">Left</option>
-                                <option <?php if ($component_styles['neigborhoodsComponent']['neigborhoods']['textAlignment'] == "center") echo 'selected'; ?> value="center">Center</option>
+                                <option <?php if ($component_styles['neighborhoodsComponent']['neighborhoods']['textAlignment'] == "right") echo 'selected'; ?> value="right">Right</option>
+                                <option <?php if ($component_styles['neighborhoodsComponent']['neighborhoods']['textAlignment'] == "left") echo 'selected'; ?> value="left">Left</option>
+                                <option <?php if ($component_styles['neighborhoodsComponent']['neighborhoods']['textAlignment'] == "center") echo 'selected'; ?> value="center">Center</option>
+                                <option <?php if ($component_styles['neighborhoodsComponent']['neighborhoods']['textAlignment'] == "justify") echo 'selected'; ?> value="justify">Justify</option>
                             </select>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-group">
                             <label>Font Color (Hovered)</label>
-                            <input type="text" name="neighborhoodscomponent_neighborhoods_font-color-hovered" value="<?php echo $component_styles['neigborhoodsComponent']['neigborhoods']['fontColorHovered'] ?>">
+                            <input type="text" name="neighborhoodscomponent_neighborhoods_font-color-hovered" value="<?php echo $component_styles['neighborhoodsComponent']['neighborhoods']['fontColorHovered'] ?>">
                         </div>
                     </div>
 
@@ -502,7 +503,7 @@ switch ($tab) {
                         </div>
                         <div class="input-group">
                             <label>Width (%)</label>
-                            <input type="number" name="mapembedcomponent_map_width" value="<?php echo $component_styles['mapEmbedComponent']['map']['width'] ?>">
+                            <input max="100" min="1" type="number" name="mapembedcomponent_map_width" value="<?php echo $component_styles['mapEmbedComponent']['map']['width'] ?>">
                         </div>
                     </div>
                 </div>
@@ -534,15 +535,35 @@ switch ($tab) {
                         </div>
                     </div>
 
-                    <h4>Map</h4>
+                    <h4>Item Name</h4>
                     <div class="row">
                         <div class="input-group">
-                            <label>Height (px)</label>
-                            <input type="number" name="drivingdirectionscomponent_map_height" value="<?php echo $component_styles['drivingDirectionsComponent']['map']['height'] ?>">
+                            <label>Font Size</label>
+                            <input type="number" name="drivingdirectionscomponent_itemname_font-size" value="<?php echo $component_styles['drivingDirectionsComponent']['itemName']['fontSize'] ?>">
                         </div>
                         <div class="input-group">
-                            <label>Width (%)</label>
-                            <input type="number" name="drivingdirectionscomponent_map_width" value="<?php echo $component_styles['drivingDirectionsComponent']['map']['width'] ?>">
+                            <label>Font Weight</label>
+                            <input type="number" name="drivingdirectionscomponent_itemname_font-weight" value="<?php echo $component_styles['drivingDirectionsComponent']['itemName']['fontWeight'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Font Color</label>
+                            <input type="text" name="drivingdirectionscomponentt_itemname_font-color" value="<?php echo $component_styles['drivingDirectionsComponent']['itemName']['fontColor'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Text Alignment</label>
+                            <select name="drivingdirectionscomponent_itemname_text-alignment">
+                                <option <?php if ($component_styles['drivingDirectionsComponent']['itemName']['textAlignment'] == "right") echo 'selected'; ?> value="right">Right</option>
+                                <option <?php if ($component_styles['drivingDirectionsComponent']['itemName']['textAlignment'] == "left") echo 'selected'; ?> value="left">Left</option>
+                                <option <?php if ($component_styles['drivingDirectionsComponent']['itemName']['textAlignment'] == "center") echo 'selected'; ?> value="center">Center</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <h4>Items</h4>
+                    <div class="row">
+                        <div class="input-group">
+                            <label>Gap</label>
+                            <input type="number" name="drivingdirectionscomponent_items_gap" value="<?php echo $component_styles['drivingDirectionsComponent']['items']['gap'] ?>">
                         </div>
                     </div>
                 </div>
@@ -601,14 +622,6 @@ switch ($tab) {
                         <div class="input-group">
                             <label>Padding</label>
                             <input type="number" name="reviewscomponent_items_padding" value="<?php echo $component_styles['reviewsComponent']['items']['padding'] ?>">
-                        </div>
-                        <div class="input-group">
-                            <label>Hover Effect</label>
-                            <select name="reviewscomponent_items_hover-effect">
-                                <option <?php if ($component_styles['reviewsComponent']['items']['hoverEffect'] == "scaleUp") echo 'selected'; ?> value="scaleUp">Scale Up</option>
-                                <option <?php if ($component_styles['reviewsComponent']['items']['hoverEffect'] == "scaleDown") echo 'selected'; ?> value="scaleDown">Scale Down</option>
-                                <option <?php if ($component_styles['reviewsComponent']['items']['hoverEffect'] == "rise") echo 'selected'; ?> value="rise">Rise</option>
-                            </select>
                         </div>
                     </div>
 

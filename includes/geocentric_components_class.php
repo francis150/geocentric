@@ -49,11 +49,7 @@ if (!class_exists('_geocentric_components')) {
 
             if (empty($api_data)) return "<pre>No data matched by id...</pre>";
 
-            $attribs = shortcode_atts(array(
-                "unit" => "f"
-            ), $atts);
-
-            $unit_string = strtolower($attribs['unit']) == 'f' ? '?unit=us' : '';
+            $unit_string = $styles['unit'] == 'fahrenheit' ? '?unit=us' : '';
 
             return "
             <style>
@@ -121,7 +117,7 @@ if (!class_exists('_geocentric_components')) {
         public function neighborhoods_component($atts) {
 
             $api_data = $this->api_data_controller->get_api_data($atts['id']);
-            $styles = $this->component_styles_controller->get_component_style('neigborhoodsComponent');
+            $styles = $this->component_styles_controller->get_component_style('neighborhoodsComponent');
 
             if (empty($api_data)) return "<pre>No data matched by id...</pre>";
             if (empty($api_data['meta']['neighborhoods'])) return "<pre>No data to show...</pre>";
@@ -181,7 +177,6 @@ if (!class_exists('_geocentric_components')) {
         @Description: Things to do component
         @Atts: {
             * title - (optional) Section title
-            * hide_ratings - (optional) Wether or not to display the rating
             * limit - (optional) Limit the number of places to display
             * alt - (optinal) image alt text
         }
@@ -220,7 +215,7 @@ if (!class_exists('_geocentric_components')) {
                 if ($decimal > 0) $star = $star . '<span class="material-icons-outlined half-checked">star</span>';
                 for ($i=0; $i < $diff; $i++) $star = $star . '<span class="material-icons-outlined">star</span>';
 
-                $ratings = !isset($atts['hide_ratings']) ? "<div>
+                $ratings = $styles['showReviews'] ? "<div>
                 <div class=\"rating-stars\">
                     {$star}
                 </div>
@@ -457,7 +452,6 @@ if (!class_exists('_geocentric_components')) {
 
                 ._geocentric-mapembed .iframe_wrapper > div {
                     width: {$styles['map']['width']}%;
-                    height: {$styles['map']['height']}px;
                 }
 
                 ._geocentric-mapembed .iframe_wrapper > div > iframe {
@@ -620,13 +614,15 @@ if (!class_exists('_geocentric_components')) {
                     display: flex;
                     flex-wrap: wrap;
                     justify-content: space-evenly;
-                    gap: 20px;
+                    gap: {$styles['items']['gap']}px;
                 }
 
                 ._geocentric-reviews .review {
-                    padding: 20px;
-                    border-radius: 5px;
-                    background: #f5f5f5;
+                    padding: {$styles['items']['padding']}px;
+                    border-radius: {$styles['items']['borderRadius']}px;
+                    border-width: {$styles['items']['borderWidth']}px;
+                    border-color: {$styles['items']['borderColor']}px;
+                    background: {$styles['items']['backgroundColor']};
                     max-width: 580px;
                 }
 
@@ -634,6 +630,7 @@ if (!class_exists('_geocentric_components')) {
                     color: #000000;
                     display: flex;
                     align-items: center;
+                    margin-bottom: 5px;
                 }
 
                 ._geocentric-reviews .review a img {
@@ -643,7 +640,15 @@ if (!class_exists('_geocentric_components')) {
 
                 ._geocentric-reviews .review a h3 {
                     margin-bottom: 3px;
-                    font-size: 18px;
+                    font-size: {$styles['authorName']['fontSize']}px;
+                    font-weight: {$styles['authorName']['fontWeight']};
+                    color: {$styles['authorName']['fontColor']};
+                }
+
+                ._geocentric-reviews .review p {
+                    font-size: {$styles['reviewBody']['fontSize']}px;
+                    font-weight: {$styles['reviewBody']['fontWeight']};
+                    color: {$styles['reviewBody']['fontColor']};
                 }
 
                 ._geocentric-reviews .review .stars .material-icons-outlined {
@@ -660,6 +665,7 @@ if (!class_exists('_geocentric_components')) {
                     -webkit-background-clip: text;
                     -webkit-text-fill-color: transparent;
                 }
+                
             </style>
             <div class=\"_geocentric-reviews _geocentric-component\">
                 <h2>{$attribs['title']}</h2>
