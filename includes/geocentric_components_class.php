@@ -422,7 +422,7 @@ if (!class_exists('_geocentric_components')) {
             if (isset($api_data['meta']['place_id'])) {
                 $query = "place_id:" . $api_data['meta']['place_id'];
             } else {
-                $query = $api_data['name'] . " " . $api_data['meta']['country_iso2'];
+                $query = $api_data['name'] . " " . $api_data['meta']['country']['iso2'];
             }
 
             return "
@@ -556,6 +556,7 @@ if (!class_exists('_geocentric_components')) {
             $styles = $this->component_styles_controller->get_component_style('reviewsComponent');
 
             if (empty($api_data)) return "<pre>No data matched by id...</pre>";
+            if (!isset($api_data['reviews'])) return "<pre>No data to show...</pre>";
             
             $attribs = shortcode_atts(array(
                 "title" => "Reviews for {$this->settings_data['business_name']} {$api_data['name']}",
@@ -623,7 +624,7 @@ if (!class_exists('_geocentric_components')) {
                     border-width: {$styles['items']['borderWidth']}px;
                     border-color: {$styles['items']['borderColor']}px;
                     background: {$styles['items']['backgroundColor']};
-                    max-width: 580px;
+                    flex: 1 1 300px;
                 }
 
                 ._geocentric-reviews .review a {
