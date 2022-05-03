@@ -34,10 +34,10 @@ $tab = !$pluginConfigured ? 'settings' : (isset($_GET['tab']) ? $_GET['tab'] : $
     data-api_server_url="<?php echo $config_data['server_url']; ?>" 
     data-geodatabase_url="<?php echo $config_data['geodatabase_url']; ?>" 
     data-appsero_api_key="<?php echo $config_data['appsero_api_key']; ?>" 
-    data-appsero_plugin_name="<?php echo $config_data['appsero_plugin_name']; ?>" 
+    data-appsero_plugin_name="<?php echo $config_data['appsero_plugin_name']; ?>"
     <?php if ($pluginConfigured) { ?>
-    data-primary_keyword="<?php echo $settings['primary_keyword'] ?>" 
-    data-primary_location="<?php echo str_replace("\"", "&#34;" ,json_encode($apiDataController->primary_location())); ?>" 
+        data-primary_keyword="<?php echo $settings['primary_keyword'] ?>" 
+        data-primary_location="<?php echo str_replace("\"", "&#34;" ,json_encode($apiDataController->primary_location())); ?>" 
     <?php } ?>
     >
     <div class="header"><h1>Geocentric Plugin</h1> <a href="http://seorockettools.com/"><img src="<?php echo plugin_dir_url(dirname(__FILE__)) . 'assets/seorocket-text-logo.svg'; ?>" alt="SEO Rocket Tools"></a></div>
@@ -59,7 +59,7 @@ switch ($tab) {
         <div class="locations-tab">
             <h2>Locations 📌</h2>
             <div class="header-wrapper">
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus, atque.</p>
+                <p>List down the all your Service Areas below to use all the goecentric data.</p>
                 <a href="?page=_geocentric&tab=new-location-form"><button class="button-primary">Add location</button></a>
             </div>
             <hr>
@@ -77,7 +77,7 @@ switch ($tab) {
                             <i class="material-icons-outlined">expand_circle_down</i>
                             <div class="dropdown-menu">
                                 <a class="remove-location-button" href="?page=_geocentric&remove-id=<?php echo $location['id']; ?>" <?php if($location['meta']['is_primary']) echo 'data-is-primary="true"'; ?>>Remove</a>
-                                <a class="set-as-primary-button" href="#">Set as Primary</a>
+                                <a data-id="<?php echo $location['id']; ?>" <?php if($location['meta']['is_primary']) echo 'data-is-primary="true"'; ?> class="set-as-primary-button" href="#">Set as Primary</a>
                             </div>
                         </button>
                     </div>
@@ -95,6 +95,11 @@ switch ($tab) {
                     <button id="tb-copy-shortcodes-button" class="button-secondary">Copy All</button>
                 </div>
             </div>
+
+            <form class="primary-location-form" style="display: none;" action="#" method="POST">
+                <textarea class="current_api_data" name="current_api_data"><?php if (isset($api_data)) echo json_encode($api_data); ?></textarea>
+                <textarea class="new_primary_api_data" name="new_primary_api_data"></textarea>
+            </form>
 
         </div>
         <?php
@@ -737,8 +742,6 @@ switch ($tab) {
 }
 
 ?></div>
-
-<!-- <a href="#TB_inline?height=100&width=400&inlineId=shortcode-tb-wrapper" id="test-button" class="thickbox"><button>Test</button></a> -->
 
 
 <div class="footer">

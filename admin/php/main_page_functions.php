@@ -289,3 +289,20 @@ if (isset($_GET['remove-id'])) {
         <?php
     }
 }
+
+// When new primary location is set
+if (isset($_POST['new_primary_api_data'])) {
+  if ($apiDataController->set_all_api_data($_POST['new_primary_api_data'])) {
+    ?>
+    <div class="notice notice-success is-dismissible">
+        <p><b><?php echo $config_data['plugin_name']; ?></b> - Primary Location updated!</p>
+    </div>
+    <?php
+  } else {
+    ?>
+    <div class="notice notice-error is-dismissible">
+        <p><b><?php echo $config_data['plugin_name']; ?></b> - Failed to update Primary Location.</p>
+    </div>
+    <?php
+  }
+}

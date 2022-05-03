@@ -281,19 +281,14 @@ if (URL_PARAMS.get('page') == '_geocentric') {
             document.querySelector('._geocentric-wrapper .new-location-form .create-button').disabled = true
             document.querySelector('._geocentric-wrapper .new-location-form .discard-button').disabled = true
         }
-
-        function clean(obj) {
-            for (var propName in obj) {
-                if (obj[propName] === null || obj[propName] === undefined) {
-                    delete obj[propName];
-                }
-            }
-            return obj
-        }
     }
 
     /** Locations Tab **/
     if (URL_PARAMS.get('tab') == null && PRIMARY_KEYWORD) {
+
+        const primaryLocationForm = document.querySelector('._geocentric-wrapper .locations-tab .primary-location-form')
+        let apiData = primaryLocationForm.current_api_data.value
+        apiData = apiData ? JSON.parse(apiData) : undefined;
 
         // on shortcodes thickbox show
         document.querySelectorAll('._geocentric-wrapper .locations-tab .location .shortcodes-button').forEach(button => {
@@ -338,6 +333,111 @@ if (URL_PARAMS.get('page') == '_geocentric') {
                 if (!confirm('Are you sure you want to remove this location?')) return e.preventDefault()
             })
         })
+
+        // set location as primary
+        document.querySelectorAll('._geocentric-wrapper .locations-tab .location .set-as-primary-button').forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault()
+
+                if (button.dataset.isPrimary) return alert('This location is already your Primary Location.')
+                if (!confirm('Are you sure you want to set this as your Primary Location?')) return
+
+                let primaryLocation = apiData.filter(location => location.id === button.dataset.id)
+                primaryLocation = primaryLocation ? primaryLocation[0].meta : undefined
+                primaryLocation = primaryLocation ? clean({
+                    country_iso2: primaryLocation.country.iso2,
+                    state_code: primaryLocation.state.code,
+                    city: primaryLocation.city,
+                    place_id: primaryLocation.place_id || undefined,
+                    street: primaryLocation.street || undefined,
+                    zip_code: primaryLocation.zip_code || undefined
+                }) : undefined
+
+                if (!primaryLocation) return;
+
+                setPrimaryEventTriggered()
+
+                const iterate = new Promise((resolve, reject) => {
+                    const modified = []
+                    let count = 0
+
+                    apiData.forEach((location, index) => {
+
+                        let neighborhoods
+    
+                        if (location.meta.neighborhoods) {
+                            neighborhoods = location.meta.neighborhoods
+                            delete location.meta.neighborhoods
+                            delete location.meta.is_primary
+                        }
+    
+                        const payload = {
+                            ...location.meta,
+                            requesting_domain: location.domain,
+                            id: location.id,
+                            appsero_info: {
+                                appsero_api_key: APPSERO_API_KEY,
+                                appsero_plugin_name: APPSERO_PLUGIN_NAME
+                            },
+                            primary_keyword: PRIMARY_KEYWORD
+                        }
+    
+                        payload.mainLocation = primaryLocation
+    
+                        axios({
+                            method: "POST",
+                            url: SERVER_URL + 'locations-generator/generate',
+                            data: payload
+                        })
+                        .then(async res => {
+                            res.data.meta = clean({
+                                country: payload.country,
+                                state: payload.state,
+                                city: payload.city,
+                                place_id: payload.place_id || undefined,
+                                street: payload.street || undefined,
+                                zip_code: payload.zip_code || undefined,
+                                neighborhoods: neighborhoods || undefined,
+                                is_primary: res.data.id === button.dataset.id
+                            })
+    
+                            modified.push(res.data)
+                            count++
+                        })
+                        .catch(err => {
+                            console.log(`ERROR IMPORTING LOCATION DATA: ${err.message}`)  
+                        })
+                        .then(() => {
+                            if (count === apiData.length) resolve(modified)
+                        })
+                    })
+                })
+
+                iterate.then((modified) => {
+                    primaryLocationForm.new_primary_api_data.value = JSON.stringify(modified)
+                    primaryLocationForm.submit()
+                })
+            })
+        })
+
+        
+        function setPrimaryEventTriggered() {
+            document.querySelector('._geocentric-wrapper .locations-tab .header-wrapper a').href = 'javascript:void(0)'
+            document.querySelector('._geocentric-wrapper .locations-tab .header-wrapper button').disabled = true
+            document.querySelectorAll('._geocentric-wrapper .locations-tab .location .options-button').forEach(button => {
+                button.disabled = true
+            })
+        }
+    }
+
+
+    function clean(obj) {
+        for (var propName in obj) {
+            if (obj[propName] === null || obj[propName] === undefined) {
+                delete obj[propName];
+            }
+        }
+        return obj
     }
 }
 
