@@ -4,6 +4,8 @@ const URL_PARAMS = new URLSearchParams(window.location.search)
 
 if (URL_PARAMS.get('page') == '_geocentric') {
 
+    document.querySelector('._geocentric-wrapper').style.display = 'inherit'
+
     const MAIN_WRAPPER_DATA = document.querySelector('._geocentric-wrapper').dataset
 
     const SERVER_URL = MAIN_WRAPPER_DATA.api_server_url
