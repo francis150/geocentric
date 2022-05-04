@@ -7,7 +7,7 @@ if (!class_exists('_geocentric_api_data')) {
         private $config_dir;
         
         function __construct() {
-            $this->config_dir = WP_CONTENT_DIR . '/uploads/_geocentric/';
+            $this->config_dir = WP_CONTENT_DIR . '/uploads/_geocentric/v2.0.0/';
             $this->load_api_data();
         }
 
@@ -24,7 +24,7 @@ if (!class_exists('_geocentric_api_data')) {
         @Description: Gets all the available api data stored in api_data.json
         @Return: ArrayObject
         */
-        private function get_all_api_data() {
+        public function get_all_api_data() {
             if (!isset($this->api_data)) return array();
             return $this->api_data;
         }
@@ -100,7 +100,7 @@ if (!class_exists('_geocentric_api_data')) {
         @Params: string $bulk_data
         */
         public function set_all_api_data($bulk_data) {
-            $new_api_data = json_decode(stripslashes($bulk_data), true)['success'];
+            $new_api_data = json_decode(stripslashes($bulk_data), true);
 
             if (file_put_contents($this->config_dir . 'api_data.json', json_encode($new_api_data))) {
                 $this->load_api_data();
@@ -145,6 +145,32 @@ if (!class_exists('_geocentric_api_data')) {
             } else {
                 return false;
             }
+        }
+        
+        /**
+         * @Description: Returns the primary location if is set
+         * @Returns: ArrayObject
+         */
+        public function primary_location() {
+            if (!isset($this->api_data)) return;
+
+            $primaryLocations = array_filter($this->api_data, function($val, $key) {
+                return $val['meta']['is_primary'];
+            }, ARRAY_FILTER_USE_BOTH);
+
+            return $primaryLocations[0]['meta'] ?? NULL;
+        }
+
+        /**
+         * @Description: Check if the location is primary by ID
+         * @Returns: boolean
+         * @params: string $id
+         */
+        public function is_primary($id) {
+            if (!isset($this->api_data)) return;
+
+            $location = $this->get_api_data($id);
+            return (isset($location['meta']['is_primary']) && $location['meta']['is_primary']) ? true : false;
         }
     }
 }

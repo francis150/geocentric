@@ -21,7 +21,6 @@ if (!class_exists('_geocentric_core')) {
             add_action( 'admin_menu', array($this, 'add_admin_menu_items'));
             add_action('admin_head', array($this, 'addto_admin_head'));
             add_action('admin_footer', array($this, 'addto_admin_footer'));
-            add_action('wp_head', array($this, 'add_to_wp_head'));
             add_action('init', array($this, 'init_component_shortcodes'));
         }
 
@@ -43,13 +42,14 @@ if (!class_exists('_geocentric_core')) {
 
             if (!$this->appsero_controller->appsero_check_license()) return;
             
-            add_shortcode('geocentric-weather', array($this->component_controller, 'weather_component'));
-            add_shortcode('geocentric-about', array($this->component_controller, 'about_component'));
-            add_shortcode('geocentric-neighbourhoods', array($this->component_controller, 'neighbourhoods_component'));
-            add_shortcode('geocentric-thingstodo', array($this->component_controller, 'thingstodo_component'));
-            add_shortcode('geocentric-mapembed', array($this->component_controller, 'mapembed_component'));
-            add_shortcode('geocentric-drivingdirections', array($this->component_controller, 'drivingdirections_component'));
-            add_shortcode('geocentric-reviews', array($this->component_controller, 'reviews_component'));
+            add_shortcode('geocentric_weather', array($this->component_controller, 'weather_component'));
+            add_shortcode('geocentric_about', array($this->component_controller, 'about_component'));
+            add_shortcode('geocentric_neighborhoods', array($this->component_controller, 'neighborhoods_component'));
+            add_shortcode('geocentric_thingstodo', array($this->component_controller, 'thingstodo_component'));
+            add_shortcode('geocentric_busstops', array($this->component_controller, 'busstops_component'));
+            add_shortcode('geocentric_mapembed', array($this->component_controller, 'mapembed_component'));
+            add_shortcode('geocentric_drivingdirections', array($this->component_controller, 'drivingdirections_component'));
+            add_shortcode('geocentric_reviews', array($this->component_controller, 'reviews_component'));
         }
 
         public function navto_main_admin_page() {
@@ -60,28 +60,21 @@ if (!class_exists('_geocentric_core')) {
             }
         }
 
-        public function add_to_wp_head() {
-            // Shoelace
-            wp_enqueue_style('_geocentric_wp_shoelace_styles', 'https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.60/dist/themes/light.css');
-        }
-
         public function addto_admin_footer() {
             // Admin page script file
             wp_enqueue_script('_geocentric_adminpage_scripts', plugins_url( '../admin/js/main_page.js', __FILE__ ));
             
             // npm-uuid cdn import
             wp_enqueue_script('_geocentric_uuid_cdn_script', 'https://cdn.jsdelivr.net/npm/uuid@latest/dist/umd/uuidv4.min.js');
-
-            // axios
-            wp_enqueue_script('_geocentric_axios_cdn_script', 'https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js');
         }
 
         public function addto_admin_head() {
+            // WP Thickbox
+            add_thickbox();
             // Admin page style file
             wp_enqueue_style('_geocentric_adminpage_styles', plugins_url( '../admin/styles/main_page.css', __FILE__ ));
-
-            // Shoelace styles
-            wp_enqueue_style('_geocentric_adminpage_shoelace_styles', 'https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.60/dist/themes/light.css');
+            // axios
+            wp_enqueue_script('_geocentric_axios_cdn_script', 'https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js');
         }
 
     }

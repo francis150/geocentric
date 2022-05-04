@@ -9,9 +9,6 @@ $pluginConfigController = new _geocentric_plugin_config();
 require_once plugin_dir_path(__FILE__) . '../../includes/geocentric_component_styles_class.php';
 $componentStylesController = new _geocentric_component_styles();
 
-require_once plugin_dir_path(__FILE__) . '../../includes/geocentric_userinput_data_class.php';
-$userInputDataController = new _geocentric_userinput_data();
-
 require_once plugin_dir_path(__FILE__) . '../../includes/geocentric_api_data_class.php';
 $apiDataController = new _geocentric_api_data();
 
@@ -19,914 +16,736 @@ $config_data = $pluginConfigController->get_plugin_config_data();
 
 require_once plugin_dir_path(__FILE__) . 'main_page_functions.php';
 
+
 $component_styles = $componentStylesController->get_component_styles();
+$api_data = $apiDataController->get_all_api_data();
 $settings = $settingsController->get_settings_data();
 
-if (!$componentStylesController->styles_isset()) {
-    ?>
-    <div class="_geocentric-main"><section class="get-started-wrapper">
-        <div class="content-wrapper">
-            <img src="<?php echo $pluginConfigController->get_plugin_logo(); ?>">
-            <p><?php echo $config_data['plugin_desc']; ?></p>
+// Is the plugin configured?
+$pluginConfigured = $componentStylesController->styles_isset();
+
+//Get the active tab from the $_GET param
+$default_tab = null;
+$tab = !$pluginConfigured ? 'settings' : (isset($_GET['tab']) ? $_GET['tab'] : $default_tab);
+
+
+?><div
+    style="display: none;"
+    class="_geocentric-wrapper" 
+    data-api_server_url="<?php echo $config_data['server_url']; ?>" 
+    data-geodatabase_url="<?php echo $config_data['geodatabase_url']; ?>" 
+    data-appsero_api_key="<?php echo $config_data['appsero_api_key']; ?>" 
+    data-appsero_plugin_name="<?php echo $config_data['appsero_plugin_name']; ?>"
+    <?php if ($pluginConfigured) { ?>
+        data-primary_keyword="<?php echo $settings['primary_keyword'] ?>" 
+        data-primary_location="<?php echo str_replace("\"", "&#34;" ,json_encode($apiDataController->primary_location())); ?>" 
+    <?php } ?>
+    >
+    <div class="header"><h1>Geocentric Plugin</h1> <a href="http://seorockettools.com/"><img src="<?php echo plugin_dir_url(dirname(__FILE__)) . 'assets/seorocket-text-logo.svg'; ?>" alt="SEO Rocket Tools"></a></div>
+    
+    <div class="nav">
+        <nav class="nav-tab-wrapper">
+            <a href="?page=_geocentric" class="nav-tab <?php if($tab===null):?>nav-tab-active<?php endif; ?>">Locations</a>
+            <a href="?page=_geocentric&tab=styling" class="nav-tab <?php if($tab==="styling"):?>nav-tab-active<?php endif; ?>">Styling</a>
+            <a href="?page=_geocentric&tab=settings" class="nav-tab <?php if($tab==="settings"):?>nav-tab-active<?php endif; ?>">Settings</a>
+        </nav>
+    </div>
+
+    <div class="_inner-wrapper">
+    <?php
+
+switch ($tab) {
+    default:
+        ?>
+        <div class="locations-tab">
+            <h2>Locations 📌</h2>
+            <div class="header-wrapper">
+                <p>List down the all your Service Areas below to use all the goecentric data.</p>
+                <a href="?page=_geocentric&tab=new-location-form"><button class="button-primary">Add location</button></a>
+            </div>
+            <hr>
+            <div class="locations-list">
+                <?php
+                foreach ($api_data as $location) {
+                    ?>
+                    <div class="location" 
+                    id="<?php echo $location['id']; ?>"
+                    data-name="<?php echo $location['name']; ?>">
+                        <p><?php echo $location['name']; ?></p>
+                        <?php if ($location['meta']['is_primary']) echo '<span>Primary</span>'; ?>
+                        <a title="Shortcodes" href="#TB_inline?height=200&width=550&inlineId=shortcode-tb-wrapper" class="thickbox shortcodes-button" ><i class="material-icons-outlined">data_array</i></a>
+                        <button title="Options" class="options-button">
+                            <i class="material-icons-outlined">expand_circle_down</i>
+                            <div class="dropdown-menu">
+                                <a class="remove-location-button" href="?page=_geocentric&remove-id=<?php echo $location['id']; ?>" <?php if($location['meta']['is_primary']) echo 'data-is-primary="true"'; ?>>Remove</a>
+                                <a data-id="<?php echo $location['id']; ?>" <?php if($location['meta']['is_primary']) echo 'data-is-primary="true"'; ?> class="set-as-primary-button" href="#">Set as Primary</a>
+                            </div>
+                        </button>
+                    </div>
+                    <?php
+                }
+                ?>
+            </div>
+
+            <!-- shortcodes thickbox -->
+            <div id="shortcode-tb-wrapper" style="display: none;">
+                <div class="shortcode-tb">
+                    <h3 class="shortcodes-tb-title">_LOCATION</h3>
+                    <p>Add these shortcodes to your <b>Service Area Pages</b> to display the geo-relevant information.</p>
+                    <textarea readonly class="shortcodes-tb-textarea" rows="11"></textarea>
+                    <button id="tb-copy-shortcodes-button" class="button-secondary">Copy All</button>
+                </div>
+            </div>
+
+            <form class="primary-location-form" style="display: none;" action="#" method="POST">
+                <textarea class="current_api_data" name="current_api_data"><?php if (isset($api_data)) echo json_encode($api_data); ?></textarea>
+                <textarea class="new_primary_api_data" name="new_primary_api_data"></textarea>
+            </form>
+
+        </div>
+        <?php
+        break;
+    case 'settings':
+        ?>
+        <div class="settings-tab">
+            <h2>Plugin Settings ⚙</h2>
+            <p>⛔ You can't proceed with the plugin unless this form is set.</p>
+            <hr>
             <form action="#" method="POST">
-                <input type="submit" value="Get Started!" name="_get-started" class="get-started-btn">
+                <div class="input-group">
+                    <label>Primary Keyword<span>*</span></label>
+                    <input type="text" required name="primary_keyword" <?php if (isset($settings['primary_keyword'])) echo "value=\"{$settings['primary_keyword']}\""; ?>>
+                    <small>Properly Input your Main Keyword here <b>WITHOUT LOCATION</b> for best results.</small>
+                </div>
+
+                <div class="input-group">
+                    <label>Business Name<span>*</span></label>
+                    <input type="text" required name="business_name" <?php if (isset($settings['business_name'])) echo "value=\"{$settings['business_name']}\""; ?>>
+                </div>
+
+                <div class="form-footer">
+                    <input name="_settings-form-update" type="submit" class="button-primary" value="Save"/>
+                </div>
             </form>
         </div>
+        <?php
+        break;
+    case 'styling':
+        ?>
+        <div class="styling-tab">
+            <h2>Component Styling 🎨</h2>
+            <p>Style how your geocentric data gets displayed on your page.</p>
+            <div class="summary">
+                <p>
+                    <b>Quick jump to...</b> 
+                    <a href="#:~:text=Component%20%7C%20Reviews%20Component-,General,-Components%20Gap">General</a> |
+                    <a href="#:~:text=Components%20Padding-,Weather%20Component,-Background%20Color">Weather Component</a> |
+                    <a href="#:~:text=About%20Component,-Title">About Component</a> |
+                    <a href="#:~:text=Neighborhoods%20Component,-Title">Neighborhoods Component</a> |
+                    <a href="#:~:text=Things%20to%20Do%20Component,-Title">Things to Do Component</a> |
+                    <a href="#:~:text=for%20each%20item%3F-,Bus%20Stops%20Component,-Title">Bus Stops Component</a> |
+                    <a href="#:~:text=Map%20Embed%20Component,-Title">Map Embed Component</a> |
+                    <a href="#:~:text=Width%20(%25)-,Driving%20Directions%20Component,-Title">Driving Directions Component</a> |
+                    <a href="#:~:text=Width%20(%25)-,Reviews%20Component,-Title">Reviews Component</a>
+                </p>
+            </div>
+            <hr>
 
-        <img src="<?php echo plugin_dir_url(dirname(__FILE__)) . 'assets/homepage-illustration.svg'; ?>" class="illustration">
-    </section></div>
-    <?php
-} else {
-    ?>
-    <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.55/dist/shoelace.js"></script>    
-
-    <div class="_geocentric-main">
-
-        <section class="overlay-form newlocation-form">
-            <form action="#" method="POST">
-
-                <!-- Hidden feilds -->
-                <input type="text" style="display: none;" class="new_key" name="new_key">
-                <input type="text" style="display: none;" class="edit_key" name="edit_key">
-                <input type="text" style="display: none;" class="remove_key" name="remove_key">
-                <input type="text" style="display: none;" class="mainlocation_key" name="mainlocation_key" value="">
+            <form action="?page=_geocentric&tab=styling" method="POST">
                 
-                <input type="text" style="display: none;" class="city_name" name="city_name" value="">
-                <input type="text" style="display: none;" class="state_name" name="state_name" value="">
-                <input type="text" style="display: none;" class="country_name" name="country_name" value="">
-
-                <input type="text" style="display: none;" class="is_primary" name="is_primary">
-
-                <div class="head">
-                    <h2>...</h2>
-                    <sl-icon-button class="close-button" name="x-lg" label="Close"></sl-icon-button>
+                <div class="general-group group">
+                    <h3  id="general">General</h3>
+                    <div class="row">
+                        <div class="input-group">
+                            <label>Components Gap</label>
+                            <input type="number" name="general_component-gap" value="<?php echo $component_styles['general']['componentsGap'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Font Family</label>
+                            <select class="general_font-family" autocomplete="on" name="general_font-family" data-setvalue="<?php echo $component_styles['general']['componentsFontFamily'] ?>">
+                            </select>
+                        </div>
+                    </div>
                 </div>
 
-                <sl-divider></sl-divider>
+                <div id="weathercomponent" class="weathercomponent-group group">
+                    <h3>Weather Component</h3>
+                    <div class="row">
+                        <div class="input-group">
+                            <label>Background Color</label>
+                            <input type="text" name="weathercomponent_background-color" value="<?php echo $component_styles['weatherComponent']['backgroundColor'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Text Color</label>
+                            <input type="text" name="weathercomponent_text-color"  value="<?php echo $component_styles['weatherComponent']['textColor'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Unit</label>
+                            <select name="weathercomponent_unit">
+                                <option <?php if ($component_styles['weatherComponent']['unit'] == "fahrenheit") echo 'selected'; ?> value="fahrenheit">Fahrenheit</option>
+                                <option <?php if ($component_styles['weatherComponent']['unit'] == "celsius") echo 'selected'; ?> value="celsius">Celsius</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
 
-                <div class="three-col-div">
+                <div id="aboutcomponent" class="aboutcomponent-group group">
+                    <h3>About Component</h3>
 
-                    <div class="input-wrapper">
+                    <h4>Title</h4>
+                    <div class="row">
+                        <div class="input-group">
+                            <label>Font Size</label>
+                            <input type="number" name="aboutcomponent_title_font-size" value="<?php echo $component_styles['aboutComponent']['title']['fontSize'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Font Weight</label>
+                            <input type="number" name="aboutcomponent_title_font-weight" value="<?php echo $component_styles['aboutComponent']['title']['fontWeight'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Font Color</label>
+                            <input type="text" name="aboutcomponent_title_font-color" value="<?php echo $component_styles['aboutComponent']['title']['fontColor'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Text Alignment</label>
+                            <select name="aboutcomponent_title_text-alignment">
+                                <option <?php if ($component_styles['aboutComponent']['title']['textAlignment'] == "right") echo 'selected'; ?> value="right">Right</option>
+                                <option <?php if ($component_styles['aboutComponent']['title']['textAlignment'] == "left") echo 'selected'; ?> value="left">Left</option>
+                                <option <?php if ($component_styles['aboutComponent']['title']['textAlignment'] == "center") echo 'selected'; ?> value="center">Center</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <h4>Content</h4>
+                    <div class="row">
+                        <div class="input-group">
+                            <label>Font Size</label>
+                            <input type="number" name="aboutcomponent_content_font-size" value="<?php echo $component_styles['aboutComponent']['content']['fontSize'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Font Weight</label>
+                            <input type="number" name="aboutcomponent_content_font-weight" value="<?php echo $component_styles['aboutComponent']['content']['fontWeight'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Font Color</label>
+                            <input type="text" name="aboutcomponent_content_font-color" value="<?php echo $component_styles['aboutComponent']['content']['fontColor'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Text Alignment</label>
+                            <select name="aboutcomponent_content_text-alignment">
+                                <option <?php if ($component_styles['aboutComponent']['content']['textAlignment'] == "right") echo 'selected'; ?> value="right">Right</option>
+                                <option <?php if ($component_styles['aboutComponent']['content']['textAlignment'] == "left") echo 'selected'; ?> value="left">Left</option>
+                                <option <?php if ($component_styles['aboutComponent']['content']['textAlignment'] == "center") echo 'selected'; ?> value="center">Center</option>
+                                <option <?php if ($component_styles['aboutComponent']['content']['textAlignment'] == "justify") echo 'selected'; ?> value="justify">Justify</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="neighborhoodscomponent" class="neighborhoodscomponent-group group">
+                    <h3>Neighborhoods Component</h3>
+
+                    <h4>Title</h4>
+                    <div class="row">
+                        <div class="input-group">
+                            <label>Font Size</label>
+                            <input type="number" name="neighborhoodscomponent_title_font-size" value="<?php echo $component_styles['neighborhoodsComponent']['title']['fontSize'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Font Weight</label>
+                            <input type="number" name="neighborhoodscomponent_title_font-weight" value="<?php echo $component_styles['neighborhoodsComponent']['title']['fontWeight'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Font Color</label>
+                            <input type="text" name="neighborhoodscomponent_title_font-color" value="<?php echo $component_styles['neighborhoodsComponent']['title']['fontColor'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Text Alignment</label>
+                            <select name="neighborhoodscomponent_title_text-alignment">
+                                <option <?php if ($component_styles['neighborhoodsComponent']['title']['textAlignment'] == "right") echo 'selected'; ?> value="right">Right</option>
+                                <option <?php if ($component_styles['neighborhoodsComponent']['title']['textAlignment'] == "left") echo 'selected'; ?> value="left">Left</option>
+                                <option <?php if ($component_styles['neighborhoodsComponent']['title']['textAlignment'] == "center") echo 'selected'; ?> value="center">Center</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <h4>Neighborhoods</h4>
+                    <div class="row">
+                        <div class="input-group">
+                            <label>Font Size</label>
+                            <input type="number" name="neighborhoodscomponent_neighborhoods_font-size" value="<?php echo $component_styles['neighborhoodsComponent']['neighborhoods']['fontSize'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Font Weight</label>
+                            <input type="number" name="neighborhoodscomponent_neighborhoods_font-weight" value="<?php echo $component_styles['neighborhoodsComponent']['neighborhoods']['fontWeight'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Font Color</label>
+                            <input type="text" name="neighborhoodscomponent_neighborhoods_font-color" value="<?php echo $component_styles['neighborhoodsComponent']['neighborhoods']['fontColor'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Text Alignment</label>
+                            <select name="neighborhoodscomponent_neighborhoods_text-alignment">
+                                <option <?php if ($component_styles['neighborhoodsComponent']['neighborhoods']['textAlignment'] == "right") echo 'selected'; ?> value="right">Right</option>
+                                <option <?php if ($component_styles['neighborhoodsComponent']['neighborhoods']['textAlignment'] == "left") echo 'selected'; ?> value="left">Left</option>
+                                <option <?php if ($component_styles['neighborhoodsComponent']['neighborhoods']['textAlignment'] == "center") echo 'selected'; ?> value="center">Center</option>
+                                <option <?php if ($component_styles['neighborhoodsComponent']['neighborhoods']['textAlignment'] == "justify") echo 'selected'; ?> value="justify">Justify</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-group">
+                            <label>Font Color (Hovered)</label>
+                            <input type="text" name="neighborhoodscomponent_neighborhoods_font-color-hovered" value="<?php echo $component_styles['neighborhoodsComponent']['neighborhoods']['fontColorHovered'] ?>">
+                        </div>
+                    </div>
+
+                </div>
+                
+                <div id="thingstodocomponent" class="thingstodocomponent-group group">
+                    <h3>Things to Do Component</h3>
+
+                    <h4>Title</h4>
+                    <div class="row">
+                        <div class="input-group">
+                            <label>Font Size</label>
+                            <input type="number" name="thingstodocomponent_title_font-size" value="<?php echo $component_styles['thingsToDoComponent']['title']['fontSize'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Font Weight</label>
+                            <input type="number" name="thingstodocomponent_title_font-weight" value="<?php echo $component_styles['thingsToDoComponent']['title']['fontWeight'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Font Color</label>
+                            <input type="text" name="thingstodocomponent_title_font-color" value="<?php echo $component_styles['thingsToDoComponent']['title']['fontColor'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Text Alignment</label>
+                            <select name="thingstodocomponent_title_text-alignment">
+                                <option <?php if ($component_styles['thingsToDoComponent']['title']['textAlignment'] == "right") echo 'selected'; ?> value="right">Right</option>
+                                <option <?php if ($component_styles['thingsToDoComponent']['title']['textAlignment'] == "left") echo 'selected'; ?> value="left">Left</option>
+                                <option <?php if ($component_styles['thingsToDoComponent']['title']['textAlignment'] == "center") echo 'selected'; ?> value="center">Center</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <h4>Items</h4>
+                    <div class="row">
+                        <div class="input-group">
+                            <label>Background Color</label>
+                            <input type="text" name="thingstodocomponent_items_background-color" value="<?php echo $component_styles['thingsToDoComponent']['items']['backgroundColor'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Border Color</label>
+                            <input type="text" name="thingstodocomponent_items_border-color" value="<?php echo $component_styles['thingsToDoComponent']['items']['borderColor'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Border Radius</label>
+                            <input type="number" name="thingstodocomponent_items_border-radius" value="<?php echo $component_styles['thingsToDoComponent']['items']['borderRadius'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Border Width</label>
+                            <input type="number" name="thingstodocomponent_items_border-width" value="<?php echo $component_styles['thingsToDoComponent']['items']['borderWidth'] ?>">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-group">
+                            <label>Gap</label>
+                            <input type="number" name="thingstodocomponent_items_gap" value="<?php echo $component_styles['thingsToDoComponent']['items']['gap'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Padding</label>
+                            <input type="number" name="thingstodocomponent_items_padding" value="<?php echo $component_styles['thingsToDoComponent']['items']['padding'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Hover Effect</label>
+                            <select name="thingstodocomponent_items_hover-effect">
+                                <option <?php if ($component_styles['thingsToDoComponent']['items']['hoverEffect'] == "scaleUp") echo 'selected'; ?> value="scaleUp">Scale Up</option>
+                                <option <?php if ($component_styles['thingsToDoComponent']['items']['hoverEffect'] == "scaleDown") echo 'selected'; ?> value="scaleDown">Scale Down</option>
+                                <option <?php if ($component_styles['thingsToDoComponent']['items']['hoverEffect'] == "rise") echo 'selected'; ?> value="rise">Rise</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <h4>Image</h4>
+                    <div class="row">
+                        <div class="input-group">
+                            <label>Border Color</label>
+                            <input type="text" name="thingstodocomponent_image_border-color" value="<?php echo $component_styles['thingsToDoComponent']['image']['borderColor'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Border Radius</label>
+                            <input type="number" name="thingstodocomponent_image_border-radius" value="<?php echo $component_styles['thingsToDoComponent']['image']['borderRadius'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Border Width</label>
+                            <input type="number" name="thingstodocomponent_image_border-width" value="<?php echo $component_styles['thingsToDoComponent']['image']['borderWidth'] ?>">
+                        </div>
+                    </div>
+
+                    <h4>Item Name</h4>
+                    <div class="row">
+                        <div class="input-group">
+                            <label>Font Size</label>
+                            <input type="number" name="thingstodocomponent_itemname_font-size" value="<?php echo $component_styles['thingsToDoComponent']['itemName']['fontSize'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Font Weight</label>
+                            <input type="number" name="thingstodocomponent_itemname_font-weight" value="<?php echo $component_styles['thingsToDoComponent']['itemName']['fontWeight'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Font Color</label>
+                            <input type="text" name="thingstodocomponent_itemname_font-color" value="<?php echo $component_styles['thingsToDoComponent']['itemName']['fontColor'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Text Alignment</label>
+                            <select name="thingstodocomponent_itemname_text-alignment">
+                                <option <?php if ($component_styles['thingsToDoComponent']['itemName']['textAlignment'] == "right") echo 'selected'; ?> value="right">Right</option>
+                                <option <?php if ($component_styles['thingsToDoComponent']['itemName']['textAlignment'] == "left") echo 'selected'; ?> value="left">Left</option>
+                                <option <?php if ($component_styles['thingsToDoComponent']['itemName']['textAlignment'] == "center") echo 'selected'; ?> value="center">Center</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="input-group thingstodocomponent_showratings">
+                        <input type="checkbox" name="thingstodocomponent_showratings" <?php if($component_styles['thingsToDoComponent']['showReviews']) echo 'checked'; ?>>
+                        <label>Show ratings for each item?</label>
+                    </div>
+
+                </div>
+
+                <div id="busstopscomponent" class="busstopscomponent-group group">
+                    <h3>Bus Stops Component</h3>
+
+                    <h4>Title</h4>
+                    <div class="row">
+                        <div class="input-group">
+                            <label>Font Size</label>
+                            <input type="number" name="busstopscomponent_title_font-size" value="<?php echo $component_styles['busStopsComponent']['title']['fontSize'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Font Weight</label>
+                            <input type="number" name="busstopscomponent_title_font-weight" value="<?php echo $component_styles['busStopsComponent']['title']['fontWeight'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Font Color</label>
+                            <input type="text" name="busstopscomponent_title_font-color" value="<?php echo $component_styles['busStopsComponent']['title']['fontColor'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Text Alignment</label>
+                            <select name="busstopscomponent_title_text-alignment">
+                                <option <?php if ($component_styles['busStopsComponent']['title']['textAlignment'] == "right") echo 'selected'; ?> value="right">Right</option>
+                                <option <?php if ($component_styles['busStopsComponent']['title']['textAlignment'] == "left") echo 'selected'; ?> value="left">Left</option>
+                                <option <?php if ($component_styles['busStopsComponent']['title']['textAlignment'] == "center") echo 'selected'; ?> value="center">Center</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <h4>Item Name</h4>
+                    <div class="row">
+                        <div class="input-group">
+                            <label>Font Size</label>
+                            <input type="number" name="busstopscomponent_itemname_font-size" value="<?php echo $component_styles['busStopsComponent']['itemName']['fontSize'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Font Weight</label>
+                            <input type="number" name="busstopscomponent_itemname_font-weight" value="<?php echo $component_styles['busStopsComponent']['itemName']['fontWeight'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Font Color</label>
+                            <input type="text" name="busstopscomponent_itemname_font-color" value="<?php echo $component_styles['busStopsComponent']['itemName']['fontColor'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Text Alignment</label>
+                            <select name="busstopscomponent_itemname_text-alignment">
+                                <option <?php if ($component_styles['busStopsComponent']['itemName']['textAlignment'] == "right") echo 'selected'; ?> value="right">Right</option>
+                                <option <?php if ($component_styles['busStopsComponent']['itemName']['textAlignment'] == "left") echo 'selected'; ?> value="left">Left</option>
+                                <option <?php if ($component_styles['busStopsComponent']['itemName']['textAlignment'] == "center") echo 'selected'; ?> value="center">Center</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <h4>Items</h4>
+                    <div class="row">
+                        <div class="input-group">
+                            <label>Gap</label>
+                            <input type="number" name="busstopscomponent_items_gap" value="<?php echo $component_styles['busStopsComponent']['items']['gap'] ?>">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="mapembedcomponent" class="mapembedcomponent-group group">
+                    <h3>Map Embed Component</h3>
+
+                    <h4>Title</h4>
+                    <div class="row">
+                        <div class="input-group">
+                            <label>Font Size</label>
+                            <input type="number" name="mapembedcomponent_title_font-size" value="<?php echo $component_styles['mapEmbedComponent']['title']['fontSize'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Font Weight</label>
+                            <input type="number" name="mapembedcomponent_title_font-weight" value="<?php echo $component_styles['mapEmbedComponent']['title']['fontWeight'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Font Color</label>
+                            <input type="text" name="mapembedcomponent_title_font-color" value="<?php echo $component_styles['mapEmbedComponent']['title']['fontColor'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Text Alignment</label>
+                            <select name="mapembedcomponent_title_text-alignment">
+                                <option <?php if ($component_styles['mapEmbedComponent']['title']['textAlignment'] == "right") echo 'selected'; ?> value="right">Right</option>
+                                <option <?php if ($component_styles['mapEmbedComponent']['title']['textAlignment'] == "left") echo 'selected'; ?> value="left">Left</option>
+                                <option <?php if ($component_styles['mapEmbedComponent']['title']['textAlignment'] == "center") echo 'selected'; ?> value="center">Center</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <h4>Map</h4>
+                    <div class="row">
+                        <div class="input-group">
+                            <label>Height (px)</label>
+                            <input type="number" name="mapembedcomponent_map_height" value="<?php echo $component_styles['mapEmbedComponent']['map']['height'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Width (%)</label>
+                            <input max="100" min="1" type="number" name="mapembedcomponent_map_width" value="<?php echo $component_styles['mapEmbedComponent']['map']['width'] ?>">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="drivingdirectionscomponent" class="drivingdirectionscomponent-group group">
+                    <h3>Driving Directions Component</h3>
+
+                    <h4>Title</h4>
+                    <div class="row">
+                        <div class="input-group">
+                            <label>Font Size</label>
+                            <input type="number" name="drivingdirectionscomponent_title_font-size" value="<?php echo $component_styles['drivingDirectionsComponent']['title']['fontSize'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Font Weight</label>
+                            <input type="number" name="drivingdirectionscomponent_title_font-weight" value="<?php echo $component_styles['drivingDirectionsComponent']['title']['fontWeight'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Font Color</label>
+                            <input type="text" name="drivingdirectionscomponent_title_font-color" value="<?php echo $component_styles['drivingDirectionsComponent']['title']['fontColor'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Text Alignment</label>
+                            <select name="drivingdirectionscomponent_title_text-alignment">
+                                <option <?php if ($component_styles['drivingDirectionsComponent']['title']['textAlignment'] == "right") echo 'selected'; ?> value="right">Right</option>
+                                <option <?php if ($component_styles['drivingDirectionsComponent']['title']['textAlignment'] == "left") echo 'selected'; ?> value="left">Left</option>
+                                <option <?php if ($component_styles['drivingDirectionsComponent']['title']['textAlignment'] == "center") echo 'selected'; ?> value="center">Center</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <h4>Item Name</h4>
+                    <div class="row">
+                        <div class="input-group">
+                            <label>Font Size</label>
+                            <input type="number" name="drivingdirectionscomponent_itemname_font-size" value="<?php echo $component_styles['drivingDirectionsComponent']['itemName']['fontSize'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Font Weight</label>
+                            <input type="number" name="drivingdirectionscomponent_itemname_font-weight" value="<?php echo $component_styles['drivingDirectionsComponent']['itemName']['fontWeight'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Font Color</label>
+                            <input type="text" name="drivingdirectionscomponentt_itemname_font-color" value="<?php echo $component_styles['drivingDirectionsComponent']['itemName']['fontColor'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Text Alignment</label>
+                            <select name="drivingdirectionscomponent_itemname_text-alignment">
+                                <option <?php if ($component_styles['drivingDirectionsComponent']['itemName']['textAlignment'] == "right") echo 'selected'; ?> value="right">Right</option>
+                                <option <?php if ($component_styles['drivingDirectionsComponent']['itemName']['textAlignment'] == "left") echo 'selected'; ?> value="left">Left</option>
+                                <option <?php if ($component_styles['drivingDirectionsComponent']['itemName']['textAlignment'] == "center") echo 'selected'; ?> value="center">Center</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <h4>Items</h4>
+                    <div class="row">
+                        <div class="input-group">
+                            <label>Gap</label>
+                            <input type="number" name="drivingdirectionscomponent_items_gap" value="<?php echo $component_styles['drivingDirectionsComponent']['items']['gap'] ?>">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="reviewscomponent" class="reviewscomponent-group group">
+                    <h3>Reviews Component</h3>
+
+                    <h4>Title</h4>
+                    <div class="row">
+                        <div class="input-group">
+                            <label>Font Size</label>
+                            <input type="number" name="reviewscomponent_title_font-size" value="<?php echo $component_styles['reviewsComponent']['title']['fontSize'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Font Weight</label>
+                            <input type="number" name="reviewscomponent_title_font-weight" value="<?php echo $component_styles['reviewsComponent']['title']['fontWeight'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Font Color</label>
+                            <input type="text" name="reviewscomponent_title_font-color" value="<?php echo $component_styles['reviewsComponent']['title']['fontColor'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Text Alignment</label>
+                            <select name="reviewscomponent_title_text-alignment">
+                                <option <?php if ($component_styles['reviewsComponent']['title']['textAlignment'] == "right") echo 'selected'; ?> value="right">Right</option>
+                                <option <?php if ($component_styles['reviewsComponent']['title']['textAlignment'] == "left") echo 'selected'; ?> value="left">Left</option>
+                                <option <?php if ($component_styles['reviewsComponent']['title']['textAlignment'] == "center") echo 'selected'; ?> value="center">Center</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <h4>Items</h4>
+                    <div class="row">
+                        <div class="input-group">
+                            <label>Background Color</label>
+                            <input type="text" name="reviewscomponent_items_background-color" value="<?php echo $component_styles['reviewsComponent']['items']['backgroundColor'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Border Color</label>
+                            <input type="text" name="reviewscomponent_items_border-color" value="<?php echo $component_styles['reviewsComponent']['items']['borderColor'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Border Radius</label>
+                            <input type="number" name="reviewscomponent_items_border-radius" value="<?php echo $component_styles['reviewsComponent']['items']['borderRadius'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Border Width</label>
+                            <input type="number" name="reviewscomponent_items_border-width" value="<?php echo $component_styles['reviewsComponent']['items']['borderWidth'] ?>">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-group">
+                            <label>Gap</label>
+                            <input type="number" name="reviewscomponent_items_gap" value="<?php echo $component_styles['reviewsComponent']['items']['gap'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Padding</label>
+                            <input type="number" name="reviewscomponent_items_padding" value="<?php echo $component_styles['reviewsComponent']['items']['padding'] ?>">
+                        </div>
+                    </div>
+
+                    <h4>Author Name</h4>
+                    <div class="row">
+                        <div class="input-group">
+                            <label>Font Size</label>
+                            <input type="number" name="reviewscomponent_authorname_font-size" value="<?php echo $component_styles['reviewsComponent']['authorName']['fontSize'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Font Weight</label>
+                            <input type="number" name="reviewscomponent_authorname_font-weight" value="<?php echo $component_styles['reviewsComponent']['authorName']['fontWeight'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Font Color</label>
+                            <input type="text" name="reviewscomponent_authorname_font-color" value="<?php echo $component_styles['reviewsComponent']['authorName']['fontColor'] ?>">
+                        </div>
+                    </div>
+
+                    <h4>Review Body</h4>
+                    <div class="row">
+                        <div class="input-group">
+                            <label>Font Size</label>
+                            <input type="number" name="reviewscomponent_reviewbody_font-size" value="<?php echo $component_styles['reviewsComponent']['reviewBody']['fontSize'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Font Weight</label>
+                            <input type="number" name="reviewscomponent_reviewbody_font-weight" value="<?php echo $component_styles['reviewsComponent']['reviewBody']['fontWeight'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Font Color</label>
+                            <input type="text" name="reviewscomponent_reviewbody_font-color" value="<?php echo $component_styles['reviewsComponent']['reviewBody']['fontColor'] ?>">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-footer">
+                    <input name="_style-form-update" type="submit" class="button-primary" value="Save"/>
+                    <input name="_style-form-reset" type="submit" class="button-secondary" value="Reset Default Styles" style="margin-left: auto;">
+                </div>
+
+            </form>
+        </div>
+        <?php
+        break;
+    case 'new-location-form':
+        ?>
+        <div class="new-location-form">
+            <h2>Create New Location</h2>
+            <hr>
+            <form action="?page=_geocentric" method="POST">
+
+                <div class="row">
+                    <div class="input-group">
                         <label>Country <span>*</span></label>
-                        <select class="country" autocomplete="on" name="country_code" required>
-                            <option value="" selected disabled>Choose a country...</option>
-                            <option value="US">United States</option>
-                            <option value="AF">Afghanistan</option>
-                            <option value="AX">Aland Islands</option>
-                            <option value="AL">Albania</option>
-                            <option value="DZ">Algeria</option>
-                            <option value="AS">American Samoa</option>
-                            <option value="AD">Andorra</option>
-                            <option value="AO">Angola</option>
-                            <option value="AI">Anguilla</option>
-                            <option value="AQ">Antarctica</option>
-                            <option value="AG">Antigua And Barbuda</option>
-                            <option value="AR">Argentina</option>
-                            <option value="AM">Armenia</option>
-                            <option value="AW">Aruba</option>
-                            <option value="AU">Australia</option>
-                            <option value="AT">Austria</option>
-                            <option value="AZ">Azerbaijan</option>
-                            <option value="BS">Bahamas The</option>
-                            <option value="BH">Bahrain</option>
-                            <option value="BD">Bangladesh</option>
-                            <option value="BB">Barbados</option>
-                            <option value="BY">Belarus</option>
-                            <option value="BE">Belgium</option>
-                            <option value="BZ">Belize</option>
-                            <option value="BJ">Benin</option>
-                            <option value="BM">Bermuda</option>
-                            <option value="BT">Bhutan</option>
-                            <option value="BO">Bolivia</option>
-                            <option value="BA">Bosnia and Herzegovina</option>
-                            <option value="BW">Botswana</option>
-                            <option value="BV">Bouvet Island</option>
-                            <option value="BR">Brazil</option>
-                            <option value="IO">British Indian Ocean Territory</option>
-                            <option value="BN">Brunei</option>
-                            <option value="BG">Bulgaria</option>
-                            <option value="BF">Burkina Faso</option>
-                            <option value="BI">Burundi</option>
-                            <option value="KH">Cambodia</option>
-                            <option value="CM">Cameroon</option>
-                            <option value="CA">Canada</option>
-                            <option value="CV">Cape Verde</option>
-                            <option value="KY">Cayman Islands</option>
-                            <option value="CF">Central African Republic</option>
-                            <option value="TD">Chad</option>
-                            <option value="CL">Chile</option>
-                            <option value="CN">China</option>
-                            <option value="CX">Christmas Island</option>
-                            <option value="CC">Cocos (Keeling) Islands</option>
-                            <option value="CO">Colombia</option>
-                            <option value="KM">Comoros</option>
-                            <option value="CG">Congo</option>
-                            <option value="CD">Democratic Republic of the Congo</option>
-                            <option value="CK">Cook Islands</option>
-                            <option value="CR">Costa Rica</option>
-                            <option value="CI">Cote D'Ivoire (Ivory Coast)</option>
-                            <option value="HR">Croatia</option>
-                            <option value="CU">Cuba</option>
-                            <option value="CY">Cyprus</option>
-                            <option value="CZ">Czech Republic</option>
-                            <option value="DK">Denmark</option>
-                            <option value="DJ">Djibouti</option>
-                            <option value="DM">Dominica</option>
-                            <option value="DO">Dominican Republic</option>
-                            <option value="TL">East Timor</option>
-                            <option value="EC">Ecuador</option>
-                            <option value="EG">Egypt</option>
-                            <option value="SV">El Salvador</option>
-                            <option value="GQ">Equatorial Guinea</option>
-                            <option value="ER">Eritrea</option>
-                            <option value="EE">Estonia</option>
-                            <option value="ET">Ethiopia</option>
-                            <option value="FK">Falkland Islands</option>
-                            <option value="FO">Faroe Islands</option>
-                            <option value="FJ">Fiji Islands</option>
-                            <option value="FI">Finland</option>
-                            <option value="FR">France</option>
-                            <option value="GF">French Guiana</option>
-                            <option value="PF">French Polynesia</option>
-                            <option value="TF">French Southern Territories</option>
-                            <option value="GA">Gabon</option>
-                            <option value="GM">Gambia The</option>
-                            <option value="GE">Georgia</option>
-                            <option value="DE">Germany</option>
-                            <option value="GH">Ghana</option>
-                            <option value="GI">Gibraltar</option>
-                            <option value="GR">Greece</option>
-                            <option value="GL">Greenland</option>
-                            <option value="GD">Grenada</option>
-                            <option value="GP">Guadeloupe</option>
-                            <option value="GU">Guam</option>
-                            <option value="GT">Guatemala</option>
-                            <option value="GG">Guernsey and Alderney</option>
-                            <option value="GN">Guinea</option>
-                            <option value="GW">Guinea-Bissau</option>
-                            <option value="GY">Guyana</option>
-                            <option value="HT">Haiti</option>
-                            <option value="HM">Heard Island and McDonald Islands</option>
-                            <option value="HN">Honduras</option>
-                            <option value="HK">Hong Kong S.A.R.</option>
-                            <option value="HU">Hungary</option>
-                            <option value="IS">Iceland</option>
-                            <option value="IN">India</option>
-                            <option value="ID">Indonesia</option>
-                            <option value="IR">Iran</option>
-                            <option value="IQ">Iraq</option>
-                            <option value="IE">Ireland</option>
-                            <option value="IL">Israel</option>
-                            <option value="IT">Italy</option>
-                            <option value="JM">Jamaica</option>
-                            <option value="JP">Japan</option>
-                            <option value="JE">Jersey</option>
-                            <option value="JO">Jordan</option>
-                            <option value="KZ">Kazakhstan</option>
-                            <option value="KE">Kenya</option>
-                            <option value="KI">Kiribati</option>
-                            <option value="KP">North Korea</option>
-                            <option value="KR">South Korea</option>
-                            <option value="KW">Kuwait</option>
-                            <option value="KG">Kyrgyzstan</option>
-                            <option value="LA">Laos</option>
-                            <option value="LV">Latvia</option>
-                            <option value="LB">Lebanon</option>
-                            <option value="LS">Lesotho</option>
-                            <option value="LR">Liberia</option>
-                            <option value="LY">Libya</option>
-                            <option value="LI">Liechtenstein</option>
-                            <option value="LT">Lithuania</option>
-                            <option value="LU">Luxembourg</option>
-                            <option value="MO">Macau S.A.R.</option>
-                            <option value="MK">Macedonia</option>
-                            <option value="MG">Madagascar</option>
-                            <option value="MW">Malawi</option>
-                            <option value="MY">Malaysia</option>
-                            <option value="MV">Maldives</option>
-                            <option value="ML">Mali</option>
-                            <option value="MT">Malta</option>
-                            <option value="IM">Man (Isle of)</option>
-                            <option value="MH">Marshall Islands</option>
-                            <option value="MQ">Martinique</option>
-                            <option value="MR">Mauritania</option>
-                            <option value="MU">Mauritius</option>
-                            <option value="YT">Mayotte</option>
-                            <option value="MX">Mexico</option>
-                            <option value="FM">Micronesia</option>
-                            <option value="MD">Moldova</option>
-                            <option value="MC">Monaco</option>
-                            <option value="MN">Mongolia</option>
-                            <option value="ME">Montenegro</option>
-                            <option value="MS">Montserrat</option>
-                            <option value="MA">Morocco</option>
-                            <option value="MZ">Mozambique</option>
-                            <option value="MM">Myanmar</option>
-                            <option value="NA">Namibia</option>
-                            <option value="NR">Nauru</option>
-                            <option value="NP">Nepal</option>
-                            <option value="BQ">Bonaire, Sint Eustatius and Saba</option>
-                            <option value="NL">Netherlands</option>
-                            <option value="NC">New Caledonia</option>
-                            <option value="NZ">New Zealand</option>
-                            <option value="NI">Nicaragua</option>
-                            <option value="NE">Niger</option>
-                            <option value="NG">Nigeria</option>
-                            <option value="NU">Niue</option>
-                            <option value="NF">Norfolk Island</option>
-                            <option value="MP">Northern Mariana Islands</option>
-                            <option value="NO">Norway</option>
-                            <option value="OM">Oman</option>
-                            <option value="PK">Pakistan</option>
-                            <option value="PW">Palau</option>
-                            <option value="PS">Palestinian Territory Occupied</option>
-                            <option value="PA">Panama</option>
-                            <option value="PG">Papua new Guinea</option>
-                            <option value="PY">Paraguay</option>
-                            <option value="PE">Peru</option>
-                            <option value="PH">Philippines</option>
-                            <option value="PN">Pitcairn Island</option>
-                            <option value="PL">Poland</option>
-                            <option value="PT">Portugal</option>
-                            <option value="PR">Puerto Rico</option>
-                            <option value="QA">Qatar</option>
-                            <option value="RE">Reunion</option>
-                            <option value="RO">Romania</option>
-                            <option value="RU">Russia</option>
-                            <option value="RW">Rwanda</option>
-                            <option value="SH">Saint Helena</option>
-                            <option value="KN">Saint Kitts And Nevis</option>
-                            <option value="LC">Saint Lucia</option>
-                            <option value="PM">Saint Pierre and Miquelon</option>
-                            <option value="VC">Saint Vincent And The Grenadines</option>
-                            <option value="BL">Saint-Barthelemy</option>
-                            <option value="MF">Saint-Martin (French part)</option>
-                            <option value="WS">Samoa</option>
-                            <option value="SM">San Marino</option>
-                            <option value="ST">Sao Tome and Principe</option>
-                            <option value="SA">Saudi Arabia</option>
-                            <option value="SN">Senegal</option>
-                            <option value="RS">Serbia</option>
-                            <option value="SC">Seychelles</option>
-                            <option value="SL">Sierra Leone</option>
-                            <option value="SG">Singapore</option>
-                            <option value="SK">Slovakia</option>
-                            <option value="SI">Slovenia</option>
-                            <option value="SB">Solomon Islands</option>
-                            <option value="SO">Somalia</option>
-                            <option value="ZA">South Africa</option>
-                            <option value="GS">South Georgia</option>
-                            <option value="SS">South Sudan</option>
-                            <option value="ES">Spain</option>
-                            <option value="LK">Sri Lanka</option>
-                            <option value="SD">Sudan</option>
-                            <option value="SR">Suriname</option>
-                            <option value="SJ">Svalbard And Jan Mayen Islands</option>
-                            <option value="SZ">Swaziland</option>
-                            <option value="SE">Sweden</option>
-                            <option value="CH">Switzerland</option>
-                            <option value="SY">Syria</option>
-                            <option value="TW">Taiwan</option>
-                            <option value="TJ">Tajikistan</option>
-                            <option value="TZ">Tanzania</option>
-                            <option value="TH">Thailand</option>
-                            <option value="TG">Togo</option>
-                            <option value="TK">Tokelau</option>
-                            <option value="TO">Tonga</option>
-                            <option value="TT">Trinidad And Tobago</option>
-                            <option value="TN">Tunisia</option>
-                            <option value="TR">Turkey</option>
-                            <option value="TM">Turkmenistan</option>
-                            <option value="TC">Turks And Caicos Islands</option>
-                            <option value="TV">Tuvalu</option>
-                            <option value="UG">Uganda</option>
-                            <option value="UA">Ukraine</option>
-                            <option value="AE">United Arab Emirates</option>
-                            <option value="GB">United Kingdom</option>
-                            <option value="UM">United States Minor Outlying Islands</option>
-                            <option value="UY">Uruguay</option>
-                            <option value="UZ">Uzbekistan</option>
-                            <option value="VU">Vanuatu</option>
-                            <option value="VA">Vatican City State (Holy See)</option>
-                            <option value="VE">Venezuela</option>
-                            <option value="VN">Vietnam</option>
-                            <option value="VG">Virgin Islands (British)</option>
-                            <option value="VI">Virgin Islands (US)</option>
-                            <option value="WF">Wallis And Futuna Islands</option>
-                            <option value="EH">Western Sahara</option>
-                            <option value="YE">Yemen</option>
-                            <option value="ZM">Zambia</option>
-                            <option value="ZW">Zimbabwe</option>
-                            <option value="XK">Kosovo</option>
-                            <option value="CW">Curaçao</option>
-                            <option value="SX">Sint Maarten (Dutch part)</option>
+                        <select required autocomplete name="newlocationform_country" class="newlocationform_country">
+                            <option value="" selected disabled>---</option>
                         </select>
                     </div>
-
-                    <div class="input-wrapper">
+                    <div class="input-group">
                         <label>State <span>*</span></label>
-                        <select class="state" autocomplete="on" name="state_code" required>
+                        <select required autocomplete name="newlocationform_state" class="newlocationform_state">
                             <option value="" selected disabled>---</option>
                         </select>
                     </div>
-
-                    <div class="input-wrapper">
+                    <div class="input-group">
                         <label>City/Town <span>*</span></label>
-                        <select class="city" autocomplete="on" name="city_id" required>
+                        <select required autocomplete class="newlocationform_city" name="newlocationform_city">
                             <option value="" selected disabled>---</option>
                         </select>
                     </div>
-
                 </div>
 
-                <div class="one-col-div">
-                    <div class="input-wrapper">
-                        <label>Neighbourhoods</label>
-                        <textarea name="neighborhood" class="neighborhood" rows="5"></textarea>
-                        <small>These are the available neighbourhoods for this area on our database. You can manually add or edit them by entering your neighbourhoods here. Enter them properly and separate each with comma(,)</small>
+                <div class="input-group full-width">
+                    <label>Neighborhoods</label>
+                    <textarea disabled name="newlocationform_neigborhoods" class="newlocationform_neigborhoods" rows="5"></textarea>
+                    <small>These are the available neighbourhoods for this area on our database. You can manually add or edit them by entering your neighbourhoods here. Enter them properly and separate each with comma(,)</small>
+                </div>
+
+                <div class="input-group full-width gbp-input-group">
+                    <label>GBP Place ID</label>
+                    <input type="text" name="newlocationform_gbp_placeid">
+                    <small>If you have physical branch in this area, you can manually enter either the Google Maps Place ID or tick the checkbox below to use street address and zip code.</small>
+                </div>
+
+                <div class="row streetzip-input-group">
+                    <div class="input-group">
+                        <label>Street Address <span>*</span></label>
+                        <input type="text" name="newlocationform_street" class="newlocationform_street">
+                    </div>
+                    <div class="input-group">
+                        <label>ZIP Code <span>*</span></label>
+                        <input type="text" name="newlocationform_zipcode" class="newlocationform_zipcode">
                     </div>
                 </div>
 
-                <div class="pinpoint-address">
-                    <div class="one-col-div place_id">
-                        <div class="input-wrapper">
-                            <label>Google Maps Place ID</label>
-                            <input class="google_maps_place_id" name="google_maps_place_id" type="text">
-                            <small>If you have physical branch in this area, you can manually enter either the Google Maps Place ID or tick the checkbox below to use street address and zip code.</small>
-                        </div>
-                    </div>
-
-                    <div class="two-col-div street_address_zipcode">
-                        <div class="input-wrapper">
-                            <label>Street Address <span>*</span></label>
-                            <input class="street_address" name="street_address" type="text">
-                        </div>
-
-                        <div class="input-wrapper">
-                            <label>ZIP Code <span>*</span></label>
-                            <input class="zip_code" name="zip_code" type="text">
-                        </div>
-                    </div>
-
-                    <input type="checkbox" class="place_id_unavailable" name="place_id_unavailable" /><span>Use <b>street address</b> and <b>zip code</b>.</span>
+                <div class="input-group input-checkbox">
+                    <input type="checkbox" name="newlocationform_useStreetzip" class="newlocationform_use-streetzip">
+                    <label>Use <b>street address</b> and <b>zip code</b>.</label>
                 </div>
 
-                <div class="bottom">
-                    <input class="_location-form-submit" name="_location-form-submit" type="submit" />
+                <div class="form-footer">
+                    <textarea name="_newlocationform_submit_api_data" class="_newlocationform-submit-api-data" style="display: none;"></textarea>
+                    <input type="checkbox" style="display: none;" name="_newlocationform_importlocation_failed">
+                    <button type="button" class="button-primary create-button">Create</button>
+                    <img src="<?php echo plugin_dir_url(dirname(__FILE__)) . 'assets/Rocket.gif'; ?>">
+                    <button type="button" class="button-secondary discard-button" style="margin-left: auto;">Discard Location</button>
                 </div>
-
             </form>
-        </section>
-
-        <section class="overlay-form loading-screen">
-            <div class="wrapper">
-                <img src="<?php echo $pluginConfigController->get_plugin_logo_small(); ?>" class="logo">
-                <div><sl-spinner style="font-size: 1.2rem;"></sl-spinner> <p>...</p></div>
-            </div>
-        </section>
-        
-        <section class="main-view-wrapper">
-            <img src="<?php echo $pluginConfigController->get_plugin_logo_small(); ?>" class="main-screen-logo">
-
-            <sl-tab-group class="main-tab-group">
-                <sl-tab slot="nav" panel="locations" <?php if (!$settingsController->settings_isset()) echo 'disabled'; ?>>Locations</sl-tab>
-                <sl-tab slot="nav" panel="design" <?php if (!$settingsController->settings_isset()) echo 'disabled'; ?>>Design</sl-tab>
-                <sl-tab slot="nav" panel="settings">Settings</sl-tab>
-
-                <sl-tab-panel name="locations" class="locations-panel">
-                    <div class="head">
-                        <p>Embed your shortcodes to your service area pages.</p>
-                        <sl-tooltip content="Add Service Area">
-                            <sl-icon-button class="add-location-button" name="plus-lg" label="Add Service Area"></sl-icon-button>
-                        </sl-tooltip>
-                        <button class="_geocentric_import_all_data" 
-                        data-site_domain="<?php echo get_site_url(); ?>" 
-                        data-google_api_key="<?php echo $settings['unrestricted_google_api_key']; ?>" 
-                        data-api_server_url="<?php echo $config_data['server_url']; ?>" 
-                        data-appsero_api_key="<?php echo $config_data['appsero_api_key']; ?>" 
-                        data-appsero_plugin_name="<?php echo $config_data['appsero_plugin_name']; ?>" 
-                        ><sl-icon name="cloud-download"></sl-icon>Import All Data</button>
-                    </div>
-                    <div class="locations-list">
-
-                        <?php
-                            if (!empty($userInputDataController->get_userinput_data())) {
-                                foreach ($userInputDataController->get_userinput_data() as $serviceArea) {
-                                    ?>
-                                    <div class="location-item" 
-                                    data-id="<?php echo $serviceArea['id']; ?>" 
-                                    data-city_name="<?php echo $serviceArea['city']['name']; ?>" 
-                                    data-city_id="<?php echo $serviceArea['city']['id']; ?>" 
-                                    data-state_name="<?php echo $serviceArea['state']['name']; ?>" 
-                                    data-state_code="<?php echo $serviceArea['state']['code']; ?>" 
-                                    data-country_name="<?php echo $serviceArea['country']['name']; ?>" 
-                                    data-country_iso2="<?php echo $serviceArea['country']['iso2']; ?>" 
-                                    
-                                    <?php
-                                    if(isset($serviceArea['neighbourhoods'])) {
-                                        ?>
-                                        data-neighbourhoods="<?php echo implode(", ", $serviceArea['neighbourhoods']); ?>"
-                                        <?php
-                                    }
-
-                                    if(isset($serviceArea['google_place_id'])) {
-                                        ?>
-                                        data-google_place_id="<?php echo $serviceArea['google_place_id']; ?>"
-                                        <?php
-                                    }
-
-                                    if(isset($serviceArea['street'])) {
-                                        ?>
-                                        data-street="<?php echo $serviceArea['street']; ?>"
-                                        <?php
-                                    }
-
-                                    if(isset($serviceArea['zip_code'])) {
-                                        ?>
-                                        data-zip_code="<?php echo $serviceArea['zip_code']; ?>"
-                                        <?php
-                                    }
-
-                                    if (isset($serviceArea['primaryLocation'])) {
-                                        ?>
-                                        data-primary_location="true" 
-                                        <?php
-                                    }
-                                    ?>
-
-                                    >
-                                        <sl-icon name="<?php echo isset($serviceArea['primaryLocation']) ? 'geo-alt-fill' : ''; ?>"></sl-icon>
-                                        <p><?php echo "{$serviceArea['city']['name']}, {$serviceArea['state']['code']} ({$serviceArea['country']['name']})"; ?></p>
-                                        <?php echo $apiDataController->api_data_is_available($serviceArea['id']) ? '<span class="available">Available</span>' : '<span class="unavailable">Not Available</span>'; ?>
-                                        <sl-dropdown class="shortcodes-dropdown" <?php echo !$apiDataController->api_data_is_available($serviceArea['id']) ? 'disabled' : '' ?>>
-                                            <sl-tooltip slot="trigger" content="Shortcodes">
-                                                <sl-icon-button <?php echo !$apiDataController->api_data_is_available($serviceArea['id']) ? 'disabled' : '' ?> name="code-slash" label="Shortcodes"></sl-icon-button>
-                                            </sl-tooltip>
-                                            <sl-menu>
-                                                <sl-menu-label>Click to Copy</sl-menu-label>
-                                                <sl-menu-item data-shortcode="[geocentric-weather id=&quot;<?php echo $serviceArea['id']; ?>&quot;]">[geocentric-weather id="..."/]</sl-menu-item>
-                                                <sl-menu-item data-shortcode="[geocentric-about id=&quot;<?php echo $serviceArea['id']; ?>&quot;]">[geocentric-about id="..."/]</sl-menu-item>
-                                                <sl-menu-item data-shortcode="[geocentric-neighbourhoods id=&quot;<?php echo $serviceArea['id']; ?>&quot;]">[geocentric-neighbourhoods id="..."/]</sl-menu-item>
-                                                <sl-menu-item data-shortcode="[geocentric-thingstodo id=&quot;<?php echo $serviceArea['id']; ?>&quot;]">[geocentric-thingstodo id="..."/]</sl-menu-item>
-                                                <sl-menu-item data-shortcode="[geocentric-mapembed id=&quot;<?php echo $serviceArea['id']; ?>&quot;]">[geocentric-mapembed id="..."/]</sl-menu-item>
-                                                <sl-menu-item data-shortcode="[geocentric-drivingdirections id=&quot;<?php echo $serviceArea['id']; ?>&quot;]">[geocentric-drivingdirections id="..."/]</sl-menu-item>
-                                                <sl-menu-item data-shortcode="[geocentric-reviews id=&quot;<?php echo $serviceArea['id']; ?>&quot;]">[geocentric-reviews id="..."/]</sl-menu-item>
-                                                <sl-divider></sl-divider>
-                                                <sl-menu-item data-shortcode="[geocentric-weather id=&quot;<?php echo $serviceArea['id']; ?>&quot;][geocentric-about id=&quot;<?php echo $serviceArea['id']; ?>&quot;][geocentric-neighbourhoods id=&quot;<?php echo $serviceArea['id']; ?>&quot;][geocentric-thingstodo id=&quot;<?php echo $serviceArea['id']; ?>&quot;][geocentric-mapembed id=&quot;<?php echo $serviceArea['id']; ?>&quot;][geocentric-drivingdirections id=&quot;<?php echo $serviceArea['id']; ?>&quot;][geocentric-reviews id=&quot;<?php echo $serviceArea['id']; ?>&quot;]">
-                                                    Copy All Components
-                                                </sl-menu-item>
-                                            </sl-menu>
-                                        </sl-dropdown>
-                                        <sl-dropdown class="moreoptions-dropdown">
-                                            <sl-icon-button name="three-dots-vertical" label="More Options" slot="trigger"></sl-icon-button>
-                                            <sl-menu>
-                                                <sl-menu-item class="edit-location-button">Edit<sl-icon slot="prefix" name="pencil-square"></sl-icon></sl-menu-item>
-                                                <sl-menu-item class="remove-location-button">Remove<sl-icon slot="prefix" name="trash"></sl-icon></sl-menu-item>
-                                                <sl-divider></sl-divider>
-                                                <sl-menu-item class="import-data-button" 
-                                                data-site_domain="<?php echo get_site_url(); ?>" 
-                                                data-google_api_key="<?php echo $settings['unrestricted_google_api_key']; ?>" 
-                                                data-api_server_url="<?php echo $config_data['server_url']; ?>" 
-                                                data-appsero_api_key="<?php echo $config_data['appsero_api_key']; ?>" 
-                                                data-appsero_plugin_name="<?php echo $config_data['appsero_plugin_name']; ?>"
-                                                >Import Data<sl-icon slot="prefix" name="cloud-download"></sl-icon></sl-menu-item>
-                                                <sl-menu-item class="main-location-button">Set as Primary Location<sl-icon slot="prefix" name="geo-alt-fill"></sl-icon></sl-menu-item>
-                                            </sl-menu>
-                                        </sl-dropdown>
-                                    </div>
-                                    <?php
-                                }
-                            } else {echo '<p class="placeholder">No Service Areas added yet...</p>';}
-                        ?>
-
-                    </div>
-                </sl-tab-panel>
-
-                <sl-tab-panel name="design" class="design-panel">
-                    <form action="#" method="POST">
-
-                        <div class="head">
-                            <p>You can style the Rank Geo Sections here.</p>
-                            <input type="submit" name="_style-form-update" class="style-form-update" value="Save Style Changes"/>
-                        </div>
-
-                        <sl-details summary="Weather Section">
-                            <div class="four-col-div">
-                                <div class="input-wrapper">
-                                    <label>Background Color</label>
-                                    <input type="text" name="wsBackgroundColor" placeholder="#00000000" value="<?php echo $component_styles['weatherSection']['backgroundColor']; ?>">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Text Color</label>
-                                    <input type="text" name="wsTextColor" placeholder="#00000000" value="<?php echo $component_styles['weatherSection']['accentColor']; ?>">
-                                </div>
-                            </div>
-                        </sl-details>
-
-                        <sl-details summary="About Section">
-                            <h3>Title</h3>
-                            <div class="four-col-div">
-                                <div class="input-wrapper">
-                                    <label>Font Size</label>
-                                    <input type="number" name="asTitleFontSize" value="<?php echo $component_styles['aboutSection']['title']['fontSize']; ?>" placeholder="36">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Font Weight</label>
-                                    <input type="number" name="asTitleFontWeight" value="<?php echo $component_styles['aboutSection']['title']['fontWeight']; ?>" placeholder="500">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Font Color</label>
-                                    <input type="text" name="asTitleFontColor" value="<?php echo $component_styles['aboutSection']['title']['fontColor']; ?>" placeholder="#00000000">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Text Alignment</label>
-                                    <select name="asTitleTextAligment" value="<?php echo $component_styles['aboutSection']['title']['textAlignment']; ?>">
-                                        <option value="center" <?php if($component_styles['aboutSection']['title']['textAlignment'] == "center") echo "selected"; ?>>Center</option>
-                                        <option value="right" <?php if($component_styles['aboutSection']['title']['textAlignment'] == "right") echo "selected"; ?>>Right</option>
-                                        <option value="left" <?php if($component_styles['aboutSection']['title']['textAlignment'] == "left") echo "selected"; ?>>Left</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <h3>Content</h3>
-                            <div class="four-col-div">
-                                <div class="input-wrapper">
-                                    <label>Font Size</label>
-                                    <input type="number" name="asContentFontSize" placeholder="16" value="<?php echo $component_styles['aboutSection']['content']['fontSize']; ?>">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Font Weight</label>
-                                    <input type="number" name="asContentFontWeight" placeholder="400" value="<?php echo $component_styles['aboutSection']['content']['fontWeight']; ?>">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Font Color</label>
-                                    <input type="text" name="asContentFontColor" placeholder="#00000000" value="<?php echo $component_styles['aboutSection']['content']['fontColor']; ?>">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Text Alignment</label>
-                                    <select name="asContentTextAligment" value="<?php echo $component_styles['aboutSection']['content']['textAlignment']; ?>">
-                                        <option value="center" <?php if($component_styles['aboutSection']['content']['textAlignment'] == "center") echo "selected"; ?>>Center</option>
-                                        <option value="right" <?php if($component_styles['aboutSection']['content']['textAlignment'] == "right") echo "selected"; ?>>Right</option>
-                                        <option value="left" <?php if($component_styles['aboutSection']['content']['textAlignment'] == "left") echo "selected"; ?>>Left</option>
-                                        <option value="justify" <?php if($component_styles['aboutSection']['content']['textAlignment'] == "justify") echo "selected"; ?>>Justify</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </sl-details>
-
-                        <sl-details summary="Neighborhoods">
-                            <h3>Title</h3>
-                            <div class="four-col-div">
-                                <div class="input-wrapper">
-                                    <label>Font Size</label>
-                                    <input type="number" name="nhTitleFontSize" placeholder="36" value="<?php echo $component_styles['neighborhoods']['title']['fontSize']; ?>">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Font Weight</label>
-                                    <input type="number" name="nhTitleFontWeight" placeholder="500" value="<?php echo $component_styles['neighborhoods']['title']['fontWeight']; ?>">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Font Color</label>
-                                    <input type="text" name="nhTitleFontColor" placeholder="#00000000" value="<?php echo $component_styles['neighborhoods']['title']['fontColor']; ?>">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Text Alignment</label>
-                                    <select name="nhTitleTextAligment" value="<?php echo $component_styles['neighborhoods']['title']['textAlignment']; ?>">
-                                        <option value="center" <?php if($component_styles['neighborhoods']['title']['textAlignment'] == "center") echo "selected"; ?>>Center</option>
-                                        <option value="right" <?php if($component_styles['neighborhoods']['title']['textAlignment'] == "right") echo "selected"; ?>>Right</option>
-                                        <option value="left" <?php if($component_styles['neighborhoods']['title']['textAlignment'] == "left") echo "selected"; ?>>Left</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <h3>Neighborhoods Link</h3>
-                            <div class="four-col-div">
-                                <div class="input-wrapper">
-                                    <label>Font Size</label>
-                                    <input type="number" name="nhLinksFontSize" placeholder="16" value="<?php echo $component_styles['neighborhoods']['neighborhoods']['fontSize']; ?>">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Font Weight</label>
-                                    <input type="number" name="nhLinksFontWeight" placeholder="400" value="<?php echo $component_styles['neighborhoods']['neighborhoods']['fontWeight']; ?>">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Font Color</label>
-                                    <input type="text" name="nhLinksFontColor" placeholder="#00000000" value="<?php echo $component_styles['neighborhoods']['neighborhoods']['fontColor']; ?>">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Font Color [Hovered]</label>
-                                    <input type="text" name="nhLinksHoveredFontColor" placeholder="#00000000" value="<?php echo $component_styles['neighborhoods']['neighborhoods']['fontColorHovered']; ?>">
-                                </div>
-                            </div>
-                            <div class="four-col-div">
-                                <div class="input-wrapper">
-                                    <label>Text Alignment</label>
-                                    <select name="nhLinksTextAligment" value="<?php echo $component_styles['neighborhoods']['neighborhoods']['textAlignment']; ?>">
-                                        <option value="center" <?php if($component_styles['neighborhoods']['neighborhoods']['textAlignment'] == "center") echo "selected"; ?>>Center</option>
-                                        <option value="right" <?php if($component_styles['neighborhoods']['neighborhoods']['textAlignment'] == "right") echo "selected"; ?>>Right</option>
-                                        <option value="left" <?php if($component_styles['neighborhoods']['neighborhoods']['textAlignment'] == "left") echo "selected"; ?>>Left</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </sl-details>
-
-                        <sl-details summary="Things To Do">
-
-                            <h3>Title</h3>
-                            <div class="four-col-div">
-                                <div class="input-wrapper">
-                                    <label>Font Size</label>
-                                    <input type="number" name="ttdTitleFontSize" placeholder="36" value="<?php echo $component_styles['thingsToDo']['title']['fontSize']; ?>">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Font Weight</label>
-                                    <input type="number" name="ttdTitleFontWeight" placeholder="500" value="<?php echo $component_styles['thingsToDo']['title']['fontWeight']; ?>">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Font Color</label>
-                                    <input type="text" name="ttdTitleFontColor" placeholder="#00000000" value="<?php echo $component_styles['thingsToDo']['title']['fontColor']; ?>">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Text Alignment</label>
-                                    <select name="ttdTitleTextAligment" value="<?php echo $component_styles['thingsToDo']['title']['textAlignment']; ?>">
-                                        <option value="center" <?php if($component_styles['thingsToDo']['title']['textAlignment'] == "center") echo "selected"; ?>>Center</option>
-                                        <option value="right" <?php if($component_styles['thingsToDo']['title']['textAlignment'] == "right") echo "selected"; ?>>Right</option>
-                                        <option value="left" <?php if($component_styles['thingsToDo']['title']['textAlignment'] == "left") echo "selected"; ?>>Left</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <h3>Items</h3>
-                            <div class="four-col-div">
-                                <div class="input-wrapper">
-                                    <label>Padding</label>
-                                    <input type="number" name="ttdItemsPadding" placeholder="20" value="<?php echo $component_styles['thingsToDo']['items']['padding']; ?>">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Gap</label>
-                                    <input type="number" name="ttdItemsGap" placeholder="20" value="<?php echo $component_styles['thingsToDo']['items']['gap']; ?>">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Background Color</label>
-                                    <input type="text" name="ttdItemsBackgroundColor" placeholder="#00000000" value="<?php echo $component_styles['thingsToDo']['items']['backgroundColor']; ?>">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Hover Effect</label>
-                                    <select name="ttdItemsHoverEffect" value="<?php echo $component_styles['thingsToDo']['items']['hoverEffect']; ?>">
-                                        <option value="scaleUp" <?php if($component_styles['thingsToDo']['items']['hoverEffect'] == "scaleUp") echo "selected"; ?>>Scale Up</option>
-                                        <option value="scaleDown" <?php if($component_styles['thingsToDo']['items']['hoverEffect'] == "scaleDown") echo "selected"; ?>>Scale Down</option>
-                                        <option value="rise" <?php if($component_styles['thingsToDo']['items']['hoverEffect'] == "rise") echo "selected"; ?>>Rise</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="four-col-div">
-                                <div class="input-wrapper">
-                                    <label>Border Radius</label>
-                                    <input type="number" name="ttdItemsBorderRadius" placeholder="5" value="<?php echo $component_styles['thingsToDo']['items']['borderRadius']; ?>">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Border Width</label>
-                                    <input type="number" name="ttdItemsBorderWidth" placeholder="1" value="<?php echo $component_styles['thingsToDo']['items']['borderWidth']; ?>">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Border Color</label>
-                                    <input type="text" name="ttdItemsBorderColor" placeholder="#00000000" value="<?php echo $component_styles['thingsToDo']['items']['borderColor']; ?>">
-                                </div>
-                            </div>
-
-                            <h3>Image</h3>
-                            <div class="four-col-div">
-                                <div class="input-wrapper">
-                                    <label>Border Radius</label>
-                                    <input type="number" name="ttdImageBorderRadius" placeholder="5" value="<?php echo $component_styles['thingsToDo']['image']['borderRadius']; ?>">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Border Width</label>
-                                    <input type="number" name="ttdImageBorderWidth" placeholder="0" value="<?php echo $component_styles['thingsToDo']['image']['borderWidth']; ?>">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Border Color</label>
-                                    <input type="text" name="ttdImageBorderColor" placeholder="#00000000" value="<?php echo $component_styles['thingsToDo']['image']['borderColor']; ?>">
-                                </div>
-                            </div>
-
-                            <h3>Name</h3>
-                            <div class="four-col-div">
-                                <div class="input-wrapper">
-                                    <label>Font Size</label>
-                                    <input type="number" name="ttdNameFontSize" placeholder="16" value="<?php echo $component_styles['thingsToDo']['name']['fontSize']; ?>">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Font Weight</label>
-                                    <input type="number" name="ttdNameFontWeight" placeholder="400" value="<?php echo $component_styles['thingsToDo']['name']['fontWeight']; ?>">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Font Color</label>
-                                    <input type="text" name="ttdNameFontColor" placeholder="#00000000" value="<?php echo $component_styles['thingsToDo']['name']['fontColor']; ?>">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Text Alignment</label>
-                                    <select name="ttdNameTextAligment" value="<?php echo $component_styles['thingsToDo']['name']['textAlignment']; ?>">
-                                        <option value="center" <?php if($component_styles['thingsToDo']['name']['textAlignment'] == "center") echo "selected"; ?>>Center</option>
-                                        <option value="right" <?php if($component_styles['thingsToDo']['name']['textAlignment'] == "right") echo "selected"; ?>>Right</option>
-                                        <option value="left" <?php if($component_styles['thingsToDo']['name']['textAlignment'] == "left") echo "selected"; ?>>Left</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                        </sl-details>
-
-                        <sl-details summary="Map Embed">
-
-                            <h3>Title</h3>
-                            <div class="four-col-div">
-                                <div class="input-wrapper">
-                                    <label>Font Size</label>
-                                    <input type="number" name="meTitleFontSize" placeholder="36" value="<?php echo $component_styles['mapEmbed']['title']['fontSize']; ?>">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Font Weight</label>
-                                    <input type="number" name="meTitleFontWeight" placeholder="500" value="<?php echo $component_styles['mapEmbed']['title']['fontWeight']; ?>">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Font Color</label>
-                                    <input type="text" name="meTitleFontColor" placeholder="#00000000" value="<?php echo $component_styles['mapEmbed']['title']['fontColor']; ?>">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Text Alignment</label>
-                                    <select name="meTitleTextAligment" value="<?php echo $component_styles['mapEmbed']['title']['textAlignment']; ?>">
-                                        <option value="center" <?php if($component_styles['mapEmbed']['title']['textAlignment'] == "center") echo "selected"; ?>>Center</option>
-                                        <option value="right" <?php if($component_styles['mapEmbed']['title']['textAlignment'] == "right") echo "selected"; ?>>Right</option>
-                                        <option value="left" <?php if($component_styles['mapEmbed']['title']['textAlignment'] == "left") echo "selected"; ?>>Left</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <h3>Map</h3>
-                            <div class="four-col-div">
-                                <div class="input-wrapper">
-                                    <label>Height (px)</label>
-                                    <input type="number" name="meMapHeight" placeholder="400" value="<?php echo $component_styles['mapEmbed']['map']['height']; ?>">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Width (%)</label>
-                                    <input min="10" max="100" type="number" name="meMapWidth" placeholder="100" value="<?php echo $component_styles['mapEmbed']['map']['width']; ?>">
-                                </div>
-                            </div>
-                        </sl-details>
-
-                        <sl-details summary="Driving Directions">
-                            <h3>Title</h3>
-                            <div class="four-col-div">
-                                <div class="input-wrapper">
-                                    <label>Font Size</label>
-                                    <input type="number" name="ddTitleFontSize" placeholder="36" value="<?php echo $component_styles['drivingDirections']['title']['fontSize']; ?>">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Font Weight</label>
-                                    <input type="number" name="ddTitleFontWeight" placeholder="500" value="<?php echo $component_styles['drivingDirections']['title']['fontWeight']; ?>">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Font Color</label>
-                                    <input type="text" name="ddTitleFontColor" placeholder="#00000000" value="<?php echo $component_styles['drivingDirections']['title']['fontColor']; ?>">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Text Alignment</label>
-                                    <select name="ddTitleTextAligment" value="<?php echo $component_styles['drivingDirections']['title']['textAlignment']; ?>">
-                                        <option value="center" <?php if($component_styles['drivingDirections']['title']['textAlignment'] == "center") echo "selected"; ?>>Center</option>
-                                        <option value="right" <?php if($component_styles['drivingDirections']['title']['textAlignment'] == "right") echo "selected"; ?>>Right</option>
-                                        <option value="left" <?php if($component_styles['drivingDirections']['title']['textAlignment'] == "left") echo "selected"; ?>>Left</option>
-                                    </select>
-                                </div>
-                            </div>
-                            
-                            <h3>Map</h3>
-                            <div class="four-col-div">
-                                <div class="input-wrapper">
-                                    <label>Height (px)</label>
-                                    <input type="number" name="ddMapHeight" placeholder="400" value="<?php echo $component_styles['drivingDirections']['map']['height']; ?>">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Width (%)</label>
-                                    <input min="10" max="100" type="number" name="ddMapWidth" placeholder="100" value="<?php echo $component_styles['drivingDirections']['map']['width']; ?>">
-                                </div>
-                            </div>
-                        </sl-details>
-
-                        <sl-details summary="Reviews">
-                            <h3>Title</h3>
-                            <div class="four-col-div">
-                                <div class="input-wrapper">
-                                    <label>Font Size</label>
-                                    <input type="number" name="rvTitleFontSize" placeholder="36" value="<?php echo $component_styles['reviews']['title']['fontSize']; ?>">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Font Weight</label>
-                                    <input type="number" name="rvTitleFontWeight" placeholder="500" value="<?php echo $component_styles['reviews']['title']['fontWeight']; ?>">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Font Color</label>
-                                    <input type="text" name="rvTitleFontColor" placeholder="#00000000" value="<?php echo $component_styles['reviews']['title']['fontColor']; ?>">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Text Alignment</label>
-                                    <select name="rvTitleTextAligment" value="<?php echo $component_styles['reviews']['title']['textAlignment']; ?>">
-                                        <option value="center" <?php if($component_styles['reviews']['title']['textAlignment'] == "center") echo "selected"; ?>>Center</option>
-                                        <option value="right" <?php if($component_styles['reviews']['title']['textAlignment'] == "right") echo "selected"; ?>>Right</option>
-                                        <option value="left" <?php if($component_styles['reviews']['title']['textAlignment'] == "left") echo "selected"; ?>>Left</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <h3>Items</h3>
-                            <div class="four-col-div">
-                                <div class="input-wrapper">
-                                    <label>Padding</label>
-                                    <input type="number" name="rvItemsPadding" placeholder="20" value="<?php echo $component_styles['reviews']['items']['padding']; ?>">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Gap</label>
-                                    <input type="number" name="rvItemsGap" placeholder="20" value="<?php echo $component_styles['reviews']['items']['gap']; ?>">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Background Color</label>
-                                    <input type="text" name="rvItemsBackgroundColor" placeholder="#00000000" value="<?php echo $component_styles['reviews']['items']['backgroundColor']; ?>">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Hover Effect</label>
-                                    <select name="rvItemsHoverEffect" value="<?php echo $component_styles['reviews']['items']['hoverEffect']; ?>">
-                                        <option value="scaleUp" <?php if($component_styles['reviews']['items']['hoverEffect'] == "scaleUp") echo "selected"; ?>>Scale Up</option>
-                                        <option value="scaleDown" <?php if($component_styles['reviews']['items']['hoverEffect'] == "scaleDown") echo "selected"; ?>>Scale Down</option>
-                                        <option value="rise" <?php if($component_styles['reviews']['items']['hoverEffect'] == "rise") echo "selected"; ?>>Rise</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="four-col-div">
-                                <div class="input-wrapper">
-                                    <label>Border Radius</label>
-                                    <input type="number" name="rvItemsBorderRadius" placeholder="5" value="<?php echo $component_styles['thingsToDo']['items']['borderRadius']; ?>">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Border Width</label>
-                                    <input type="number" name="rvItemsBorderWidth" placeholder="1" value="<?php echo $component_styles['thingsToDo']['items']['borderWidth']; ?>">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Border Color</label>
-                                    <input type="text" name="rvItemsBorderColor" placeholder="#00000000" value="<?php echo $component_styles['thingsToDo']['items']['borderColor']; ?>">
-                                </div>
-                            </div>
-                        </sl-details>
-
-                    </form>
-                </sl-tab-panel>
-
-                <sl-tab-panel name="settings" class="settings-panel">
-                    <form action="#" method="POST">
-                        
-                        <div class="head">
-                            <p>Modify plugin settings.</p>
-                            <input type="submit" name="_settings-form-update" class="settings-form-update" value="Save Settings Changes"/>
-                        </div>
-
-                        <div class="two-col-div">
-                            <div class="input-wrapper">
-                                <label>Google API Key (Unrestricted) <span>*</span></label>
-                                <input type="password" class="google-api-key" name="unrestricted_google_api_key" placeholder="..." required 
-                                <?php if (isset($settings['unrestricted_google_api_key'])) echo "value=\"{$settings['unrestricted_google_api_key']}\""; ?>
-                                >
-                                <small>This API Key will be used on our backend server and will not be visible in th front-end. <b>This must be unrestricted</b> for our servers to run. <b>API's Required:</b> Places API, Geo Coding API, Knowledge Graph Search API</small>
-                            </div>
-                        </div>
-
-                        <div class="two-col-div">
-                            <div class="input-wrapper">
-                                <label>Google API Key (Restricted) <span>*</span></label>
-                                <input type="password" class="google-api-key" name="restricted_google_api_key" placeholder="..." required 
-                                <?php if (isset($settings['restricted_google_api_key'])) echo "value=\"{$settings['restricted_google_api_key']}\""; ?>
-                                >
-                                <small>This API key will be used by the Driving Directions Component and is visible to the front-end. <b>This must be restricted</b> for it to be used only by your domain. Read <a href="https://github.com/francis150/geocentric#-google-api-key-setup" target="_blank">the docs</a> here to know how to restrict your API Key. <b>API's Required:</b> Maps JavaScript API, Directions API</small>
-                            </div>
-                        </div>
-
-                    </form>
-                </sl-tab-panel>
-            </sl-tab-group>
-
-            <sl-divider></sl-divider>
-
-            <div class="footer">
-                <p>Powered by © <a href="http://rankfortress.com/" target="_blank">Rank Fortress</a>, 2021 🤘. - Read full <a href="https://github.com/francis150/geocentric#readme" target="_blank">docs here</a>.</p>
-            </div>
-        </section>
-
-        <section class="hidden-form" style="display: none;">
-            <form action="#" method="POST">
-               <input type="text" name="_single_api_data" /> 
-               <input type="text" name="_bulk_api_data" /> 
-               <input type="text" name="_api_request_failed" /> 
-               <input type="text" id="_copy_shortcode" name="_copy_shortcode" />
-            </form>
-        </section>
-    </div>
-    <?php
+        </div>
+        <?php
+        break;
 }
+
+?></div>
+
+
+<div class="footer">
+    <p>Powered by © <a href="http://seorockettools.com/" target="_blank">SEO Rocket Tools</a>, 2022 🚀.</p>
+    <p><a href="https://github.com/francis150/geocentric#readme" target="_blank">Documentation</a> | <a href="#">Community</a> | <a href="http://support.seorockettools.com/"  target="_blank">Support</a></p>
+</div></div>

@@ -5,7 +5,6 @@ if (!class_exists('_geocentric_components')) {
     require_once plugin_dir_path( __FILE__ ) . 'geocentric_settings_class.php';
     require_once plugin_dir_path( __FILE__ ) . 'geocentric_plugin_config_class.php';
     require_once plugin_dir_path( __FILE__ ) . 'geocentric_component_styles_class.php';
-    require_once plugin_dir_path( __FILE__ ) . 'geocentric_userinput_data_class.php';
     require_once plugin_dir_path( __FILE__ ) . 'geocentric_api_data_class.php';
 
     class _geocentric_components {
@@ -14,12 +13,27 @@ if (!class_exists('_geocentric_components')) {
         private $userinput_data_controller;
         private $component_styles_controller;
         private $settings_data_controller;
+        private $plugin_config;
+
+        private $general_styles;
+        private $font;
+        private $font_family;
+        private $settings_data;
 
         function __construct() {
             $this->api_data_controller = new _geocentric_api_data();
-            $this->userinput_data_controller = new _geocentric_userinput_data();
             $this->component_styles_controller = new _geocentric_component_styles();
             $this->settings_data_controller = new _geocentric_settings();
+            $this->plugin_config_controller = new _geocentric_plugin_config();
+
+            if ($this->component_styles_controller->get_component_styles() !== null) {
+                $this->general_styles = $this->component_styles_controller->get_component_style('general');
+                $this->font = explode(" ", $this->general_styles['componentsFontFamily']);
+                $this->font_family = str_replace("+", " ", $this->font[0]);
+
+                $this->plugin_config = $this->plugin_config_controller->get_plugin_config_data();
+                $this->settings_data = $this->settings_data_controller->get_settings_data();
+            }   
         }
 
         /* 
@@ -29,23 +43,24 @@ if (!class_exists('_geocentric_components')) {
         }
         */
         public function weather_component($atts) {
+
             $api_data = $this->api_data_controller->get_api_data($atts['id']);
-            $styles = $this->component_styles_controller->get_component_style('weatherSection');
-
-            $attribs = shortcode_atts(array(
-                "unit" => "c"
-            ), $atts);
-
-            $unit_string = strtolower($attribs['unit']) == 'f' ? '?unit=us' : '';
+            $styles = $this->component_styles_controller->get_component_style('weatherComponent');
 
             if (empty($api_data)) return "<pre>No data matched by id...</pre>";
 
-            $weatherURL = $api_data['weather_widget'] ?? $api_data['weatherWidget'];
+            $unit_string = $styles['unit'] == 'fahrenheit' ? '?unit=us' : '';
 
-            return "<a class=\"weatherwidget-io\" href=\"https://forecast7.com/en/{$weatherURL}{$unit_string}\" data-label_1=\"{$api_data['name']}\" data-label_2=\"Weather\" data-theme=\"original\" data-basecolor=\"{$styles['backgroundColor']}\" data-textcolor=\"{$styles['accentColor']}\">{$api_data['name']}</a>
+            return "
+            <style>
+                ._geocentric-component {
+                    margin-bottom: {$this->general_styles['componentsGap']}px;
+                }
+            </style>
+            <div class=\"_geocentric-component _geocentric-weather-component\"><a class=\"weatherwidget-io\" href=\"https://forecast7.com/en/{$api_data['weather_widget']}{$unit_string}\" data-label_1=\"{$api_data['name']}\" data-label_2=\"Weather\" data-theme=\"original\" data-basecolor=\"{$styles['backgroundColor']}\" data-textcolor=\"{$styles['textColor']}\">{$api_data['name']}</a>
             <script>
             !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
-            </script>";
+            </script></div>";
         }
 
         /* 
@@ -55,8 +70,9 @@ if (!class_exists('_geocentric_components')) {
         }
         */
         public function about_component($atts) {
+
             $api_data = $this->api_data_controller->get_api_data($atts['id']);
-            $styles = $this->component_styles_controller->get_component_style('aboutSection');
+            $styles = $this->component_styles_controller->get_component_style('aboutComponent');
 
             if (empty($api_data)) return "<pre>No data matched by id...</pre>";
 
@@ -66,22 +82,29 @@ if (!class_exists('_geocentric_components')) {
 
             return "
             <style>
-                ._geocentric-about_component > h2 {
+                @import url('https://fonts.googleapis.com/css2?family={$this->font[0]}&display=swap');
+
+                ._geocentric-component {
+                    margin-bottom: {$this->general_styles['componentsGap']}px;
+                    font-family: '{$this->font_family}', {$this->font[1]};
+                }
+
+                ._geocentric-about-component > h2 {
                     font-size: {$styles['title']['fontSize']}px;
                     font-weight: {$styles['title']['fontWeight']};
                     color: {$styles['title']['fontColor']};
                     text-align: {$styles['title']['textAlignment']};
-                    margin-bottom: 40px;
+                    margin-bottom: 20px;
                 }
 
-                ._geocentric-about_component > p {
+                ._geocentric-about-component > p {
                     font-size: {$styles['content']['fontSize']}px;
                     color: {$styles['content']['fontColor']};
                     text-align: {$styles['content']['textAlignment']};
                     font-weight: {$styles['content']['fontWeight']};
                 }
             </style>
-            <div class=\"_geocentric-about_component\"><h2>{$attribs['title']}</h2><p>{$api_data['about']}</p></div>
+            <div class=\"_geocentric-component _geocentric-about-component\"><h2>{$attribs['title']}</h2><p>{$api_data['about']}</p></div>
             ";
         }
 
@@ -91,13 +114,13 @@ if (!class_exists('_geocentric_components')) {
             * title - (optional) Section title
         }
         */
-        public function neighbourhoods_component($atts) {
-            $api_data = $this->api_data_controller->get_api_data($atts['id']);
-            $styles = $this->component_styles_controller->get_component_style('neighborhoods');
-            $userinput_data = $this->userinput_data_controller->get_userinput_by_id($atts['id']);
+        public function neighborhoods_component($atts) {
 
-            if (empty($userinput_data)) return "<pre>No data matched by id...</pre>";
-            if (empty($userinput_data['neighbourhoods'])) return "<pre>No data to show...</pre>";
+            $api_data = $this->api_data_controller->get_api_data($atts['id']);
+            $styles = $this->component_styles_controller->get_component_style('neighborhoodsComponent');
+
+            if (empty($api_data)) return "<pre>No data matched by id...</pre>";
+            if (empty($api_data['meta']['neighborhoods'])) return "<pre>No data to show...</pre>";
 
             $attribs = shortcode_atts(array(
                 "title" => "Neighborhoods in {$api_data['name']}"
@@ -105,23 +128,30 @@ if (!class_exists('_geocentric_components')) {
 
             $neighbourhoods_anchors = [];
 
-            foreach ($userinput_data['neighbourhoods'] as $neigborhood) {
+            foreach ($api_data['meta']['neighborhoods'] as $neigborhood) {
 
                 $neigborhood_query = ($neigborhood . ', ' . $api_data['name']);
-                $encoded_neighbourhood_query = urlencode($neigborhood_query);
+                $encoded_neighborhood_query = urlencode($neigborhood_query);
 
-                array_push($neighbourhoods_anchors, "<a href=\"https://www.google.com/maps/search/?api=1&query={$encoded_neighbourhood_query}\" target=\"_blank\">{$neigborhood}</a>");
+                array_push($neighbourhoods_anchors, "<a href=\"https://www.google.com/maps/search/?api=1&query={$encoded_neighborhood_query}\" target=\"_blank\">{$neigborhood}</a>");
             }
 
             return "
             <style>
+                @import url('https://fonts.googleapis.com/css2?family={$this->font[0]}&display=swap');
+
+                ._geocentric-component {
+                    margin-bottom: {$this->general_styles['componentsGap']}px;
+                    font-family: '{$this->font_family}', {$this->font[1]};
+                }
+
                 ._geocentric-neighbourhoods > h2 {
                     font-size: {$styles['title']['fontSize']}px;
                     font-weight: {$styles['title']['fontWeight']};
                     color: {$styles['title']['fontColor']};
                     text-align: {$styles['title']['textAlignment']};
 
-                    margin-bottom: 40px;
+                    margin-bottom: 20px;
                 }
 
                 ._geocentric-neighbourhoods > p {
@@ -139,7 +169,7 @@ if (!class_exists('_geocentric_components')) {
                     color: {$styles['neighborhoods']['fontColorHovered']};
                 }
             </style>
-            <div class=\"_geocentric-neighbourhoods\"><h2>{$attribs['title']}</h2><p>".implode(', ', $neighbourhoods_anchors)."</p></div>
+            <div class=\"_geocentric-neighbourhoods _geocentric-component\"><h2>{$attribs['title']}</h2><p>".implode(', ', $neighbourhoods_anchors)."</p></div>
             ";
         }
 
@@ -147,30 +177,29 @@ if (!class_exists('_geocentric_components')) {
         @Description: Things to do component
         @Atts: {
             * title - (optional) Section title
-            * hide_ratings - (optional) Wether or not to display the rating
             * limit - (optional) Limit the number of places to display
             * alt - (optinal) image alt text
         }
         */
         public function thingstodo_component($atts) {
+
             $api_data = $this->api_data_controller->get_api_data($atts['id']);
-            $styles = $this->component_styles_controller->get_component_style('thingsToDo');
+            $styles = $this->component_styles_controller->get_component_style('thingsToDoComponent');
 
             if (empty($api_data)) return "<pre>No data matched by id...</pre>";
 
             if (empty($api_data['things_to_do']) && empty($api_data['thingsToDo'])) return "<pre>No data to show...</pre>";
 
-             $attribs = shortcode_atts(array(
-                "title" => "Things To Do",
+            $attribs = shortcode_atts(array(
+                "title" => "Things To Do in {$api_data['name']}",
                 "limit" => 1000,
                 "alt" => ""
             ), $atts);
 
             $thingstodo_cards = [];
 
-            $thingsToDoData = $api_data['things_to_do'] ?? $api_data['thingsToDo'];
 
-            foreach ($thingsToDoData as $thingstodo) {
+            foreach ($api_data['things_to_do'] as $thingstodo) {
 
                 if($attribs['limit'] == count($thingstodo_cards)) break;
 
@@ -179,40 +208,52 @@ if (!class_exists('_geocentric_components')) {
                     $thingstodo['users_total_rating'] = 'No ratings yet';
                 }
 
-                // ===========================================================
-                $thingsToDoImageURL = $thingstodo['photo_url'] ?? "https://lh3.googleusercontent.com/places/{$thingstodo['photoID']}";
+                $star = '';
+                $whole = floor($thingstodo['rating']);
+                $decimal = $thingstodo['rating'] - $whole;
+                $diff = 5 - ceil($thingstodo['rating']);
 
-                $thingsToDoUserTotalRatings = $thingstodo['users_total_rating'] ?? $thingstodo['usersTotalRating'];
+                for ($i=0; $i < $whole; $i++) $star = $star . '<span class="material-icons-outlined checked">star</span>';
+                if ($decimal > 0) $star = $star . '<span class="material-icons-outlined half-checked">star</span>';
+                for ($i=0; $i < $diff; $i++) $star = $star . '<span class="material-icons-outlined">star</span>';
 
-                $thingsToDoPlaceId = $thingstodo['place_id'] ?? $thingstodo['placeID'];
-
-                // ===========================================================
-
-                $ratings = !isset($atts['hide_ratings']) ? "<div><sl-rating readonly value=\"{$thingstodo['rating']}\" style=\"--symbol-size: .9rem;\"></sl-rating><small>{$thingstodo['rating']} ({$thingsToDoUserTotalRatings})</small></div>" : "";
+                $ratings = $styles['showReviews'] ? "<div>
+                <div class=\"rating-stars\">
+                    {$star}
+                </div>
+                <small>{$thingstodo['rating']} ({$thingstodo['users_total_rating']})</small></div>" : "";
 
                 array_push($thingstodo_cards, "<div><div><a href=\"https://www.google.com/maps/search/?api=1&query={$thingstodo['name']}&query_place_id={$thingsToDoPlaceId}\" target=\"_blank\"><img src=\"{$thingsToDoImageURL}\" alt=\"{$attribs['alt']}\"/>{$ratings}<p>{$thingstodo['name']}</p></a></div></div>");
             }
 
             return "
-            <script type=\"module\" src=\"https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.60/dist/components/rating/rating.js\"></script>
             <style>
+                @import url('https://fonts.googleapis.com/icon?family=Material+Icons+Outlined');
+                @import url('https://fonts.googleapis.com/css2?family={$this->font[0]}&display=swap');
+
+                ._geocentric-component {
+                    margin-bottom: {$this->general_styles['componentsGap']}px;
+                    font-family: '{$this->font_family}', {$this->font[1]};
+                }
+
                 ._geocentric-thingstodo > h2 {
                     font-size: {$styles['title']['fontSize']}px;
                     font-weight: {$styles['title']['fontWeight']};
                     color: {$styles['title']['fontColor']};
                     text-align: {$styles['title']['textAlignment']};
 
-                    margin-bottom: 40px;
+                    margin-bottom: 20px;
                 }
 
                 ._geocentric-thingstodo > .wrapper {
                     display: flex;
                     flex-wrap: wrap;
+                    justify-content: space-evenly;
                     gap: {$styles['items']['gap']}px;
                 }
 
                 ._geocentric-thingstodo > .wrapper > div {
-                    flex: 1 1 300px;
+                    width: 350px;
                 }
 
                 ._geocentric-thingstodo > .wrapper > div > div {
@@ -253,6 +294,21 @@ if (!class_exists('_geocentric_components')) {
                     opacity: .7;
                 }
 
+                ._geocentric-thingstodo > .wrapper > div > div a > div .rating-stars > span {
+                    color: #b4b4b4;
+                    font-size: 16px;
+                }
+
+                ._geocentric-thingstodo > .wrapper > div > div a > div .rating-stars > span.checked {
+                    color: #FF9529;
+                }
+
+                ._geocentric-thingstodo > .wrapper > div > div a > div .rating-stars > span.half-checked {
+                    background: linear-gradient(90deg, rgba(255,149,41,1) 50%, rgba(180,180,180,1) 50%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                }
+
                 ._geocentric-thingstodo > .wrapper > div > div p {
                     white-space: nowrap;
                     overflow: hidden;
@@ -260,14 +316,90 @@ if (!class_exists('_geocentric_components')) {
                     width: 100%;
 
                     margin-bottom: 0;
-                    text-align: {$styles['name']['textAlignment']};
-                    color: {$styles['name']['fontColor']};
-                    font-size: {$styles['name']['fontSize']}px;
-                    font-weight: {$styles['name']['fontWeight']};
+                    text-align: {$styles['itemName']['textAlignment']};
+                    color: {$styles['itemName']['fontColor']};
+                    font-size: {$styles['itemName']['fontSize']}px;
+                    font-weight: {$styles['itemName']['fontWeight']};
                 }
             </style>
-            <div class=\"_geocentric-thingstodo\"><h2>{$attribs['title']}</h2><div class=\"wrapper\">".implode("", $thingstodo_cards)."</div></div>
+            <div class=\"_geocentric-thingstodo _geocentric-component\"><h2>{$attribs['title']}</h2><div class=\"wrapper\">".implode("", $thingstodo_cards)."</div></div>
             ";
+        }
+
+        /**
+         * @Desccription: Bus Stops Component
+         * @Atts: {
+            * title - (optional) Section title
+            * limit - (optional) Limit the number of bus stops to display
+         * }
+         */
+        public function busstops_component($atts) {
+
+            $styles = $this->component_styles_controller->get_component_style('busStopsComponent');
+            $api_data = $this->api_data_controller->get_api_data($atts['id']);
+
+            if (empty($api_data)) return "<pre>No data matched by id...</pre>";
+            if (empty($api_data['bus_stops'])) return "<pre>No data to show...</pre>";
+
+            $attribs = shortcode_atts(array(
+                "title" => "Bus Stops  in {$api_data['name']} to {$this->settings_data['business_name']}",
+                "limit" => 12,
+            ), $atts);
+
+            $busstops = [];
+
+            foreach ($api_data['bus_stops'] as $busstop) {
+
+                if($attribs['limit'] == count($busstops)) break;
+
+                array_push($busstops, "<div class=\"bus-stop\">
+                    <iframe src=\"https://www.google.com/maps/embed/v1/place?key={$this->plugin_config['g_api_key']}&q={$busstop['query']}\" width=\"300\" height=\"320\" style=\"border:0;\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>
+                    <h3>Bus Stop in {$busstop['name']} {$api_data['name']} to {$this->settings_data['business_name']}</h3>
+                </div>");
+            }
+
+            return "<style>
+                @import url('https://fonts.googleapis.com/css2?family={$this->font[0]}&display=swap');
+
+                ._geocentric-component {
+                    margin-bottom: {$this->general_styles['componentsGap']}px;
+                    font-family: '{$this->font_family}', {$this->font[1]};
+                }
+
+                ._geocentric-busstops > h2 {
+                    font-size: {$styles['title']['fontSize']}px;
+                    font-weight: {$styles['title']['fontWeight']};
+                    color: {$styles['title']['fontColor']};
+                    text-align: {$styles['title']['textAlignment']};
+                    margin-bottom: 20px;
+                }
+
+                ._geocentric-busstops .busstops {
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: space-evenly;
+                    gap: {$styles['items']['gap']}px;
+                }
+
+                ._geocentric-busstops .bus-stop {
+                    margin-bottom: 10px;
+                    width: 350px;
+                }
+
+                ._geocentric-busstops .bus-stop h3 {
+                    font-size: {$styles['itemName']['fontSize']}px;
+                    font-weight: {$styles['itemName']['fontWeight']};
+                    color: {$styles['itemName']['fontColor']};
+                    text-align: {$styles['itemName']['textAlignment']};
+                    margin: 0;
+                }
+            </style>
+            <div class=\"_geocentric-busstops _geocentric-component\">
+                <h2>{$attribs['title']}</h2>
+                <div class=\"busstops\">"
+                    .implode("", $busstops).
+                "</div>
+            </div>";
         }
 
         /* 
@@ -277,25 +409,40 @@ if (!class_exists('_geocentric_components')) {
         }
         */
         public function mapembed_component($atts) {
-            $userinput_data = $this->userinput_data_controller->get_userinput_by_id($atts['id']);
-            $styles = $this->component_styles_controller->get_component_style('mapEmbed');
 
-            if (empty($userinput_data)) return "<pre>No data matched by id...</pre>";
+            $styles = $this->component_styles_controller->get_component_style('mapEmbedComponent');
+            $api_data = $this->api_data_controller->get_api_data($atts['id']);
+
+            if (empty($api_data)) return "<pre>No data matched by id...</pre>";
 
             $attribs = shortcode_atts(array(
-                "title" => "{$userinput_data['city']['name']}, {$userinput_data['state']['code']}"
+                "title" => "Map of {$api_data['name']}"
             ), $atts);
 
+            $query = '';
+
+            if (isset($api_data['meta']['place_id'])) {
+                $query = "place_id:" . $api_data['meta']['place_id'];
+            } else {
+                $query = $api_data['name'] . " " . $api_data['meta']['country']['iso2'];
+            }
 
             return "
             <style>
+                @import url('https://fonts.googleapis.com/css2?family={$this->font[0]}&display=swap');
+
+                ._geocentric-component {
+                    margin-bottom: {$this->general_styles['componentsGap']}px;
+                    font-family: '{$this->font_family}', {$this->font[1]};
+                }
+
                 ._geocentric-mapembed > h2 {
                     font-size: {$styles['title']['fontSize']}px;
                     font-weight: {$styles['title']['fontWeight']};
                     color: {$styles['title']['fontColor']};
                     text-align: {$styles['title']['textAlignment']};
 
-                    margin-bottom: 40px;
+                    margin-bottom: 20px;
                 }
 
                 ._geocentric-mapembed .iframe_wrapper {
@@ -307,96 +454,93 @@ if (!class_exists('_geocentric_components')) {
 
                 ._geocentric-mapembed .iframe_wrapper > div {
                     width: {$styles['map']['width']}%;
-                    height: {$styles['map']['height']}px;
                 }
 
                 ._geocentric-mapembed .iframe_wrapper > div > iframe {
                     min-width: 100%;
                 }
             </style>
-            <div class=\"_geocentric-mapembed\"><h2>{$attribs['title']}</h2>
-            <div class=\"iframe_wrapper\"><div><iframe height=\"{$styles['map']['height']}\" frameborder=\"0\" scrolling=\"no\" marginheight=\"0\" marginwidth=\"0\" id=\"gmap_canvas\" src=\"https://maps.google.com/maps?width=520&amp;height=400&amp;hl=en&amp;q={$userinput_data['city']['name']}, {$userinput_data['state']['code']}, {$userinput_data['country']['iso2']}&amp;t=&amp;z=12&amp;ie=UTF8&amp;iwloc=B&amp;output=embed\"></iframe></div></div></div>";
+            <div class=\"_geocentric-mapembed _geocentric-component\"><h2>{$attribs['title']}</h2>
+            <div class=\"iframe_wrapper\"><div>
+            <iframe src=\"https://www.google.com/maps/embed/v1/place?key={$this->plugin_config['g_api_key']}&q={$query}\" width=\"600\" height=\"{$styles['map']['height']}\" style=\"border:0;\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>
+            </div></div></div>";
         }
 
         /* 
         @Description: Driving Directions Component
         @Atts: {
             * title - (optional) Section title
+            * limit - (optional) Limit the number of driving directions to display
         }
         */
         public function drivingdirections_component($atts) {
-            $userinput_data = $this->userinput_data_controller->get_userinput_by_id($atts['id']);
-            $styles = $this->component_styles_controller->get_component_style('drivingDirections');
+
+            $styles = $this->component_styles_controller->get_component_style('drivingDirectionsComponent');
             $api_data = $this->api_data_controller->get_api_data($atts['id']);
-            $settings = $this->settings_data_controller->get_settings_data();
             
             if (empty($api_data)) return "<pre>No data matched by id...</pre>";
 
             $attribs = shortcode_atts(array(
-                "title" => "{$userinput_data['city']['name']}, {$userinput_data['state']['code']} Driving Directions"
+                "title" => "Driving Directions in {$api_data['name']} to {$this->settings_data['business_name']}",
+                "limit" => 12
             ), $atts);
+
+            $driving_directions = [];
+
+            foreach ($api_data['directions']['origins'] as $origin) {
+
+                if($attribs['limit'] == count($driving_directions)) break;
+
+                array_push($driving_directions, "<div class=\"direction\">
+                    <iframe src=\"https://www.google.com/maps/embed/v1/directions?key={$this->plugin_config['g_api_key']}&origin={$origin['query']}&destination={$api_data['directions']['destination']['query']}\" width=\"600\" height=\"320\" style=\"border:0;\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>
+                    <h3>Driving Directions from {$origin['name']} to {$api_data['directions']['destination']['name']}</h3>
+                </div>");
+            }
 
             return "
             <style>
+                @import url('https://fonts.googleapis.com/css2?family={$this->font[0]}&display=swap');
+
+                ._geocentric-component {
+                    margin-bottom: {$this->general_styles['componentsGap']}px;
+                    font-family: '{$this->font_family}', {$this->font[1]};
+                }
+
                 ._geocentric-drivingdirections > h2 {
                     font-size: {$styles['title']['fontSize']}px;
                     font-weight: {$styles['title']['fontWeight']};
                     color: {$styles['title']['fontColor']};
                     text-align: {$styles['title']['textAlignment']};
-
-                    margin-bottom: 40px;
+                    margin-bottom: 20px;
                 }
 
-                ._geocentric-drivingdirections {
+                ._geocentric-drivingdirections .drivingdirections {
                     display: flex;
-                    flex-direction: column;
-                    align-items: center;
+                    flex-wrap: wrap;
+                    justify-content: space-evenly;
+                    gap: {$styles['items']['gap']}px;
                 }
+
+                ._geocentric-drivingdirections .direction {
+                    margin-bottom: 10px;
+                    width: 350px;
+                }
+
+                ._geocentric-drivingdirections .direction h3 {
+                    font-size: {$styles['itemName']['fontSize']}px;
+                    font-weight: {$styles['itemName']['fontWeight']};
+                    color: {$styles['itemName']['fontColor']};
+                    text-align: {$styles['itemName']['textAlignment']};
+                    margin: 0;
+                }
+
             </style>
-            <div class=\"_geocentric-drivingdirections\">
-                <h2>{$attribs['title']}</h2>
-                <div style=\"height: {$styles['map']['height']}px; width: {$styles['map']['width']}%;\" class=\"map\"></div>
-            </div>
-            <script>
-                async function initMap() {
-                    var directionsService = new google.maps.DirectionsService();
-                    var directionsDisplay = new google.maps.DirectionsRenderer();
-                    var map;
-
-                    /* Fetch Streets From Geo Streets API */
-                    const directions = ".json_encode($api_data['directions'])."
-                    
-                    /* Initialize Map ID and Options */
-                    map = new google.maps.Map(document.querySelector('._geocentric-drivingdirections > .map'), {
-                        zoom: 14, 
-                        center: directions.destination
-                    });
-
-                    /* Pin Point Routes Into Map And Set Markers  */
-                    function calculateRoute(mapOrigin, mapDestination) {
-                        var request = {
-                            origin: mapOrigin,
-                            destination: mapDestination,
-                            travelMode: 'DRIVING'
-                        };
-
-                        directionsService.route(request, function (result, status) {
-                            if (status == \"OK\") {
-                                var directionsDisplay = new google.maps.DirectionsRenderer({
-                                    map: map
-                                });
-                                directionsDisplay.setDirections(result);
-                            }
-                        });
-                    }
-
-                    directions.origins.forEach(origin =>{
-                        calculateRoute(origin, directions.destination)
-                    })
-                }
-
-            </script>
-            <script src=\"https://maps.googleapis.com/maps/api/js?key={$settings['restricted_google_api_key']}&callback=initMap&v=weekly\" async></script>";
+            <div class=\"_geocentric-drivingdirections _geocentric-component\">
+            <h2>{$attribs['title']}</h2>
+            <div class=\"drivingdirections\">"
+            .implode("", $driving_directions).
+            "</div>
+            </div>";
         }
 
         /* 
@@ -410,169 +554,126 @@ if (!class_exists('_geocentric_components')) {
         }
         */
         public function reviews_component($atts) {
-            $styles = $this->component_styles_controller->get_component_style('reviews');
             $api_data = $this->api_data_controller->get_api_data($atts['id']);
-            $place_id = $this->getPlaceID($atts['id']);
+            $styles = $this->component_styles_controller->get_component_style('reviewsComponent');
 
             if (empty($api_data)) return "<pre>No data matched by id...</pre>";
-            if (empty($api_data['reviews'])) return "<pre>No data to show...</pre>";
-
+            if (!isset($api_data['reviews'])) return "<pre>No data to show...</pre>";
+            
             $attribs = shortcode_atts(array(
-                "title" => "Reviews",
-                "limit" => 1000,
-                "items-on-desktop" => 3,
-                "items-on-tablet" => 2,
-                "items-on-mobile" => 1
+                "title" => "Reviews for {$this->settings_data['business_name']} {$api_data['name']}",
+                "limit" => 6
             ), $atts);
 
-            $reviewsString = [];
+            $reviews = [];
 
             foreach ($api_data['reviews'] as $review) {
-                if($attribs['limit'] == count($reviewsString)) break;
 
-                // ================================================
+                if($attribs['limit'] == count($reviews)) break;
 
-                $reviewPhotoURL = $review['profile_photo_url'] ?? $review['profilePhotoUrl'];
+                $star = '';
+                $whole = floor($review['rating']);
+                $decimal = $review['rating'] - $whole;
+                $diff = 5 - ceil($review['rating']);
 
-                $reviewAuthorName = $review['author_name'] ?? $review['authorName'];
-            
-                // ================================================
-
-                array_push($reviewsString, "<div class=\"review\"><a class=\"head\" target=\"_blank\" href=\"https://search.google.com/local/writereview?placeid={$place_id}\"><img src=\"{$reviewPhotoURL}\"><div class=\"head-content\"><p class=\"name\">{$reviewAuthorName}</p><sl-rating readonly value=\"{$review['rating']}\" style=\"--symbol-size: .9rem;\"></sl-rating></div></a><div class=\"message-wrapper\"><p class=\"message\">{$review['text']}</p></div></div>");
+                for ($i=0; $i < $whole; $i++) $star = $star . '<span class="material-icons-outlined checked">star</span>';
+                if ($decimal > 0) $star = $star . '<span class="material-icons-outlined half-checked">star</span>';
+                for ($i=0; $i < $diff; $i++) $star = $star . '<span class="material-icons-outlined">star</span>';
+                
+                array_push($reviews, "<div class=\"review\">
+                    <a href=\"{$review['author_url']}\" target=\"_blank\" class=\"head\">
+                        <img src=\"{$review['profile_photo_url']}\" alt=\"{$this->settings_data['business_name']} Reviews\">
+                        <div class=\"info\">
+                            <h3>{$review['author_name']}</h3>
+                            <div class=\"stars\">
+                                {$star} <span>({$review['rating']})</span>
+                            </div>
+                        </div>
+                    </a>
+                    <p>{$review['text']}</p>
+                </div>");
             }
 
-            $gap_style = $styles['items']['gap'] / 2;
-
             return "
-            <script type=\"module\" src=\"https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.62/dist/components/icon/icon.js\"></script>
-            <script type=\"module\" src=\"https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.60/dist/components/rating/rating.js\"></script>
-            <link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/glider-js@1/glider.min.css\">
             <style>
-                ._geocentric-reviewscomponent *::-webkit-scrollbar-track {
-                    background-color: #ebebeb;
+                @import url('https://fonts.googleapis.com/icon?family=Material+Icons+Outlined');
+                @import url('https://fonts.googleapis.com/css2?family={$this->font[0]}&display=swap');
+
+                ._geocentric-component {
+                    margin-bottom: {$this->general_styles['componentsGap']}px;
+                    font-family: '{$this->font_family}', {$this->font[1]};
                 }
 
-                ._geocentric-reviewscomponent *::-webkit-scrollbar {
-                    width: 5px;
-                    background-color: #ebebeb;
-                }
-
-                ._geocentric-reviewscomponent *::-webkit-scrollbar-thumb {
-                    background-color: #363636;
-                }
-
-                ._geocentric-reviewscomponent h2 {
+                ._geocentric-reviews > h2 {
                     font-size: {$styles['title']['fontSize']}px;
                     font-weight: {$styles['title']['fontWeight']};
                     color: {$styles['title']['fontColor']};
                     text-align: {$styles['title']['textAlignment']};
 
-                    margin-bottom: 40px;
+                    margin-bottom: 20px;
                 }
 
-                ._geocentric-reviewscomponent .glider {
-                    padding-top: 5px;
-                }
-
-                ._geocentric-reviewscomponent .review {
-                    background: {$styles['items']['backgroundColor']};
+                ._geocentric-reviews .reviews {
                     display: flex;
-                    flex-direction: column;
-                    margin: 0 {$gap_style}px;
+                    flex-wrap: wrap;
+                    justify-content: space-evenly;
+                    gap: {$styles['items']['gap']}px;
+                }
+
+                ._geocentric-reviews .review {
                     padding: {$styles['items']['padding']}px;
+                    border-radius: {$styles['items']['borderRadius']}px;
                     border-width: {$styles['items']['borderWidth']}px;
                     border-color: {$styles['items']['borderColor']}px;
-                    border-radius: {$styles['items']['borderRadius']}px;
-                    transition: .3s transform ease-in-out;
+                    background: {$styles['items']['backgroundColor']};
+                    flex: 1 1 300px;
                 }
 
-                ._geocentric-reviewscomponent .review:hover {
-                    transform: {$this->component_styles_controller->get_hover_effect($styles['items']['hoverEffect'])};
-                }
-
-                ._geocentric-reviewscomponent .head {
+                ._geocentric-reviews .review a {
+                    color: #000000;
                     display: flex;
-                    flex-direction: row;
-                    margin-bottom: 10px;
                     align-items: center;
-                    text-decoration: none;
-                    color: black;
-                    font-weight: 500;
+                    margin-bottom: 5px;
                 }
 
-                ._geocentric-reviewscomponent img {
-                    height: 40px;
+                ._geocentric-reviews .review a img {
+                    height: 45px;
                     margin-right: 10px;
                 }
 
-                ._geocentric-reviewscomponent .head-content {
-                    display: flex;
-                    flex-direction: column;
+                ._geocentric-reviews .review a h3 {
+                    margin-bottom: 3px;
+                    font-size: {$styles['authorName']['fontSize']}px;
+                    font-weight: {$styles['authorName']['fontWeight']};
+                    color: {$styles['authorName']['fontColor']};
                 }
 
-                ._geocentric-reviewscomponent .name {
-                    margin: 0;
+                ._geocentric-reviews .review p {
+                    font-size: {$styles['reviewBody']['fontSize']}px;
+                    font-weight: {$styles['reviewBody']['fontWeight']};
+                    color: {$styles['reviewBody']['fontColor']};
                 }
 
-                ._geocentric-reviewscomponent .message-wrapper {
-                    height: 100px;
-                    overflow-y: hidden;
-                    padding-right: 8px;
-                }
-
-                ._geocentric-reviewscomponent .message-wrapper:hover {
-                    overflow-y: auto;
-                    padding-right: 3px;
-                }
-
-                ._geocentric-reviewscomponent .message {
-                    text-align: justify;
+                ._geocentric-reviews .review .stars .material-icons-outlined {
+                    color: #b4b4b4;
                     font-size: 16px;
-                    line-height: 1.5em;
                 }
 
-                ._geocentric-reviewscomponent .glider-dots {
-                    margin-top: 20px;
-                    gap: 10px;
+                ._geocentric-reviews .review .stars .material-icons-outlined.checked {
+                    color: #FF9529;
                 }
+
+                ._geocentric-reviews .review .stars .material-icons-outlined.half-checked {
+                    background: linear-gradient(90deg, rgba(255,149,41,1) 50%, rgba(180,180,180,1) 50%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                }
+                
             </style>
-            <div class=\"glider-contain multiple _geocentric-reviewscomponent\">
-
+            <div class=\"_geocentric-reviews _geocentric-component\">
                 <h2>{$attribs['title']}</h2>
-
-                <div class=\"glider\">".implode("", $reviewsString)."</div>
-
-            </div>
-
-            <script src=\"https://cdn.jsdelivr.net/npm/glider-js@1/glider.min.js\"></script>
-            <script>
-                new Glider(document.querySelector('.glider'), {
-                    slidesToShow: ". $attribs['items-on-desktop'] .",
-                    draggable: true,
-                    duration: .5,
-                    responsive: [
-                        {
-                            breakpoint: 375,
-                            settings: {
-                                slidesToShow: ". $attribs['items-on-mobile'] ."
-                            }
-                        },
-                        {
-                            breakpoint: 1024,
-                            settings: {
-                                slidesToShow: ". $attribs['items-on-tablet'] ."
-                            }
-                        },
-                        {
-                            breakpoint: 1333,
-                            settings: {
-                                slidesToShow: ". $attribs['items-on-desktop'] ."
-                            }
-                        }
-                    ]
-                })
-            </script>
-            ";
+                <div class=\"reviews\">".implode("", $reviews)."</div>
+            </div>";
         }
 
         private function getPlaceID($id) {
