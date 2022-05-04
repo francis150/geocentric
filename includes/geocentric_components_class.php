@@ -223,7 +223,7 @@ if (!class_exists('_geocentric_components')) {
                 </div>
                 <small>{$thingstodo['rating']} ({$thingstodo['users_total_rating']})</small></div>" : "";
 
-                array_push($thingstodo_cards, "<div><div><a href=\"https://www.google.com/maps/search/?api=1&query={$thingstodo['name']}&query_place_id={$thingsToDoPlaceId}\" target=\"_blank\"><img src=\"{$thingsToDoImageURL}\" alt=\"{$attribs['alt']}\"/>{$ratings}<p>{$thingstodo['name']}</p></a></div></div>");
+                array_push($thingstodo_cards, "<div><div><a href=\"https://www.google.com/maps/search/?api=1&query={$thingstodo['name']}&query_place_id={$thingstodo['place_id']}\" target=\"_blank\"><img src=\"{$thingstodo['photo_url']}\" alt=\"{$attribs['alt']}\"/>{$ratings}<p>{$thingstodo['name']}</p></a></div></div>");
             }
 
             return "
