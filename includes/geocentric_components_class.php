@@ -187,7 +187,8 @@ if (!class_exists('_geocentric_components')) {
             $styles = $this->component_styles_controller->get_component_style('thingsToDoComponent');
 
             if (empty($api_data)) return "<pre>No data matched by id...</pre>";
-            if (empty($api_data['things_to_do'])) return "<pre>No data to show...</pre>";
+
+            if (empty($api_data['things_to_do']) && empty($api_data['thingsToDo'])) return "<pre>No data to show...</pre>";
 
             $attribs = shortcode_atts(array(
                 "title" => "Things To Do in {$api_data['name']}",
@@ -196,6 +197,7 @@ if (!class_exists('_geocentric_components')) {
             ), $atts);
 
             $thingstodo_cards = [];
+
 
             foreach ($api_data['things_to_do'] as $thingstodo) {
 
@@ -221,7 +223,7 @@ if (!class_exists('_geocentric_components')) {
                 </div>
                 <small>{$thingstodo['rating']} ({$thingstodo['users_total_rating']})</small></div>" : "";
 
-                array_push($thingstodo_cards, "<div><div><a href=\"https://www.google.com/maps/search/?api=1&query={$thingstodo['name']}&query_place_id={$thingstodo['place_id']}\" target=\"_blank\"><img src=\"{$thingstodo['photo_url']}\" alt=\"{$attribs['alt']}\"/>{$ratings}<p>{$thingstodo['name']}</p></a></div></div>");
+                array_push($thingstodo_cards, "<div><div><a href=\"https://www.google.com/maps/search/?api=1&query={$thingstodo['name']}&query_place_id={$thingsToDoPlaceId}\" target=\"_blank\"><img src=\"{$thingsToDoImageURL}\" alt=\"{$attribs['alt']}\"/>{$ratings}<p>{$thingstodo['name']}</p></a></div></div>");
             }
 
             return "
