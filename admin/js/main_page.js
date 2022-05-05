@@ -167,7 +167,7 @@ if (URL_PARAMS.get('page') == '_geocentric') {
             .then(res => {
                 neighborhoodsTextArea.disabled = false
                 neighborhoodsTextArea.placeholder = ''
-                if (res.data.neighborhoods) neighborhoodsTextArea.innerHTML = res.data.neighborhoods.toString()
+                if (res.data.neighbourhoods) neighborhoodsTextArea.innerHTML = res.data.neighbourhoods.toString()
                 else neighborhoodsTextArea.placeholder = 'No data available...'
             })
             .catch(err => {
