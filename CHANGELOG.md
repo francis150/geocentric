@@ -4,6 +4,25 @@
 
 <p>&nbsp;</p>
 
+## 🎯 v2.0.0
+
+### ❗ **IMPORTANT NOTE**
+THIS UPDATE WILL WIPE OUT ALL YOUR EXCISTING DATA/LOCATION. You will have to add back all your locations after this update. This will reward to no longer requiring Google API Keys.
+
+### 😎 **Updates**
+- NO API KEYS NEEDED 🤯
+- New Driving Directions Component
+    - Driving directions from competitors to your business
+- Bus Stops Component (Bus stops to your business)
+- Major UI Update
+
+### 🕷 **Bug Fixes**
+- Driving Directions **FIXED**
+- Irrelevant about us information **FIXED**
+- Broken UI on multiple Location import **FIXED**
+
+<p>&nbsp;</p>
+
 ## 🎯 v1.0.5
 
 ### 🕷 **Bug Fixes**
