@@ -127,7 +127,7 @@ switch ($tab) {
                 <div class="input-group">
                     <label>Google API Key (Unrestricted)<span>*</span></label>
                     <input type="text" required name="google_api_key" <?php if (isset($settings['google_api_key'])) echo "value=\"{$settings['google_api_key']}\""; ?>>
-                    <small>This API Key will be used on our backend server and will not be visible in th front-end. <b>This must be unrestricted</b> for our servers to run. <b>API's Required:</b> Places API, Geo Coding API, Knowledge Graph Search API</small>
+                    <small>This API Key will be used on our backend server and will not be visible in th front-end. <b>This must be unrestricted</b> for our servers to run. <b>API's Required:</b> Places API, Geo Coding API, Knowledge Graph Search API. You can read all about setting it up <a href="https://github.com/francis150/geocentric" target="_blank">here</a>.</small>
                 </div>
 
                 <div class="form-footer">
