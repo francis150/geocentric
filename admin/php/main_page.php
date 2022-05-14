@@ -39,6 +39,7 @@ $tab = !$pluginConfigured ? 'settings' : (isset($_GET['tab']) ? $_GET['tab'] : $
     <?php if ($pluginConfigured) { ?>
         data-primary_keyword="<?php echo $settings['primary_keyword'] ?>" 
         data-primary_location="<?php echo str_replace("\"", "&#34;" ,json_encode($apiDataController->primary_location())); ?>" 
+        data-google-api-key="<?php echo $settings['google_api_key'] ?>"
     <?php } ?>
     >
     <div class="header"><h1>Geocentric Plugin</h1> <a href="http://seorockettools.com/"><img src="<?php echo plugin_dir_url(dirname(__FILE__)) . 'assets/seorocket-text-logo.svg'; ?>" alt="SEO Rocket Tools"></a></div>
@@ -121,6 +122,12 @@ switch ($tab) {
                 <div class="input-group">
                     <label>Business Name<span>*</span></label>
                     <input type="text" required name="business_name" <?php if (isset($settings['business_name'])) echo "value=\"{$settings['business_name']}\""; ?>>
+                </div>
+
+                <div class="input-group">
+                    <label>Google API Key (Unrestricted)<span>*</span></label>
+                    <input type="text" required name="google_api_key" <?php if (isset($settings['google_api_key'])) echo "value=\"{$settings['google_api_key']}\""; ?>>
+                    <small>This API Key will be used on our backend server and will not be visible in th front-end. <b>This must be unrestricted</b> for our servers to run. <b>API's Required:</b> Places API, Geo Coding API, Knowledge Graph Search API</small>
                 </div>
 
                 <div class="form-footer">

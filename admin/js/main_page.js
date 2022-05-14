@@ -54,6 +54,8 @@ if (URL_PARAMS.get('page') == '_geocentric') {
     /** New Location Form Tab **/
     if (URL_PARAMS.get('tab') == 'new-location-form' && PRIMARY_KEYWORD) {
 
+        const googleApiKey = MAIN_WRAPPER_DATA.googleApiKey
+
         const selectCountryElement = document.querySelector('._geocentric-wrapper .new-location-form .newlocationform_country')
         const selectStateElement = document.querySelector('._geocentric-wrapper .new-location-form .newlocationform_state')
         const selectCityElement = document.querySelector('._geocentric-wrapper .new-location-form .newlocationform_city')
@@ -219,6 +221,7 @@ if (URL_PARAMS.get('page') == '_geocentric') {
                     appsero_plugin_name: APPSERO_PLUGIN_NAME
                 },
                 primary_keyword: PRIMARY_KEYWORD,
+                google_api_key: googleApiKey,
                 place_id: newLocationForm.newlocationform_gbp_placeid.value || undefined,
                 street: newLocationForm.newlocationform_street.value || undefined,
                 zip_code: newLocationForm.newlocationform_zipcode.value || undefined
@@ -287,6 +290,8 @@ if (URL_PARAMS.get('page') == '_geocentric') {
 
     /** Locations Tab **/
     if (URL_PARAMS.get('tab') == null && PRIMARY_KEYWORD) {
+
+        const googleApiKey = MAIN_WRAPPER_DATA.googleApiKey
 
         const primaryLocationForm = document.querySelector('._geocentric-wrapper .locations-tab .primary-location-form')
         let apiData = primaryLocationForm.current_api_data.value
@@ -381,6 +386,7 @@ if (URL_PARAMS.get('page') == '_geocentric') {
                                 appsero_api_key: APPSERO_API_KEY,
                                 appsero_plugin_name: APPSERO_PLUGIN_NAME
                             },
+                            google_api_key: googleApiKey,
                             primary_keyword: PRIMARY_KEYWORD
                         }
     
