@@ -30,7 +30,6 @@ $tab = !$pluginConfigured ? 'settings' : (isset($_GET['tab']) ? $_GET['tab'] : $
 
 
 ?><div
-    style="display: none;"
     class="_geocentric-wrapper" 
     data-api_server_url="<?php echo $config_data['server_url']; ?>" 
     data-geodatabase_url="<?php echo $config_data['geodatabase_url']; ?>" 

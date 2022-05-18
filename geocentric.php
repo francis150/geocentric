@@ -2,9 +2,9 @@
 /**
  * Plugin Name: Geocentric
  * Description: Pull all relevant geocentric data to your service area page in one click!
- * Version: 2.0.0
+ * Version: 2.0.1
  * Requires at least: 5.2
- * Tested up to: 5.8
+ * Tested up to: 5.9
  * Requires PHP: 7.2
  * Author: SEO Rocket Tools
  * Author URI: http://seorockettools.com/
