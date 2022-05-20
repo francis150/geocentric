@@ -16,21 +16,9 @@ A WordPress plugin that pulls all relevant geocentric data and allows you to add
 
 - 🚀 [Installation](#-installation)
 - 📃 [License & Activation](#-license--activation)
+- 🤔 [Usage](#)
+- 👨‍💻 [Component Shortcodes](#)
 - 🌎 [Google API Key Setup](#-google-api-key-setup)
-    - [Getting Started](#getting-started)
-    - [Creating Your Cloud Console Project](#creating-your-cloud-console-project)
-    - [Generate Your API Key](#generate-your-api-key)
-        - [Restricted API Key](#creating-your-restricted-api-key)
-        - [Unrestricted API Key](#creating-your-unrestricted-api-key)
-- 🤔 [Usage](#-usage)
-- 👨‍💻 [Component Shortcodes](#-component-shortcodes)
-    - [Weather Component](#weather-component---geocentric-weather)
-    - [About Component](#about-component---geocentric-about)
-    - [Neighbourhoods Component](#neighbourhoods-component---geocentric-neighbourhoods)
-    - [Things to Do Component](#things-to-do-component---geocentric-thingstodo)
-    - [Map Embed Component](#map-embed-component---geocentric-mapembed)
-    - [Driving Directions Component](#driving-directions---geocentric-drivingdirections)
-    - [Reviews Component](#reviews---geocentric-reviews)
 - 🚩 [Changelog](CHANGELOG.md)
 - 🙋‍♂️ [Developers](#%EF%B8%8F-developers)
 
@@ -42,7 +30,7 @@ A WordPress plugin that pulls all relevant geocentric data and allows you to add
 
 ## 🚀 Installation
 
-1. After completing your order from [RankFortress](https://rankfortress.com/product-category/gmb-tools/), you will receive an email with the download link and your license key. <p>![Download Button](https://i.ibb.co/wWR68jC/download-link.png)</p>
+1. After completing your order from [SEO Rocket](http://seorocket.dev/), you will receive an email with the download link and your license key. <p>![Download Button](https://i.ibb.co/wWR68jC/download-link.png)</p>
 
 2. After downloading your .zip file from the download link in your email, go to your WordPress site, and go to `Plugins > Add New > Upload Plugin`
 
@@ -84,10 +72,132 @@ A WordPress plugin that pulls all relevant geocentric data and allows you to add
 
 <p>&nbsp;</p>
 
-## 🌎 Google API Key Setup
+## 🤔 Usage
+
+1. After installing the plugin, open up the dashboard and it will redirect you to the `Settings` tab. You can not proceed if you dont setup the settings first. From here, enter your **Primary Keyword** without any location. Also enter your **Business Name.** If you have a Google Business Profile, it would be better if you could enter in the exact name of your GBP. <p>![Settings Tab](https://i.imgur.com/0FetC8e.png)</p><p>After setting up your settings page, the next step is the `Locations` tab. </p><p>![Locations Tab](https://i.imgur.com/dbiVSOj.png)</p>
+
+2. In the `Locations` tab, you need to add your **Service Areas** and to do that click the `Add Location` button at the top right corner. <p>![Add Location Button](https://i.imgur.com/0pTVMBF.png)</p>
+
+3. It will then take you to the `Create New Location` form. From here, select from the three dropdowns the `Country`, `State`, and `City` of your Service Area. <p>![Select Location](https://i.imgur.com/jUAX4Dj.png)</p>
+
+4. After choosing from the `City` dropdown, The `neighborhoods` text area will load up all available neighborhoods data we have on our database. Some locations may have a lot, some may have few, and some may have none. The `neighborhoods` text area is completely editable. You can add or remove any neighborhoods as you please. Just make sure to separate each with commas. <p>![Neighborhoods](https://i.imgur.com/bcKB1vb.png)</p><p>We are still currently working on adding data to our database as we'd love to cater as much of our subscribers as possible. If you want to request for a location to be added, just email us at seorockettools@gmail.com or write a support ticket at <a href="https://support.seorocket.dev/" target="_blank">our supoprt channel</a>.</p>
+
+5. The `GBP Place ID` is the next field. Although it is not required, it is recommended that you enter a Place ID **IF AND ONLY IF** you have a GBP in that city. This will be used to pull in the reviews from your GBP. If you dont have a GBP in this city, **DO NOT** enter anything. <p>![GBP Place ID](https://i.imgur.com/8nvAT4r.png)</p>
+
+6. Click `Create` button at the buttom and wait for the plugin to pull in all the geocentric data. <p>![Create Button](https://i.imgur.com/knOBeiw.png)</p>
+
+7. After creating a Service Area or a Location, click the `shortcodes` icon to show the shortcodes. <p>![Shortcodes](https://i.imgur.com/GePXkM0.png)</p>
+
+8. All that's left now is to copy the `shortcodes` and paste them into your Service Area Pages. <p>![Copy Shortcodes](https://i.imgur.com/ZaRQjgD.png)</p>
+
+9. Done! 👌
 
 <p>&nbsp;</p>
 
+---
+
+<p>&nbsp;</p>
+
+## 👨‍💻 Component Shortcodes
+
+*All shortcodes has a required attribute `id` which is used to reference your shortcodes from your multiple locations.*
+
+<p>&nbsp;</p>
+
+### **Weather Component** - `[geocentric_weather]`
+
+Shows the temperature, and weather in that area for the day and 7 days ahead. <p>![](https://i.ibb.co/FY4SbqS/image-36.png)</p>
+
+
+<p>&nbsp;</p>
+
+### **About Component** - `[geocentric_about]`
+
+Shows a paragraph of all the information about the location. <p>![](https://i.ibb.co/5jQ0qLz/image-37.png)</p>
+
+#### **Attributes**
+
+- `title` - *(optional)* changes the title of the section.
+
+<p>&nbsp;</p>
+
+### **Neighborhoods Component** - `[geocentric_neighborhoods]`
+
+Shows a list of all the neighborhoods in that location and is linked to google maps whenever it is clicked. <p>![](https://i.ibb.co/5KqcmXm/image-38.png)</p>
+
+#### **Attributes**
+
+- `title` - *(optional)* changes the title of the section.
+
+<p>&nbsp;</p>
+
+### **Things to Do Component** - `[geocentric_thingstodo]`
+
+Shows all the top sights in that location together with their ratings. <p>![](https://i.ibb.co/2j16y0R/image-39.png)</p>
+
+#### **Attributes**
+
+- `title` - *(optional)* changes the title of the section.
+- `hide_ratings` - *(optional)* Wether or not to display the rating
+- `limit` - *(optional)* Limit the number of items to display
+- `alt` - *(optional)* image alt texts
+
+<p>&nbsp;</p>
+
+### **Bus Stops Component** - `[geocentric_busstops]`
+
+Show a grid of bus stops in the city increasing your proximity. <p>![Bus Stops Component](https://i.imgur.com/PZILXuA.png)</p>
+
+#### **Attributes**
+
+- `title` - *(optional)* changes the title of the section.
+- `limit` - *(optional)* Limit the number of items to display
+
+<p>&nbsp;</p>
+
+### **Map Embed Component** - `[geocentric_mapembed]`
+
+Embeds Google Map of that location. <p>![](https://i.ibb.co/56F82V7/image-40.png)</p>
+
+#### **Attributes**
+
+- `title` - *(optional)* changes the title of the section.
+
+<p>&nbsp;</p>
+
+### **Driving Directions** - `[geocentric_drivingdirections]`
+
+Shows a grid of maps with driving directions from your compitetors to your business sending traffic to google making it look like unsatisfied customers driving from your compitetor's business to yours. <p>![](https://i.imgur.com/pUYyCyh.png)</p>
+
+#### **Attributes**
+
+- `title` - *(optional)* changes the title of the section.
+- `limit` - *(optional)* Limit the number of items to display
+
+<p>&nbsp;</p>
+
+### **Reviews** - `[geocentric_reviews]`
+
+Shows the reviews of your GMB Listing in that area if available, if not, it shows the reviews of your GMB Listing on your Primary Location. <p>![](https://i.ibb.co/s1xs4X7/image-42.png)</p>
+
+#### **Attributes**
+
+- `title` - *(optional)* changes the title of the section.
+- `limit` - *(optional)* Limit the number of reviews to display
+
+<p>&nbsp;</p>
+
+[Back To The Top](#-geocentric-wp-plugin)
+
+<p>&nbsp;</p>
+
+---
+
+<p>&nbsp;</p>
+
+## 🌎 Google API Key Setup 
+
+*For Geocentric Plugins that are purchased via <a href="http://seorocket.dev/" target="_blank">http://seorocket.dev/</a>, we do not require any Google API Key anymore and this step is not necessary.*
 
 ### **Getting Started**
  
@@ -131,166 +241,7 @@ Go to your [Google Cloud Console Dashboard](https://console.cloud.google.com/hom
 
 8. Click Enable To Use That API <p>![Enable API](https://i.imgur.com/6xkNDos.png) *Please Make sure you have enable required API's enabled For The Plugin To Work!*</p>
 
-
-
-### **Generate Your API Key**
-
-For this step you are required to create 2 API Keys. There two kinds of API Key's we will be creating. <br><br><strong>`➡ Restricted API Key`</strong> - This API Key is the one that will be exposed to your client site. This key is required for your Driving Directions Component To Work! <br><strong>`➡ Unrestricted API Key`</strong> - This API Key is the one that our servers will need to be build your components. These keys are not exposed to the client side and will be hidden from access. This key is required to build your all the other components aside from the Driving Directions. <br><br> Please make sure that you do not skip these steps and create the right kind of API Keys to secure your account!
-
-###  **Creating Your Restricted API Key**
-
-1. Go Back to your API Overview Dashboard Page <p>![Overview Page](https://i.imgur.com/xr97fVR.png)</p>
-
-2. Click Create Create Credentials and Select API Key <br> <p>![Api KEY](https://i.imgur.com/3nCFHZR.png)</p>
-
-3. Click Restrict Key <br> <p>![Restrict Api KEY](https://i.imgur.com/9nxo50M.png)</p> 
-
-4. Name this API Key as **Restricted API KEY** and select the HTTP referrers options below <br> <p>![Restrict Api KEY](https://i.imgur.com/2yp8LZA.png)</p> 
-
-5. For every website you will where you will be using the plugin make sure to add a website restriction rule for your domain. <br><br> Make sure to follow this format <br> <strong>\*.example.com/* for subdomains</strong> <br> 
-<strong>example.com/* for single domains</strong> <p>![Add Website Restrictions](https://i.imgur.com/V0brrbT.png)</p> 
-
-6. Click done and once you are done make sure to save.
-
-<p>&nbsp;</p>
-
-### **Creating Your Unrestricted API Key**
-
-Follow Step 1 to 4 from the last instructions. 
-
-1. Name this key **Unrestricted API Key** and select the None option on the Applications Restrictions Section.<p>![Unrestricted API Key](https://i.imgur.com/NUNTg3E.png)</p>
-
-2. Proceed to the API Restrictions section and select the option Don't restrict key. Click save once you are done.<p>![Done](https://i.imgur.com/AoT8nYw.png)</p> 
-
-
-[Back To The Top](#-geocentric-wp-plugin)
-
-<p>&nbsp;</p>
-
----
-
-<p>&nbsp;</p>
-
-## 🤔 Usage
-
-1. After activating your plugin license, you will be prompted into a Welcome Screen, and all you have to do from there is press the `Get Started` button. <p>![Get Started](https://i.imgur.com/1lojImC.png)</p>
-
-2. You will then be redirected to the settings page. Here you will enter the API Keys you have created as instructed previously. Save your settings after entering your API Keys.<p>![Enter API Keys](https://i.imgur.com/JDTDQr5.png)</p>
-
-
-3. After Entering your Google API Key, you will be prompted to the dashboard. Next thing to do is Add your service areas to the list. You can do that by hitting the `Add Service Area` button and a form will pop up. <p>![Add service area button](https://i.ibb.co/hZt0y12/addservice-area.png)</p>
-
-4. On the form, set your location by choosing from the three dropdowns(country, state, city). <p>![](https://i.ibb.co/RBLsNNY/Group-78-1.png)</p>
-
-5. Once you set your location, the `Neighbourhoods` text box will be propagated with the neighbourhoods data we've pulled from google. You can `Add` or `Remove` your own neighbourhoods to the text box as long as you separate them with commas(,) <p>![](https://i.ibb.co/cFwvj30/image-30.png)</p>
-
-6. For the `Google Maps Place ID` section, if a GMB Listing is available for this location, you can add the Place ID here. If you have a physical branch in this location but dont have a GMB Listing, you can tick the `Use street address and zip code` checkbox and enter your `Street Address` and `ZIP Code`. After that you can  <p>![](https://i.ibb.co/xSg5gCL/image-31.png)</p>
-
-7. For the sake of the demo, I've added 2 locations to the list. So now, the next thing you need to do is that we need to set your primary location. To do that, Hit the three dots `more icon`, and hit `Set as Primary Location`. <p>![](https://i.ibb.co/gDTXqzC/Group-80-1.png)</p>
-
-
-8. After all of that, all we need to do now is to import all the data from our server into your website. There are two ways to do that; import them one by one, or import them all together. To import them one by one, you can hit the `More Button > Import Data`. To import them all together, you can hit the `Import All Data Button`. Both of these buttons does not work if you haven't set up your Primary Location. <p>![](https://i.ibb.co/F39JJtT/Group-80-2.png)</p>
-
-9. After the data is pulled from our server, you can see from the green indicators marked `Available` which means that the data is now available in your website. Also, the `Code Icon` will be enabled, and when you click it, you can see the different shortcodes for each components. You can click them to copy the shortcodes instantly. <p>![](https://i.ibb.co/VtyfFTm/Group-81.png)</p>
-
-10. Now, all that is left to do is use it on your actual location page. To do that just simply copy the component shortcode that you want (in my case, I clicked `Copy All Components` to copy all components) and paste the shortcodes to wherever part of the page you want it to be placed. <p>![](https://i.ibb.co/QPXBzxN/image-35.png)</p>
-
-11. Hit Save and you're All Good! 👍
-
-<p>&nbsp;</p>
-
-[Back To The Top](#-geocentric-wp-plugin)
-
-<p>&nbsp;</p>
-
----
-
-<p>&nbsp;</p>
-
-## 👨‍💻 Component Shortcodes
-
-*All shortcodes has a required attribute `id` which is used to reference your shortcodes from your multiple locations.*
-
-<p>&nbsp;</p>
-
-### **Weather Component** - `[geocentric-weather]`
-
-Shows the temperature, and weather in that area for the day and 7 days ahead. <p>![](https://i.ibb.co/FY4SbqS/image-36.png)</p>
-
-#### **Attributes**
-
-- `unit` - *(optional)* Use `C` for Celsius and `F` for Fahrenheit.
-
-<p>&nbsp;</p>
-
-### **About Component** - `[geocentric-about]`
-
-Shows a paragraph of all the information about the location. <p>![](https://i.ibb.co/5jQ0qLz/image-37.png)</p>
-
-#### **Attributes**
-
-- `title` - *(optional)* changes the title of the section.
-
-<p>&nbsp;</p>
-
-### **Neighbourhoods Component** - `[geocentric-neighbourhoods]`
-
-Shows a list of all the neighbourhoods in that location and is linked to google maps whenever it is clicked. <p>![](https://i.ibb.co/5KqcmXm/image-38.png)</p>
-
-#### **Attributes**
-
-- `title` - *(optional)* changes the title of the section.
-
-<p>&nbsp;</p>
-
-### **Things to Do Component** - `[geocentric-thingstodo]`
-
-Shows all the top sights in that location together with their ratings. <p>![](https://i.ibb.co/2j16y0R/image-39.png)</p>
-
-#### **Attributes**
-
-- `title` - *(optional)* changes the title of the section.
-- `hide_ratings` - *(optional)* Wether or not to display the rating
-- `limit` - *(optional)* Limit the number of items to display
-- `alt` - *(optional)* image alt texts
-
-<p>&nbsp;</p>
-
-### **Map Embed Component** - `[geocentric-mapembed]`
-
-Embeds Google Map of that location. <p>![](https://i.ibb.co/56F82V7/image-40.png)</p>
-
-#### **Attributes**
-
-- `title` - *(optional)* changes the title of the section.
-
-<p>&nbsp;</p>
-
-### **Driving Directions** - `[geocentric-drivingdirections]`
-
-Embeds a map with the driving directions from multiple points of that location to your primary location. <p>![](https://i.ibb.co/9y27kqj/image-41.png)</p>
-
-#### **Attributes**
-
-- `title` - *(optional)* changes the title of the section.
-
-<p>&nbsp;</p>
-
-### **Reviews** - `[geocentric-reviews]`
-
-Shows the reviews of your GMB Listing in that area if available, if not, it shows the reviews of your GMB Listing on your Primary Location. <p>![](https://i.ibb.co/s1xs4X7/image-42.png)</p>
-
-#### **Attributes**
-
-- `title` - *(optional)* changes the title of the section.
-- `limit` - *(optional)* Limit the number of reviews to display
-- `items-on-desktop` - *(optional)* items to show per page on desktop
-- `items-on-tablet` - *(optional)* items to show per page on tablet
-- `items-on-mobile` - *(optional)* items to show per page on mobile
-
-<p>&nbsp;</p>
-
-[Back To The Top](#-geocentric-wp-plugin)
+***NOTE:** For the plugin to work properly you have to set up your billing info inside the Google Cloud Console.*
 
 <p>&nbsp;</p>
 
@@ -316,4 +267,4 @@ Shows the reviews of your GMB Listing in that area if available, if not, it show
 
 ---
 
-© Powered by [RankFortress](https://rankfortress.com/) 2021 🤟.
+© Powered by [SEO Rocket](http://seorocket.dev/) 2021 🤟.

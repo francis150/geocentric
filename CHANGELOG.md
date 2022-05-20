@@ -4,6 +4,13 @@
 
 <p>&nbsp;</p>
 
+## 🎯 v2.0.1
+
+### 😎 **Updates**
+- Server URL Update from SRT to Official
+
+<p>&nbsp;</p>
+
 ## 🎯 v2.0.0
 
 ### ❗ **IMPORTANT NOTE**
