@@ -18,7 +18,8 @@ A WordPress plugin that pulls all relevant geocentric data and allows you to add
 - 📃 [License & Activation](#-license--activation)
 - 🤔 [Usage](#)
 - 👨‍💻 [Component Shortcodes](#)
-- 🌎 [Google API Key Setup](#-google-api-key-setup)
+- 🌎 [Google API Key Setup](#)
+- 📌 [GBP Place ID](#)
 - 🚩 [Changelog](CHANGELOG.md)
 - 🙋‍♂️ [Developers](#%EF%B8%8F-developers)
 
@@ -242,6 +243,44 @@ Go to your [Google Cloud Console Dashboard](https://console.cloud.google.com/hom
 8. Click Enable To Use That API <p>![Enable API](https://i.imgur.com/6xkNDos.png) *Please Make sure you have enable required API's enabled For The Plugin To Work!*</p>
 
 ***NOTE:** For the plugin to work properly you have to set up your billing info inside the Google Cloud Console.*
+
+<p>&nbsp;</p>
+
+[Back To The Top](#-geocentric-wp-plugin)
+
+<p>&nbsp;</p>
+
+---
+
+<p>&nbsp;</p>
+
+## 📌GBP Place ID
+
+*There are a number of ways to find your Google Business Profile's Place ID.*
+
+<p>&nbsp;</p>
+
+### Google Place ID Finder
+
+Head over to googles <a href="https://developers.google.com/maps/documentation/javascript/examples/places-placeid-finder" target="_blank">Place ID Finder</a> and search for your Google Business Profile.
+
+![Place ID Finder](https://i.imgur.com/YHB7mRL.png)
+
+This should show a pin on your GBP with your Place ID with it.
+
+<p>&nbsp;</p>
+
+### GatherUp Chrome Extension
+
+Install the <a href="https://chrome.google.com/webstore/detail/gatherup-google-review-li/cledombdgacmpceceadogfpacbhfehlf" target="_blank">GatherUp chrome extension</a> and go to your Google Business Profile.
+
+![](https://i.imgur.com/NBSc8E2.png)
+
+When you're in your GBP, click the GatherUp icon in your chrome extensions menu on the top right corner of your Chrome Browser.
+
+![](https://i.imgur.com/GujyfrD.png)
+
+This should take you to a page where you can see your CID Link and Place ID Link. Extract your Place ID from the Place ID Link just as seen in the image above.
 
 <p>&nbsp;</p>
 
