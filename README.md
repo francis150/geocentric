@@ -95,6 +95,10 @@ A WordPress plugin that pulls all relevant geocentric data and allows you to add
 
 <p>&nbsp;</p>
 
+[Back To The Top](#-geocentric-wp-plugin)
+
+<p>&nbsp;</p>
+
 ---
 
 <p>&nbsp;</p>
@@ -281,6 +285,10 @@ When you're in your GBP, click the GatherUp icon in your chrome extensions menu 
 ![](https://i.imgur.com/GujyfrD.png)
 
 This should take you to a page where you can see your CID Link and Place ID Link. Extract your Place ID from the Place ID Link just as seen in the image above.
+
+<p>&nbsp;</p>
+
+[Back To The Top](#-geocentric-wp-plugin)
 
 <p>&nbsp;</p>
 
