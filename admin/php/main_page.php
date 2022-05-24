@@ -41,7 +41,7 @@ $tab = !$pluginConfigured ? 'settings' : (isset($_GET['tab']) ? $_GET['tab'] : $
         data-primary_location="<?php echo str_replace("\"", "&#34;" ,json_encode($apiDataController->primary_location())); ?>" 
     <?php } ?>
     >
-    <div class="header"><h1>Geocentric Plugin</h1> <a href="http://seorockettools.com/"><img src="<?php echo plugin_dir_url(dirname(__FILE__)) . 'assets/seorocket-text-logo.svg'; ?>" alt="SEO Rocket Tools"></a></div>
+    <div class="header"><h1>Geocentric Plugin</h1> <a href="http://seorocket.dev/" target="_blank"><img src="<?php echo plugin_dir_url(dirname(__FILE__)) . 'assets/seorocket-text-logo.svg'; ?>" alt="SEO Rocket Tools"></a></div>
     
     <div class="nav">
         <nav class="nav-tab-wrapper">
@@ -746,6 +746,6 @@ switch ($tab) {
 
 
 <div class="footer">
-    <p>Powered by © <a href="http://seorockettools.com/" target="_blank">SEO Rocket Tools</a>, 2022 🚀.</p>
-    <p><a href="https://github.com/francis150/geocentric#readme" target="_blank">Documentation</a> | <a href="#">Community</a> | <a href="http://support.seorockettools.com/"  target="_blank">Support</a></p>
+    <p>Powered by © <a href="http://seorocket.dev/" target="_blank">SEO Rocket Tools</a>, 2022 🚀.</p>
+    <p><a href="https://github.com/francis150/geocentric/blob/7e9e2f4c9f0becea1a3925087376f710e55ebda8/README.md" target="_blank">Documentation</a> | <a href="https://www.facebook.com/groups/seorockettools" target="_blank">Community</a> | <a href="https://support.seorocket.dev/"  target="_blank">Support</a></p>
 </div></div>
