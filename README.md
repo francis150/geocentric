@@ -16,10 +16,10 @@ A WordPress plugin that pulls all relevant geocentric data and allows you to add
 
 - 🚀 [Installation](#-installation)
 - 📃 [License & Activation](#-license--activation)
-- 🤔 [Usage](#)
-- 👨‍💻 [Component Shortcodes](#)
-- 🌎 [Google API Key Setup](#)
-- 📌 [GBP Place ID](#)
+- 🤔 [Usage](#-usage)
+- 👨‍💻 [Component Shortcodes](#-component-shortcodes)
+- 🌎 [Google API Key Setup](#-google-api-key-setup)
+- 📌 [GBP Place ID](#gbp-place-id)
 - 🚩 [Changelog](CHANGELOG.md)
 - 🙋‍♂️ [Developers](#%EF%B8%8F-developers)
 
