@@ -69,7 +69,7 @@ if (URL_PARAMS.get('page') == '_geocentric') {
             axios({
                 method: 'GET',
                 url: GEODATABASE_URL + 'countries',
-                headers: {'access_key': '%^%^$#'}
+                headers: {'api_key': '629262de4c6006162d782135'}
             })
             .then(res => {
                 selectCountryElement.innerHTML = `<option value="" selected disasbled>Choose a country...</option>`
@@ -100,7 +100,7 @@ if (URL_PARAMS.get('page') == '_geocentric') {
             axios({
                 method: 'GET',
                 url: `${GEODATABASE_URL}countries/${e.target.value}/states`,
-                headers: {'access_key': '%^%^$#'}
+                headers: {'api_key': '629262de4c6006162d782135'}
             })
             .then(res => {
 
@@ -132,7 +132,7 @@ if (URL_PARAMS.get('page') == '_geocentric') {
             axios({
                 method: 'GET',
                 url: `${GEODATABASE_URL}countries/${selectCountryElement.value}/states/${e.target.value}/cities`,
-                headers: {'access_key': '%^%^$#'}
+                headers: {'api_key': '629262de4c6006162d782135'}
             })
             .then(res => {
                 
@@ -142,7 +142,7 @@ if (URL_PARAMS.get('page') == '_geocentric') {
 
                 res.data.forEach(city => {
                     const cityOption = document.createElement('option')
-                    cityOption.value = city.id
+                    cityOption.value = city._id
                     cityOption.innerHTML = city.name
                     selectCityElement.appendChild(cityOption)
                 })
@@ -154,21 +154,39 @@ if (URL_PARAMS.get('page') == '_geocentric') {
 
         // Load neigborhoods to textarea when city is selected
         selectCityElement.addEventListener('change', (e) => {
+            neighborhoodsTextArea.disabled = true
             neighborhoodsTextArea.innerHTML = ''
             neighborhoodsTextArea.placeholder = 'Loading...'
 
             selectCityElement.dataset.cityName = selectCityElement.options[selectCityElement.selectedIndex].text
 
+            const payload = {
+                city: {
+                    name: selectCityElement.options[selectCityElement.selectedIndex].text,
+                    id: selectCityElement.value
+                },
+                state: {
+                    code: selectStateElement.value,
+                    name: selectStateElement.options[selectStateElement.selectedIndex].text
+                },
+                country: {
+                    iso2: selectCountryElement.value,
+                    name: selectCountryElement.options[selectCountryElement.selectedIndex].text
+                }
+            }
+
             axios({
-                method: 'GET',
-                url: `${GEODATABASE_URL}countries/${selectCountryElement.value}/states/${selectStateElement.value}/cities/${e.target.value}`,
-                headers: {'access_key': '%^%^$#'}
+                method: "POST",
+                url: SERVER_URL + 'locations-generator/generate-neighborhoods',
+                data: payload
             })
             .then(res => {
                 neighborhoodsTextArea.disabled = false
                 neighborhoodsTextArea.placeholder = ''
-                if (res.data.neighbourhoods) neighborhoodsTextArea.innerHTML = res.data.neighbourhoods.toString()
-                else neighborhoodsTextArea.placeholder = 'No data available...'
+
+                if (res.data.length > 0) return neighborhoodsTextArea.innerHTML = res.data.toString()
+                
+                neighborhoodsTextArea.placeholder = 'No data available...' 
             })
             .catch(err => {
                 console.log(`ERROR FETCHING NEIGBORHOODS: ${err.message}`)
@@ -241,7 +259,6 @@ if (URL_PARAMS.get('page') == '_geocentric') {
             })
 
             // ==============================================================
-
             axios({
                 method: "POST",
                 url: SERVER_URL + 'locations-generator/generate',
