@@ -12,6 +12,7 @@ if (!class_exists('_geocentric_core')) {
         private $plugin_config_controller;
         private $component_controller;
         private $appsero_controller;
+        private $plugin_version = '2.0.3';
         
         function __construct() {
             $this->plugin_config_controller = new _geocentric_plugin_config();
@@ -62,7 +63,7 @@ if (!class_exists('_geocentric_core')) {
 
         public function addto_admin_footer() {
             // Admin page script file
-            wp_enqueue_script('_geocentric_adminpage_scripts', plugins_url( '../admin/js/main_page.js', __FILE__ ));
+            wp_enqueue_script('_geocentric_adminpage_scripts', plugins_url( '../admin/js/main_page.js', __FILE__ ), array(), $this->plugin_version);
             
             // npm-uuid cdn import
             wp_enqueue_script('_geocentric_uuid_cdn_script', 'https://cdn.jsdelivr.net/npm/uuid@latest/dist/umd/uuidv4.min.js');
@@ -72,7 +73,7 @@ if (!class_exists('_geocentric_core')) {
             // WP Thickbox
             add_thickbox();
             // Admin page style file
-            wp_enqueue_style('_geocentric_adminpage_styles', plugins_url( '../admin/styles/main_page.css', __FILE__ ));
+            wp_enqueue_style('_geocentric_adminpage_styles', plugins_url( '../admin/styles/main_page.css', __FILE__ ), array(), $this->plugin_version);
             // axios
             wp_enqueue_script('_geocentric_axios_cdn_script', 'https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js');
         }
