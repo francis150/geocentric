@@ -4,6 +4,13 @@
 
 <p>&nbsp;</p>
 
+## 🎯 v2.0.5
+
+### 😎 **Bug fixes**
+- Minor Bug Fixes
+
+<p>&nbsp;</p>
+
 ## 🎯 v2.0.4
 
 ### 😎 **Updates**
