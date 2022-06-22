@@ -49,18 +49,167 @@ if (!class_exists('_geocentric_components')) {
 
             if (empty($api_data)) return "<pre>No data matched by id...</pre>";
 
-            $unit_string = $styles['unit'] == 'fahrenheit' ? '?unit=us' : '';
+            if (isset($api_data['coordinates'])) {
+                // New weather widget
+                $unit_group = $styles['unit'] == 'fahrenheit' ? array(
+                    "imperial",
+                    "°F",
+                    "mph",
+                ) : array (
+                    "metric",
+                    "°C",
+                    "m/s"
+                );
 
-            return "
-            <style>
-                ._geocentric-component {
-                    margin-bottom: {$this->general_styles['componentsGap']}px;
-                }
-            </style>
-            <div class=\"_geocentric-component _geocentric-weather-component\"><a class=\"weatherwidget-io\" href=\"https://forecast7.com/en/{$api_data['weather_widget']}{$unit_string}\" data-label_1=\"{$api_data['name']}\" data-label_2=\"Weather\" data-theme=\"original\" data-basecolor=\"{$styles['backgroundColor']}\" data-textcolor=\"{$styles['textColor']}\">{$api_data['name']}</a>
-            <script>
-            !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
-            </script></div>";
+                $attribs = shortcode_atts(array(
+                    "title" => "Weather in {$api_data['name']}"
+                ), $atts);
+
+                $ch = curl_init();
+
+                $options = array(
+                    CURLOPT_URL => "https://seo-rocket-weather.herokuapp.com/fetchCurrentWeather?lon={$api_data['coordinates']['lng']}&lat={$api_data['coordinates']['lat']}&units={$unit_group[0]}",
+                    CURLOPT_RETURNTRANSFER => true
+                );
+
+                curl_setopt_array($ch, $options);
+                $content  = curl_exec($ch);
+                curl_close($ch);
+
+                /* $dummy_weather_data = '{"coord":{"lon":-95.3698,"lat":29.7604},"weather":[{"id":721,"main":"Haze","description":"haze","icon":"50d"}],"base":"stations","main":{"temp":79.9,"feels_like":79.9,"temp_min":75.07,"temp_max":82.4,"pressure":1018,"humidity":85},"visibility":9656,"wind":{"speed":3.44,"deg":140},"clouds":{"all":75},"dt":1655811339,"sys":{"type":2,"id":2022061,"country":"US","sunrise":1655810491,"sunset":1655861099},"timezone":-18000,"id":4699066,"name":"Houston","cod":200}'; */
+                $weather_data = json_decode($content, true);
+
+                return "
+                <style>
+                    @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded');
+                    @import url('https://fonts.googleapis.com/css2?family={$this->font[0]}&display=swap');
+
+                    ._geocentric-component {
+                        margin-bottom: {$this->general_styles['componentsGap']}px;
+                        font-family: '{$this->font_family}', {$this->font[1]};
+                    }
+
+                    ._geocentric-weather-component > h2 {
+                        font-size: {$styles['title']['fontSize']}px;
+                        font-weight: {$styles['title']['fontWeight']};
+                        color: {$styles['title']['fontColor']};
+                        text-align: {$styles['title']['textAlignment']};
+
+                        margin-bottom: 20px;
+                    }
+
+                    ._geocentric-weather-component > .weather-wrapper {
+                        max-width: 941px;
+                        background: {$styles['backgroundColor']};
+                        margin: 0 auto;
+                        min-height: 140px;
+                        border-radius: 10px;
+                        
+                        display: flex;
+                        flex-wrap: wrap;
+                        justify-content: space-evenly;
+                        align-items: center;
+                    }
+
+                    ._geocentric-weather-component * {
+                        color: {$styles['textColor']};
+                    }
+
+                    ._geocentric-weather-component .weather img {
+                        height: 115px;
+                    }
+
+                    ._geocentric-weather-component .weather h3 {
+                        transform: translateY(-22px);
+                        text-align: center;
+                    }
+
+                    ._geocentric-weather-component .weather {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: center;
+                    }
+
+                    ._geocentric-weather-component .weather-info {
+                        min-width: 150px;
+                    }
+
+                    ._geocentric-weather-component .weather-info .top {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+
+                    ._geocentric-weather-component .weather-info .top > span {
+                        font-size: 38px;
+                    }
+
+                    ._geocentric-weather-component .weather-info .top p {
+                        font-size: 52px;
+                        max-height: 60px;
+                        font-weight: 300;
+                    }
+
+                    ._geocentric-weather-component .weather-info .top p .unit {
+                        font-size: 22px;
+                    }
+
+                    ._geocentric-weather-component .weather-info > h3 {
+                        margin-top: -5px;
+                        text-align: center;
+                        font-size: 18px;
+                        font-weight: 400;
+                    }
+
+                    
+                </style>
+                <div class=\"_geocentric-component _geocentric-weather-component\">
+                    <h2>{$attribs['title']}</h2>
+                    <div class=\"weather-wrapper\">
+                        <div class=\"weather weather-info\">
+                            <img src=\"http://openweathermap.org/img/wn/{$weather_data['weather'][0]['icon']}@4x.png\">
+                            <h3>" . ucwords($weather_data['weather'][0]['description']) . "</h3>
+                        </div>
+                        <div class=\"temperature weather-info\">
+                            <div class=\"top\">
+                            <span class=\"material-symbols-rounded\"> thermostat</span>
+                                <p>" . round($weather_data['main']['temp']) . "<span class=\"unit\">{$unit_group[1]}</span></p>
+                            </div>
+                            <h3>Temperature</h3>
+                        </div>
+                        <div class=\"wind weather-info\">
+                            <div class=\"top\">
+                            <span class=\"material-symbols-rounded\">air</span>
+                                <p>" . round($weather_data['wind']['speed']) . "<span class=\"unit\">{$unit_group[2]}</span></p>
+                            </div>
+                            <h3>Wind Speed</h3>
+                        </div>
+                        <div class=\"wind weather-info\">
+                            <div class=\"top\">
+                            <span class=\"material-symbols-rounded\">humidity_mid</span>
+                                <p>{$weather_data['main']['humidity']}<span class=\"unit\">%</span></p>
+                            </div>
+                            <h3>Humidity</h3>
+                        </div>
+                    </div>
+                </div>
+                ";
+            } else {
+                // Old weather widget from weatherwidget.io
+                $unit_string = $styles['unit'] == 'fahrenheit' ? '?unit=us' : '';
+
+                return "
+                <style>
+                    ._geocentric-component {
+                        margin-bottom: {$this->general_styles['componentsGap']}px;
+                    }
+                </style>
+                <div class=\"_geocentric-component _geocentric-weather-component\"><a class=\"weatherwidget-io\" href=\"https://forecast7.com/en/{$api_data['weather_widget']}{$unit_string}\" data-label_1=\"{$api_data['name']}\" data-label_2=\"Weather\" data-theme=\"original\" data-basecolor=\"{$styles['backgroundColor']}\" data-textcolor=\"{$styles['textColor']}\">{$api_data['name']}</a>
+                <script>
+                !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
+                </script></div>";
+            }
         }
 
         /* 

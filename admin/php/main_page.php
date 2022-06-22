@@ -170,6 +170,32 @@ switch ($tab) {
 
                 <div id="weathercomponent" class="weathercomponent-group group">
                     <h3>Weather Component</h3>
+
+                    <h4>Title</h4>
+                    <div class="row">
+                        <div class="input-group">
+                            <label>Font Size</label>
+                            <input type="number" name="weathercomponent_title_font-size" value="<?php echo $component_styles['weatherComponent']['title']['fontSize'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Font Weight</label>
+                            <input type="number" name="weathercomponent_title_font-weight" value="<?php echo $component_styles['weatherComponent']['title']['fontWeight'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Font Color</label>
+                            <input type="text" name="weathercomponent_title_font-color" value="<?php echo $component_styles['weatherComponent']['title']['fontColor'] ?>">
+                        </div>
+                        <div class="input-group">
+                            <label>Text Alignment</label>
+                            <select name="weathercomponent_title_text-alignment">
+                                <option <?php if ($component_styles['weatherComponent']['title']['textAlignment'] == "right") echo 'selected'; ?> value="right">Right</option>
+                                <option <?php if ($component_styles['weatherComponent']['title']['textAlignment'] == "left") echo 'selected'; ?> value="left">Left</option>
+                                <option <?php if ($component_styles['weatherComponent']['title']['textAlignment'] == "center") echo 'selected'; ?> value="center">Center</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <h4>Content</h4>
                     <div class="row">
                         <div class="input-group">
                             <label>Background Color</label>

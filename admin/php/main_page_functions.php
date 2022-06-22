@@ -52,6 +52,13 @@ if (isset($_POST['_style-form-update'])) {
         ),
         'weatherComponent' => 
         array (
+          'title' => 
+          array(
+            'fontSize' => !empty($formdata['weathercomponent_title_font-size']) ? $formdata['weathercomponent_title_font-size'] : 36,
+            'fontWeight' => !empty($formdata['weathercomponent_title_font-weight']) ? $formdata['weathercomponent_title_font-weight'] : 500,
+            'fontColor' => !empty($formdata['weathercomponent_title_font-color']) ? $formdata['weathercomponent_title_font-color'] : '#000000',
+            'textAlignment' => !empty($formdata['weathercomponent_title_text-alignment']) ? $formdata['weathercomponent_title_text-alignment'] : 'center',
+          ),
           'backgroundColor' => !empty($formdata['weathercomponent_background-color']) ? $formdata['weathercomponent_background-color'] : '#1F567C',
           'textColor' => !empty($formdata['weathercomponent_text-color']) ? $formdata['weathercomponent_text-color'] : '#FFFFFF',
           'unit' => !empty($formdata['weathercomponent_unit']) ? $formdata['weathercomponent_unit'] : 'fahrenheit',
