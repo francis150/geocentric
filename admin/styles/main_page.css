@@ -308,15 +308,15 @@ html {
 
 @-webkit-keyframes rotate {
   to {
-    -webkit-transform: rotate(180deg);
-            transform: rotate(180deg);
+    -webkit-transform: rotate(-180deg);
+            transform: rotate(-180deg);
   }
 }
 
 @keyframes rotate {
   to {
-    -webkit-transform: rotate(180deg);
-            transform: rotate(180deg);
+    -webkit-transform: rotate(-180deg);
+            transform: rotate(-180deg);
   }
 }
 
