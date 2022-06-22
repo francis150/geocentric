@@ -183,9 +183,9 @@ if (!class_exists('_geocentric_api_data')) {
             if (file_exists( $this->config_dir . 'api_data.json' )) {
                 $api_data = json_decode(file_get_contents( $this->config_dir . 'api_data.json' ), true);
 
-                $clean_api_data = array_filter($api_data, function ($k) {
-                    return empty($k);
-                }, ARRAY_FILTER_USE_KEY);
+                $clean_api_data = array_filter($api_data, function ($v, $k) {
+                    return isset($v['id']);
+                }, ARRAY_FILTER_USE_BOTH);
 
                 file_put_contents($this->config_dir . 'api_data.json', json_encode($clean_api_data, JSON_PRETTY_PRINT));
             }
