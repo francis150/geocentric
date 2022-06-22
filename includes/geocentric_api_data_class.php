@@ -8,6 +8,7 @@ if (!class_exists('_geocentric_api_data')) {
         
         function __construct() {
             $this->config_dir = WP_CONTENT_DIR . '/uploads/_geocentric/v2.0.0/';
+            $this->clear_junk();
             $this->load_api_data();
         }
 
@@ -70,6 +71,8 @@ if (!class_exists('_geocentric_api_data')) {
         public function set_single_api_data($single_api_data) {
             $modified = [];
             $recvd = json_decode(stripslashes($single_api_data), true);
+
+            if (empty($recvd['id'])) return false;
 
             if ($this->api_data_is_available($recvd['id'])) {
                 $modified = array_map(function($data) use ($recvd) {
@@ -171,6 +174,21 @@ if (!class_exists('_geocentric_api_data')) {
 
             $location = $this->get_api_data($id);
             return (isset($location['meta']['is_primary']) && $location['meta']['is_primary']) ? true : false;
+        }
+
+        /**
+         * @description: Clean for junks (null) in the api_data.json file
+         */
+        private function clear_junk() {
+            if (file_exists( $this->config_dir . 'api_data.json' )) {
+                $api_data = json_decode(file_get_contents( $this->config_dir . 'api_data.json' ), true);
+
+                $clean_api_data = array_filter($api_data, function ($k) {
+                    return empty($k);
+                }, ARRAY_FILTER_USE_KEY);
+
+                file_put_contents($this->config_dir . 'api_data.json', json_encode($clean_api_data, JSON_PRETTY_PRINT));
+            }
         }
     }
 }

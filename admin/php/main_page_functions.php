@@ -261,7 +261,6 @@ if (isset($_POST['_style-form-reset'])) {
 
 // Create new location form submit
 if (isset($_POST['_newlocationform_submit_api_data'])) {
-
   if ($apiDataController->set_single_api_data($_POST['_newlocationform_submit_api_data'])) {
     ?>
     <div class="notice notice-success is-dismissible">
@@ -270,7 +269,7 @@ if (isset($_POST['_newlocationform_submit_api_data'])) {
     <?php
   } else {
     ?>
-    <div class="notice notice-success is-dismissible">
+    <div class="notice notice-error is-dismissible">
         <p><b><?php echo $config_data['plugin_name']; ?></b> - Failed to create location!</p>
     </div>
     <?php
