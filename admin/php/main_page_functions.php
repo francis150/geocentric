@@ -298,7 +298,7 @@ if (isset($_GET['remove-id'])) {
 }
 
 // When new primary location is set
-if (isset($_POST['new_primary_api_data'])) {
+if (!empty($_POST['new_primary_api_data'])) {
   if ($apiDataController->set_all_api_data($_POST['new_primary_api_data'])) {
     ?>
     <div class="notice notice-success is-dismissible">
@@ -309,6 +309,23 @@ if (isset($_POST['new_primary_api_data'])) {
     ?>
     <div class="notice notice-error is-dismissible">
         <p><b><?php echo $config_data['plugin_name']; ?></b> - Failed to update Primary Location.</p>
+    </div>
+    <?php
+  }
+}
+
+// When a location is re-imported
+if (!empty($_POST['reimported_api_data'])) {
+  if ($apiDataController->set_single_api_data($_POST['reimported_api_data'])) {
+    ?>
+    <div class="notice notice-success is-dismissible">
+        <p><b><?php echo $config_data['plugin_name']; ?></b> - Location re-imported successfully!</p>
+    </div>
+    <?php
+  } else {
+    ?>
+    <div class="notice notice-error is-dismissible">
+        <p><b><?php echo $config_data['plugin_name']; ?></b> - Failed to re-import Location.</p>
     </div>
     <?php
   }

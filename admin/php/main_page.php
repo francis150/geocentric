@@ -74,6 +74,7 @@ switch ($tab) {
                         <p><?php echo $location['name']; ?></p>
                         <?php if ($location['meta']['is_primary']) echo '<span>Primary</span>'; ?>
                         <a title="Shortcodes" href="#TB_inline?height=200&width=550&inlineId=shortcode-tb-wrapper" class="thickbox shortcodes-button" ><i class="material-icons-outlined">data_array</i></a>
+                        <a title="Re-import" href="#" class="reimport-button" data-id="<?php echo $location['id']; ?>"><i class="material-icons-outlined">sync</i></a>
                         <button title="Options" class="options-button">
                             <i class="material-icons-outlined">expand_circle_down</i>
                             <div class="dropdown-menu">
@@ -100,6 +101,7 @@ switch ($tab) {
             <form class="primary-location-form" style="display: none;" action="#" method="POST">
                 <textarea class="current_api_data" name="current_api_data"><?php if (isset($api_data)) echo json_encode($api_data); ?></textarea>
                 <textarea class="new_primary_api_data" name="new_primary_api_data"></textarea>
+                <textarea class="reimported_api_data" name="reimported_api_data"></textarea>
             </form>
 
         </div>

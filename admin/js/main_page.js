@@ -439,6 +439,83 @@ if (URL_PARAMS.get('page') == '_geocentric') {
             })
         })
 
+        // Re-import location
+        document.querySelectorAll('._geocentric-wrapper .locations-tab .location .reimport-button').forEach(button => {
+            button.addEventListener('click', e => {
+                e.preventDefault()
+
+                button.className = 'reimport-button reimporting'
+
+                let selectedLocation = button.dataset.id
+                selectedLocation = apiData.filter(location => location.id === selectedLocation)[0]
+
+                let primaryLocation = apiData.filter(location => location.meta.is_primary === true)
+                primaryLocation = primaryLocation.length > 0 ? primaryLocation[0].meta : undefined
+                primaryLocation = primaryLocation ? clean({
+                    country_iso2: primaryLocation.country.iso2,
+                    state_code: primaryLocation.state.code,
+                    city: primaryLocation.city,
+                    place_id: primaryLocation.place_id || undefined,
+                    street: primaryLocation.street || undefined,
+                    zip_code: primaryLocation.zip_code || undefined
+                }) : clean({
+                    country_iso2: selectedLocation.meta.country.iso2,
+                    state_code: selectedLocation.meta.state.code,
+                    city: selectedLocation.meta.city,
+                    place_id: selectedLocation.meta.place_id || undefined,
+                    street: selectedLocation.meta.street || undefined,
+                    zip_code: selectedLocation.meta.zip_code || undefined
+                })
+
+                let neighborhoods
+                let is_primary
+
+                if (selectedLocation.meta.neighborhoods) {
+                    neighborhoods = selectedLocation.meta.neighborhoods
+                    is_primary = selectedLocation.meta.is_primary
+                    delete selectedLocation.meta.neighborhoods
+                    delete selectedLocation.meta.is_primary
+                }
+
+                const payload = clean({
+                    ...selectedLocation.meta,
+                    requesting_domain: selectedLocation.domain,
+                    id: selectedLocation.id,
+                    appsero_info: {
+                        appsero_api_key: APPSERO_API_KEY,
+                        appsero_plugin_name: APPSERO_PLUGIN_NAME
+                    },
+                    primary_keyword: PRIMARY_KEYWORD,
+                    mainLocation: primaryLocation
+                })
+
+                axios({
+                    method: "POST",
+                    url: SERVER_URL + 'locations-generator/generate',
+                    data: payload
+                })
+                .then(res => {
+                    res.data.meta = clean({
+                        country: payload.country,
+                        state: payload.state,
+                        city: payload.city,
+                        place_id: payload.place_id || undefined,
+                        street: payload.street || undefined,
+                        zip_code: payload.zip_code || undefined,
+                        neighborhoods: neighborhoods || undefined,
+                        is_primary
+                    })
+
+                    primaryLocationForm.reimported_api_data.value = JSON.stringify(res.data)
+                    primaryLocationForm.submit()
+                })
+                .catch(err => {
+                    console.log(`ERROR IMPORTING LOCATION DATA: ${err.message}`)  
+                })
+                
+            })
+        })
+
         
         function setPrimaryEventTriggered() {
             document.querySelector('._geocentric-wrapper .locations-tab .header-wrapper a').href = 'javascript:void(0)'

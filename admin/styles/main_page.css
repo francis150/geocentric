@@ -233,10 +233,6 @@ html {
   font-size: 11px;
 }
 
-._geocentric-wrapper .locations-tab .locations-list .location .shortcodes-button {
-  margin-left: auto;
-}
-
 ._geocentric-wrapper .locations-tab .locations-list .location .options-button {
   margin-left: 10px;
   position: relative;
@@ -298,6 +294,30 @@ html {
   color: #8b8b8b;
   -webkit-transition: color .3s ease-in-out;
   transition: color .3s ease-in-out;
+}
+
+._geocentric-wrapper .locations-tab .locations-list .location .shortcodes-button {
+  margin-left: auto;
+}
+
+._geocentric-wrapper .locations-tab .locations-list .location .reimporting {
+  -webkit-animation: rotate 1s linear infinite;
+          animation: rotate 1s linear infinite;
+  pointer-events: none;
+}
+
+@-webkit-keyframes rotate {
+  to {
+    -webkit-transform: rotate(180deg);
+            transform: rotate(180deg);
+  }
+}
+
+@keyframes rotate {
+  to {
+    -webkit-transform: rotate(180deg);
+            transform: rotate(180deg);
+  }
 }
 
 ._geocentric-wrapper .new-location-form .row {

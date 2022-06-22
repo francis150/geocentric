@@ -214,10 +214,6 @@ html {
                 font-size: 11px;
             }
 
-            .shortcodes-button {
-                margin-left: auto;
-            }
-
             .options-button {
                 margin-left: 10px;
                 position: relative;
@@ -270,6 +266,21 @@ html {
                     font-size: 18px;
                     color: $iconColor;
                     transition: color .3s ease-in-out;
+                }
+            }
+
+            .shortcodes-button {
+                margin-left: auto;
+            }
+
+            .reimporting {
+                animation: rotate 1s linear infinite;
+                pointer-events: none;
+            }
+
+            @keyframes rotate {
+                to {
+                    transform: rotate(180deg);
                 }
             }
         }
