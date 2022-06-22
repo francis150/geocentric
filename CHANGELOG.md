@@ -4,6 +4,24 @@
 
 <p>&nbsp;</p>
 
+## 🎯 v2.0.4
+
+### 😎 **Updates**
+- Re-import location feature added
+
+### 🕷 **Bug Fixes**
+- Weather widget errors [FIXED and REPLACED]
+- Creating junk/empty data [FIXED]
+
+<p>&nbsp;</p>
+
+## 🎯 v2.0.3
+
+### 🕷 **Bug Fixes**
+- Plugin using old source files [FIXED]
+
+<p>&nbsp;</p>
+
 ## 🎯 v2.0.2
 
 ### 😎 **Updates**

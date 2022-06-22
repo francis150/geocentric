@@ -111,7 +111,11 @@ A WordPress plugin that pulls all relevant geocentric data and allows you to add
 
 ### **Weather Component** - `[geocentric_weather]`
 
-Shows the temperature, and weather in that area for the day and 7 days ahead. <p>![](https://i.ibb.co/FY4SbqS/image-36.png)</p>
+Shows the weather, temperature, wind speed, and humidity in that area for the day. <p>![](https://i.imgur.com/fbgg9qg.png)</p>
+
+#### **Attributes**
+
+- `title` - *(optional)* changes the title of the section.
 
 
 <p>&nbsp;</p>
