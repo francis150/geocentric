@@ -8,7 +8,7 @@ if (!class_exists('_geocentric_api_data')) {
         
         function __construct() {
             $this->config_dir = WP_CONTENT_DIR . '/uploads/_geocentric/v2.0.0/';
-            $this->clear_junk();
+            // $this->clear_junk();
             $this->load_api_data();
         }
 
@@ -179,7 +179,7 @@ if (!class_exists('_geocentric_api_data')) {
         /**
          * @description: Clean for junks (null) in the api_data.json file
          */
-        private function clear_junk() {
+        /* private function clear_junk() {
             if (file_exists( $this->config_dir . 'api_data.json' )) {
                 $api_data = json_decode(file_get_contents( $this->config_dir . 'api_data.json' ), true);
 
@@ -189,6 +189,6 @@ if (!class_exists('_geocentric_api_data')) {
 
                 file_put_contents($this->config_dir . 'api_data.json', json_encode($clean_api_data, JSON_PRETTY_PRINT));
             }
-        }
+        } */
     }
 }

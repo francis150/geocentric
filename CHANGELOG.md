@@ -4,6 +4,13 @@
 
 <p>&nbsp;</p>
 
+## 🎯 v2.0.6
+
+### 😎 **Bug fixes**
+- Location being removed after a day [FIXED]
+
+<p>&nbsp;</p>
+
 ## 🎯 v2.0.5
 
 ### 😎 **Bug fixes**
