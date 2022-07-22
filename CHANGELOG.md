@@ -4,6 +4,13 @@
 
 <p>&nbsp;</p>
 
+## 🎯 v3.0.0
+
+### 😎 **Updates**
+- Major UI Changes
+
+<p>&nbsp;</p>
+
 ## 🎯 v2.0.6
 
 ### 😎 **Bug fixes**
