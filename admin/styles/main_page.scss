@@ -6,7 +6,8 @@ $mutedBackground: #f5f5f5;
 $mutedBackgroundHovered: #e7e7e7;
 $iconColor: #8b8b8b;
 $textColor: black;
-$accentColor: #CF321D;
+$accentColor: #660CFF;
+$accentColorLight: #3A177B;
 $dropShadow: 1px 1px 25px rgba(0, 0, 0, 0.09);
 
 html {
@@ -14,7 +15,7 @@ html {
 }
 
 ._geocentric-wrapper {
-    margin-top: 20px;
+    margin-top: 30px;
     margin-right: 20px;
     max-width: 900px;
     font-family: 'Poppins', sans-serif;
@@ -24,14 +25,14 @@ html {
         display: flex;
         justify-content: space-between;
         align-items: center;
-
+        
         h1 {
             font-size: 34px;
             font-weight: 600;
         }
 
         img {
-            width: 200px;
+            width: 350px;
         }
     }
 
@@ -57,21 +58,21 @@ html {
 
             &:hover {
                 background: $background;
-                border-top: solid 4px $accentColor;
+                border-top: solid 4px $accentColorLight;
             }
         }
 
         .nav-tab-active {
             background: $background;
-            border-top: solid 4px $accentColor;
+            border-top: solid 4px $accentColorLight;
         }
     }
 
     ._inner-wrapper {
         background: $background;
         box-shadow: $dropShadow;
-        border-radius: 0px 5px 5px 5px;
-        padding: 10px 20px 30px 20px;
+        border-radius: 0 30px 30px 30px;
+        padding: 10px 30px 30px 30px;
     }
 
     .footer {
@@ -94,6 +95,7 @@ html {
         margin-bottom: 20px;
 
         label {
+            padding-left: 10px;
             color: $textColor;
             font-weight: 400;
 
@@ -102,12 +104,19 @@ html {
             }
         }
 
-        input, select {
-            padding: 2px 10px;
+        input[type=text], input[type=number], select {
+            padding: 0 20px;
+            height: 40px;
+            background: $mutedBackground;
+            border: none;
+            border-radius: 50px;
         }
 
         textarea {
-            padding: 10px;
+            padding: 20px;
+            background: $mutedBackground;
+            border: none;
+            border-radius: 20px;
         }
     }
     
@@ -129,6 +138,20 @@ html {
 
         .input-group {
             max-width: 500px;
+        }
+
+        .form-footer .save-button {
+            height: 40px;
+            width: 100px;
+            background: $accentColor;
+            box-shadow: 0px 4px 40px rgba($color: $accentColor, $alpha: 0.25);
+            border-radius: 50px;
+            border: none;
+            transition: .3s all ease-in-out;
+
+            &:hover {
+                background: $accentColorLight;
+            }
         }
     }
 }
@@ -166,6 +189,39 @@ html {
         display: inline;
         max-width: 400px;
     }
+
+    .form-footer {
+        .save-button {
+            height: 40px;
+            width: 100px;
+            background: $accentColor;
+            box-shadow: 0px 4px 40px rgba($color: $accentColor, $alpha: 0.25);
+            border-radius: 50px;
+            border: none;
+            transition: .3s all ease-in-out;
+
+            &:hover {
+                background: $accentColorLight;
+            }
+        }
+
+        .reset-default-button {
+            background: white;
+            height: 40px;
+            border-radius: 50px;
+            border: solid 2px $accentColor;
+            color: $accentColor;
+            transition: .3s all ease-in-out;
+
+            &:hover {
+                color: white;
+                background: $accentColorLight;
+                box-shadow: 0px 4px 40px rgba($color: $accentColor, $alpha: 0.25);
+                border-radius: 50px;
+                border: solid 2px $accentColorLight;
+            }
+        }
+    }
 }
 
 ._geocentric-wrapper .locations-tab {
@@ -176,13 +232,19 @@ html {
         align-items: baseline;
     }
 
-    hr {
-        margin-top: 5px;
-    }
-
     button {
         padding: 3px 20px;
         font-size: 13px;
+        height: 40px;
+        background: $accentColor;
+        box-shadow: 0px 4px 40px rgba($color: $accentColor, $alpha: 0.25);
+        border-radius: 50px;
+        border: none;
+        transition: .3s all ease-in-out;
+
+        &:hover {
+            background: $accentColorLight;
+        }
     }
 
     .locations-list {
@@ -317,9 +379,42 @@ html {
         margin-bottom: 40px;
     }
 
-    .form-footer img {
-        max-height: 30px;
-        display: none;
+    .form-footer {
+
+        .create-button {
+            height: 40px;
+            background: $accentColor;
+            box-shadow: 0px 4px 40px rgba($color: $accentColor, $alpha: 0.25);
+            border-radius: 50px;
+            border: none;
+            transition: .3s all ease-in-out;
+
+            &:hover {
+                background: $accentColorLight;
+            }
+        }
+
+        .discard-button {
+            background: white;
+            height: 40px;
+            border-radius: 50px;
+            border: solid 2px $accentColor;
+            color: $accentColor;
+            transition: .3s all ease-in-out;
+
+            &:hover {
+                color: white;
+                background: $accentColorLight;
+                box-shadow: 0px 4px 40px rgba($color: $accentColor, $alpha: 0.25);
+                border-radius: 50px;
+                border: solid 2px $accentColorLight;
+            }
+        }
+
+        img {
+            max-height: 30px;
+            display: none;
+        }
     }
 }
 

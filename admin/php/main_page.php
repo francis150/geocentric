@@ -126,7 +126,7 @@ switch ($tab) {
                 </div>
 
                 <div class="form-footer">
-                    <input name="_settings-form-update" type="submit" class="button-primary" value="Save"/>
+                    <input name="_settings-form-update" type="submit" class="button-primary save-button" value="Save"/>
                 </div>
             </form>
         </div>
@@ -693,8 +693,8 @@ switch ($tab) {
                 </div>
 
                 <div class="form-footer">
-                    <input name="_style-form-update" type="submit" class="button-primary" value="Save"/>
-                    <input name="_style-form-reset" type="submit" class="button-secondary" value="Reset Default Styles" style="margin-left: auto;">
+                    <input name="_style-form-update" type="submit" class="button-primary save-button" value="Save"/>
+                    <input name="_style-form-reset" type="submit" class="button-secondary reset-default-button" value="Reset Default Styles" style="margin-left: auto;">
                 </div>
 
             </form>
@@ -731,7 +731,7 @@ switch ($tab) {
 
                 <div class="input-group full-width">
                     <label>Neighborhoods</label>
-                    <textarea disabled name="newlocationform_neigborhoods" class="newlocationform_neigborhoods" rows="5"></textarea>
+                    <textarea disabled name="newlocationform_neigborhoods" class="newlocationform_neigborhoods" rows="7"></textarea>
                     <small>These are the available neighbourhoods for this area on our database. You can manually add or edit them by entering your neighbourhoods here. Enter them properly and separate each with comma(,)</small>
                 </div>
 

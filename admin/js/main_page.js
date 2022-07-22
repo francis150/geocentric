@@ -288,6 +288,14 @@ if (URL_PARAMS.get('page') == '_geocentric') {
             })
         })
 
+        // New location form discard
+        document.querySelector('._geocentric-wrapper .new-location-form .form-footer .discard-button').addEventListener('click', () => {
+            if (confirm('Are you sure you want to discard this location?')) {
+                window.location.href = '?page=_geocentric'
+            }
+            
+        })
+
         // Set as primary
         function disasbleNewLocationForm() {
             newLocationForm.newlocationform_country.disabled = true
